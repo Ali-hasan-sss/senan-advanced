@@ -1,0 +1,17 @@
+import imgRectangle from "@/assets/a8104aab23faf58bd70c6dc79239cdb987fb521b.png";
+
+export default function Layer() {
+  return (
+    <div className="relative size-full" data-name="Layer_1">
+      <div className="absolute inset-[0_-0.35%_-0.35%_0]" data-name="Rectangle">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img
+            alt=""
+            className="absolute left-0 max-w-none size-full top-0"
+            src={imgRectangle}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
