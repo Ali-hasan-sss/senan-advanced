@@ -111,12 +111,12 @@ export default function ExperiencePage() {
   ];
 
   return (
-    <div className="w-full h-full relative overflow-hidden">
-      <div className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
-        <img src={experienceBg} alt="" className="w-full h-full object-cover" />
+    <div className="w-full min-h-screen relative">
+      <div className="absolute inset-0 w-full min-h-screen" style={{ zIndex: 0 }}>
+        <img src={experienceBg} alt="" className="w-full h-full min-h-full object-cover object-center" />
         <div className="absolute inset-0 bg-gray-900/50" />
       </div>
-      <div className="relative h-full flex flex-col items-center justify-center px-4 md:px-8 lg:px-16 py-8 md:py-12 lg:py-20 z-10 overflow-y-auto">
+      <div className="relative min-h-screen flex flex-col items-center justify-center px-4 md:px-8 lg:px-16 py-8 md:py-12 lg:py-20 z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

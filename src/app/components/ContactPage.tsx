@@ -26,7 +26,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="w-full h-full relative overflow-hidden flex flex-col lg:flex-row overflow-y-auto">
+    <div className="w-full min-h-screen relative overflow-x-hidden flex flex-col lg:flex-row">
       <div className="absolute inset-0">
         <img
           src={backgroundImage}

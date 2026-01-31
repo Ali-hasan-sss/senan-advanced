@@ -48,13 +48,13 @@ function TextSection({ title, children, delay }: TextSectionProps) {
 export default function AboutPage() {
   const { t } = useLanguage();
   return (
-    <div className="w-full h-full relative overflow-hidden">
-      <div className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
-        <img src={aboutBg} alt="" className="w-full h-full object-cover" />
+    <div className="w-full min-h-screen relative">
+      <div className="absolute inset-0 w-full min-h-screen" style={{ zIndex: 0 }}>
+        <img src={aboutBg} alt="" className="w-full h-full min-h-full object-cover object-center" />
         <div className="absolute inset-0 bg-gray-900/60" />
       </div>
       <div
-        className="relative h-full flex items-center justify-center px-4 md:px-8 lg:px-20 py-8 md:py-12 lg:py-16 overflow-y-auto"
+        className="relative min-h-screen flex items-center justify-center px-4 md:px-8 lg:px-20 py-8 md:py-12 lg:py-16"
         style={{ zIndex: 10 }}
       >
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8 max-w-7xl w-full">

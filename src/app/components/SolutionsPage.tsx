@@ -17,7 +17,7 @@ export default function SolutionsPage() {
   const { t } = useLanguage();
   return (
     <div
-      className="w-full min-h-screen h-full relative overflow-hidden flex flex-col"
+      className="w-full min-h-screen md:min-h-[140vh] relative overflow-x-hidden flex flex-col"
       style={{
         cursor:
           'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%278%27 fill=%27black%27/%3E%3C/svg%3E") 16 16, auto',
@@ -29,7 +29,7 @@ export default function SolutionsPage() {
       </div>
 
       {/* Desktop: infographic + left block (hidden on mobile, animations unchanged) */}
-      <div className="hidden md:block absolute inset-0" style={{ zIndex: 5 }}>
+      <div className="hidden md:block absolute inset-0 min-h-[140vh]" style={{ zIndex: 5 }}>
         {/* Rotating Circle 1 - Clockwise */}
         <motion.div
           className="absolute"
@@ -587,57 +587,163 @@ export default function SolutionsPage() {
         />
       </div>
 
-      {/* Mobile: simple list (flex flow, not absolute; desktop layout & animations unchanged) */}
-      <div className="md:hidden relative z-20 flex flex-1 flex-col w-full min-h-screen">
-        {/* Overlay for readability on mobile */}
-        <div className="absolute inset-0 bg-gray-900/60 pointer-events-none" aria-hidden="true" />
+      {/* Mobile: all solutions in a responsive grid – flows with page scroll */}
+      <div className="md:hidden relative z-20 w-full">
+        {/* Overlay for readability */}
+        <div className="absolute inset-0 min-h-full bg-gray-900/70 pointer-events-none" aria-hidden="true" />
         <div
-          className="relative flex flex-col items-center justify-center flex-1 w-full px-6 py-10 sm:py-14 overflow-y-auto"
+          className="relative flex flex-col items-center w-full px-4 sm:px-6 py-8 sm:py-12"
           style={{ fontFamily: "DIN Arabic, sans-serif" }}
         >
-          <h2 className="text-white text-xl sm:text-2xl font-bold mb-8 sm:mb-10 text-center">
+          <h2 className="text-white text-xl sm:text-2xl font-bold mb-6 sm:mb-10 text-center">
             {t.solutions.ourSolutions}
           </h2>
-          <div className="flex flex-col gap-4 sm:gap-5 w-full max-w-md">
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10 text-white">
-              <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-2xl mx-auto">
+            {/* Communication */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15">
                 <CommunicationIcon />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-[15px] leading-snug mb-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
                   {t.solutions.communication}
                 </div>
-                <div className="text-white/80 text-sm leading-snug">
+                <div className="text-white/85 text-sm leading-snug mt-0.5">
                   {t.solutions.communicationSystems}
                 </div>
               </div>
-            </div>
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10 text-white">
-              <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/10">
+            </motion.div>
+            {/* Training */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: 0.05 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15">
                 <TrainingIcon />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-[15px] leading-snug mb-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
                   {t.solutions.training}
                 </div>
-                <div className="text-white/80 text-sm leading-snug">
+                <div className="text-white/85 text-sm leading-snug mt-0.5">
                   {t.solutions.trainingAndServices}
                 </div>
               </div>
-            </div>
-            <div className="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10 text-white">
-              <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/10">
+            </motion.div>
+            {/* Defense */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15">
                 <DefenseIcon />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-[15px] leading-snug mb-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
                   {t.solutions.defense}
                 </div>
-                <div className="text-white/80 text-sm leading-snug">
+                <div className="text-white/85 text-sm leading-snug mt-0.5">
                   {t.solutions.defenseSystems}
                 </div>
               </div>
-            </div>
+            </motion.div>
+            {/* Space Defense */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
+                <img src={spaceLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+              </div>
+              <div className="flex-1 min-w-0 pt-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
+                  {t.solutions.spaceDefense}
+                </div>
+              </div>
+            </motion.div>
+            {/* Air Defense */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
+                <img src={airLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+              </div>
+              <div className="flex-1 min-w-0 pt-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
+                  {t.solutions.airDefense}
+                </div>
+              </div>
+            </motion.div>
+            {/* Land Defense */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: 0.25 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
+                <img src={landLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+              </div>
+              <div className="flex-1 min-w-0 pt-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
+                  {t.solutions.landDefense}
+                </div>
+              </div>
+            </motion.div>
+            {/* Maritime Defense */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
+                <img src={maritimeLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+              </div>
+              <div className="flex-1 min-w-0 pt-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
+                  {t.solutions.maritimeDefense}
+                </div>
+              </div>
+            </motion.div>
+            {/* Cyber Defense */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ duration: 0.4, delay: 0.35 }}
+              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg sm:col-span-2"
+            >
+              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
+                <img src={cyberLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+              </div>
+              <div className="flex-1 min-w-0 pt-0.5">
+                <div className="font-bold text-base sm:text-lg leading-tight">
+                  {t.solutions.cyberDefense}
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -136,6 +136,11 @@ export const translations = {
       trainingAndServices: "and services",
       defense: "Defense",
       defenseSystems: "systems",
+      spaceDefense: "Space Defense Systems",
+      airDefense: "Air Defense Systems",
+      landDefense: "Land Defense Systems",
+      maritimeDefense: "Maritime Defense Systems",
+      cyberDefense: "Cyber Defense Systems",
     },
     achievements: {
       title: "Our Achievements",
@@ -329,6 +334,11 @@ export const translations = {
       trainingAndServices: "والخدمات",
       defense: "الدفاع",
       defenseSystems: "الأنظمة",
+      spaceDefense: "أنظمة الدفاع الفضائي",
+      airDefense: "أنظمة الدفاع الجوي",
+      landDefense: "أنظمة الدفاع البري",
+      maritimeDefense: "أنظمة الدفاع البحري",
+      cyberDefense: "أنظمة الدفاع السيبراني",
     },
     achievements: {
       title: "إنجازاتنا",

@@ -201,9 +201,13 @@
   }
   .animate-strip-scroll-30 {
     animation: strip-scroll 30s linear infinite;
+    /* Force LTR direction so RTL pages don't break the animation */
+    direction: ltr !important;
   }
   .animate-strip-scroll-60 {
     animation: strip-scroll 60s linear infinite;
+    /* Force LTR direction so RTL pages don't break the animation */
+    direction: ltr !important;
   }
 
   /**

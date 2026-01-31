@@ -416,7 +416,7 @@ export default function App() {
       {/* About Section */}
       <section
         id="about"
-        className="min-h-screen md:h-screen bg-gray-900 relative overflow-hidden"
+        className="min-h-screen bg-gray-900 relative overflow-x-hidden"
       >
         <AboutPage />
       </section>
@@ -424,7 +424,7 @@ export default function App() {
       {/* Our Values Section */}
       <section
         id="values"
-        className="min-h-screen md:h-screen relative overflow-hidden"
+        className="min-h-screen relative overflow-x-hidden"
       >
         <ValuesPage />
       </section>
@@ -432,13 +432,13 @@ export default function App() {
       {/* Our Experience Section */}
       <section
         id="experience"
-        className="min-h-screen md:h-screen relative overflow-hidden"
+        className="min-h-screen relative overflow-x-hidden"
       >
         <ExperiencePage />
       </section>
 
       {/* Sectors Section - SINAN DYNAMICS (Blue) */}
-      <section id="sectors" className="min-h-screen relative overflow-hidden">
+      <section id="sectors" className="min-h-screen relative overflow-x-hidden">
         {/* Drone Image - Centered between the two sides like the submarine */}
         <motion.div
           className="hidden md:block absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
@@ -605,7 +605,7 @@ export default function App() {
       {/* Sinan Marine Section (Purple) */}
       <section
         id="marine"
-        className="min-h-screen md:min-h-0 md:h-screen bg-white relative"
+        className="min-h-screen bg-white relative overflow-x-hidden"
       >
         {/* Submarine Image - Centered between the two sides (hidden on mobile, animations unchanged) */}
         <motion.div
@@ -625,7 +625,7 @@ export default function App() {
         </motion.div>
 
         <div
-          className="min-h-screen md:min-h-0 md:h-full flex flex-col md:flex-row relative"
+          className="min-h-screen flex flex-col md:flex-row relative"
           style={{ zIndex: 10 }}
         >
           {/* Left Side - Purple Page */}
@@ -749,7 +749,7 @@ export default function App() {
       {/* Sinan Frontiers Section (Orange) */}
       <section
         id="frontiers"
-        className="min-h-screen md:min-h-0 md:h-screen bg-white relative overflow-hidden"
+        className="min-h-screen bg-white relative overflow-x-hidden"
       >
         {/* Target Icon Image - Centered between the two sides (hidden on mobile, animations unchanged) */}
         <motion.div
@@ -769,7 +769,7 @@ export default function App() {
         </motion.div>
 
         <div
-          className="min-h-screen md:min-h-0 md:h-full flex flex-col md:flex-row relative"
+          className="min-h-screen flex flex-col md:flex-row relative"
           style={{ zIndex: 10 }}
         >
           {/* Left Side - Orange Page */}
@@ -894,10 +894,10 @@ export default function App() {
         className="min-h-screen bg-gray-900 relative overflow-x-hidden py-16 md:py-20"
       >
         {/* 3D Geometric Background - CSS infinite scroll (3×100vw, 0→-100% seamless loop) */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ direction: "ltr" }}>
           <div
-            className="flex h-full animate-strip-scroll-30"
-            style={{ width: "300vw" }}
+            className="flex h-full animate-strip-scroll-60"
+            style={{ width: "300vw", direction: "ltr" }}
           >
             <img
               src={aselsanBg}
@@ -1036,7 +1036,7 @@ export default function App() {
       {/* Our Solutions Infographic Section */}
       <section
         id="solutions"
-        className="min-h-screen h-screen bg-white relative overflow-hidden"
+        className="min-h-screen bg-white relative overflow-x-hidden"
       >
         <SolutionsPage />
       </section>
@@ -1044,7 +1044,7 @@ export default function App() {
       {/* Our Achievements Section */}
       <section
         id="achievements"
-        className="min-h-screen h-screen bg-white relative overflow-hidden"
+        className="min-h-screen bg-white relative overflow-x-hidden"
       >
         <AchievementsPage />
       </section>
@@ -1052,7 +1052,7 @@ export default function App() {
       {/* Contact Section - Before Footer */}
       <section
         id="contact"
-        className="min-h-screen md:h-screen relative overflow-hidden"
+        className="min-h-screen relative overflow-x-hidden"
       >
         <ContactPage />
       </section>

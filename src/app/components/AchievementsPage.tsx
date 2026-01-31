@@ -218,19 +218,20 @@ export default function AchievementsPage() {
   return (
     <div
       ref={sectionRef}
-      className="w-full h-full min-h-0 relative overflow-hidden flex flex-col items-center px-4 md:px-8 lg:px-12 overflow-y-auto"
+      className="w-full min-h-screen relative overflow-x-hidden flex flex-col items-center px-4 md:px-8 lg:px-12"
       style={{ backgroundColor: "#F5F3EE" }}
     >
       {/* Background Image - Architectural Landmarks - Moving like News Ticker (as in old component) */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 md:h-64 lg:h-80 overflow-hidden">
+      <div className="absolute bottom-0 left-0 right-0 h-48 md:h-64 lg:h-80 overflow-hidden" style={{ direction: "ltr" }}>
         <motion.div
-          className="absolute bottom-0 h-48 md:h-64 lg:h-80 bg-no-repeat w-[300%]"
+          className="absolute bottom-0 left-0 h-48 md:h-64 lg:h-80 bg-no-repeat w-[300%]"
           style={{
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: "auto 120%",
             backgroundPosition: "0 bottom",
             backgroundRepeat: "repeat-x",
             opacity: 0.6,
+            direction: "ltr",
           }}
           animate={{ x: [0, "-66.666%"] }}
           transition={{
@@ -260,17 +261,16 @@ export default function AchievementsPage() {
         className="relative w-full flex flex-col items-center pt-20 md:pt-24 lg:pt-[100px] flex-1 min-h-0"
         style={{ zIndex: 10 }}
       >
-        {/* Achievements Icons and Labels: horizontal scroll on mobile, row on desktop */}
-        <div className="relative w-full flex overflow-x-auto md:overflow-visible gap-4 md:gap-0 md:justify-between items-end px-2 md:px-20 mb-6 md:mb-8 pb-2 md:pb-0 flex-nowrap">
+        {/* Desktop: horizontal row with wave pattern */}
+        <div className="hidden md:flex relative w-full gap-0 justify-between items-end px-20 mb-8">
           {achievements.map((achievement, index) => {
             const Icon = achievement.icon;
-            // Pattern: 0,2,4,6 stay same, 1,3,5,7 move down
             const shouldMoveDown = index % 2 === 1;
 
             return (
               <motion.div
                 key={index}
-                className={`flex flex-col items-center flex-shrink-0 w-[90px] min-w-[90px] md:w-[130px] md:min-w-0 ${shouldMoveDown ? "mt-10 md:mt-[70px]" : ""}`}
+                className={`flex flex-col items-center w-[130px] ${shouldMoveDown ? "mt-[70px]" : ""}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1 + index * 0.15 }}
@@ -410,7 +410,7 @@ export default function AchievementsPage() {
 
                 {/* Label */}
                 <div
-                  className="text-gray-800 text-center leading-tight whitespace-pre-line text-[10px] md:text-xs lg:text-[12pt]"
+                  className="text-gray-800 text-center leading-tight whitespace-pre-line text-xs lg:text-[12pt]"
                   style={{
                     fontWeight: 500,
                     fontFamily: "DIN Arabic, sans-serif",
@@ -423,10 +423,81 @@ export default function AchievementsPage() {
           })}
         </div>
 
-        {/* Spacer: pushes timeline to bottom, removes white space below */}
-        <div className="flex-1 min-h-4 w-full" aria-hidden="true" />
+        {/* Mobile: 2-column grid, no horizontal scroll, same counter & style */}
+        <div className="md:hidden grid grid-cols-2 gap-x-4 gap-y-6 sm:gap-y-8 px-2 sm:px-4 mb-6 w-full max-w-lg mx-auto">
+          {achievements.map((achievement, index) => {
+            const Icon = achievement.icon;
 
-        {/* Horizontal Timeline - Now positioned after labels */}
+            return (
+              <motion.div
+                key={index}
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.8 + index * 0.08 }}
+              >
+                <motion.div
+                  className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center mb-2 [&_img]:max-w-full [&_img]:max-h-full [&_img]:object-contain"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <Icon />
+                </motion.div>
+                <div
+                  className="text-gray-700 text-center mb-2 text-sm sm:text-base"
+                  style={{ fontWeight: 600, fontFamily: "DIN Arabic, sans-serif" }}
+                >
+                  <AnimatedCounter
+                    targetValue={achievement.targetNumber}
+                    suffix={achievement.suffix}
+                    progress={scrollProgress}
+                  />
+                </div>
+                <motion.svg
+                  width="2"
+                  height="40"
+                  viewBox="0 0 2 40"
+                  className="overflow-visible"
+                >
+                  <motion.line
+                    x1="1"
+                    y1="0"
+                    x2="1"
+                    y2="40"
+                    stroke="#9CA3AF"
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                    strokeDashoffset={isInView ? 0 : 44}
+                    transition={{
+                      duration: 0.8,
+                      ease: "easeOut",
+                      delay: isInView ? 1.2 + index * 0.1 : 0,
+                    }}
+                  />
+                </motion.svg>
+                <motion.div
+                  className="w-2.5 h-2.5 bg-gray-800 rounded-full my-2"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3, delay: 1 + index * 0.08 }}
+                />
+                <div
+                  className="text-gray-800 text-center leading-tight whitespace-pre-line text-[10px] sm:text-xs"
+                  style={{
+                    fontWeight: 500,
+                    fontFamily: "DIN Arabic, sans-serif",
+                  }}
+                >
+                  {achievement.label}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Spacer: pushes timeline to bottom on desktop */}
+        <div className="hidden md:block flex-1 min-h-4 w-full" aria-hidden="true" />
+
+        {/* Horizontal Timeline */}
         <div className="w-full px-4 md:px-20 mt-4 md:mt-6 flex-shrink-0 pb-6 md:pb-8">
           <motion.div
             className="h-0.5 bg-gray-900 relative"
