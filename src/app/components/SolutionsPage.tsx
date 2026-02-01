@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import solutionsBg from "@/assets/3004dc5a5d12ee327e0bb3709f487de52a320930.png";
@@ -15,6 +16,7 @@ import centerLogo from "@/assets/64074ce9782b043bd0cc2630c3456e4497e318bc.png";
 
 export default function SolutionsPage() {
   const { t } = useLanguage();
+  const [defenseHovered, setDefenseHovered] = useState(false);
   return (
     <div
       className="w-full h-full min-h-0 relative overflow-hidden flex flex-col"
@@ -525,80 +527,78 @@ export default function SolutionsPage() {
             </div>
           </div>
 
-          <div
-            className="absolute left-12 z-20 text-left"
-            style={{ top: "195px" }}
-          >
-            <h2
-              className="text-[24px] mb-8"
-              style={{
-                color: "#A0AEC0",
-                fontFamily: "DIN Arabic, sans-serif",
-                letterSpacing: "0.5px",
-                fontWeight: "bold",
-              }}
-            >
-              {t.solutions.ourSolutions}
-            </h2>
-            <div
-              className="flex flex-col gap-4"
-              style={{ fontFamily: "DIN Arabic, sans-serif" }}
-            >
-              <div className="flex items-center gap-3">
-                <div style={{ width: "24px", height: "24px" }}>
-                  <CommunicationIcon />
-                </div>
-                <div
-                  className="text-[12px] leading-tight"
-                  style={{ color: "#A0AEC0", fontWeight: "bold" }}
-                >
-                  <div>{t.solutions.communication}</div>
-                  <div>{t.solutions.communicationSystems}</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div style={{ width: "24px", height: "24px" }}>
-                  <TrainingIcon />
-                </div>
-                <div
-                  className="text-[12px] leading-tight"
-                  style={{ color: "#A0AEC0", fontWeight: "bold" }}
-                >
-                  <div>{t.solutions.training}</div>
-                  <div>{t.solutions.trainingAndServices}</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div style={{ width: "24px", height: "24px" }}>
-                  <DefenseIcon />
-                </div>
-                <div
-                  className="text-[12px] leading-tight"
-                  style={{ color: "#A0AEC0", fontWeight: "bold" }}
-                >
-                  <div>{t.solutions.defense}</div>
-                  <div>{t.solutions.defenseSystems}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Connecting Lines from Defense Systems to Cyber Defense Circle */}
+          {/* Connecting Lines — تظهر عند الهوفر على Defense systems */}
           <img
             src={connectingLines}
             alt=""
-            className="absolute z-10"
+            className="absolute z-[7] transition-opacity duration-300"
             style={{
               left: "70px",
               top: "300px",
               width: "680px",
               height: "auto",
+              opacity: defenseHovered ? 1 : 0,
             }}
           />
+
+          {/* الحلول الثلاثة — أقصى اليسار لضمان عدم التداخل مع الصورة */}
+          <div
+            className="absolute z-20 text-left max-w-[260px] pl-1 pr-1 py-5 -translate-x-8 xl:-translate-x-12"
+            style={{
+              left: "0",
+              bottom: "22%",
+              top: "auto",
+            }}
+          >
+            <h2
+              className="text-gray-900 text-xl xl:text-2xl font-bold mb-5"
+              style={{
+                fontFamily: "DIN Arabic, sans-serif",
+                letterSpacing: "0.5px",
+              }}
+            >
+              {t.solutions.ourSolutions}
+            </h2>
+            <div
+              className="flex flex-col gap-3"
+              style={{ fontFamily: "DIN Arabic, sans-serif" }}
+            >
+              <div className="flex items-center gap-4 py-2">
+                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-gray-700">
+                  <CommunicationIcon />
+                </div>
+                <div className="text-gray-800 leading-tight">
+                  <div className="font-bold text-base xl:text-lg text-gray-900">{t.solutions.communication}</div>
+                  <div className="text-gray-600 text-sm xl:text-base mt-0.5">{t.solutions.communicationSystems}</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 py-2">
+                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-gray-700">
+                  <TrainingIcon />
+                </div>
+                <div className="text-gray-800 leading-tight">
+                  <div className="font-bold text-base xl:text-lg text-gray-900">{t.solutions.training}</div>
+                  <div className="text-gray-600 text-sm xl:text-base mt-0.5">{t.solutions.trainingAndServices}</div>
+                </div>
+              </div>
+              <div
+                className="flex items-center gap-4 py-2 cursor-default rounded-md transition-all duration-200 hover:bg-gray-100/50 hover:scale-105 origin-left"
+                onMouseEnter={() => setDefenseHovered(true)}
+              >
+                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-gray-700">
+                  <DefenseIcon />
+                </div>
+                <div className="text-gray-800 leading-tight">
+                  <div className="font-bold text-base xl:text-lg text-gray-900">{t.solutions.defense}</div>
+                  <div className="text-gray-600 text-sm xl:text-base mt-0.5">{t.solutions.defenseSystems}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Mobile: all solutions in a responsive grid – flows with page scroll */}
+      {/* Mobile: الحلول الثلاثة الرئيسية أولاً ثم باقي الحلول */}
       <div className="md:hidden relative z-20 w-full">
         {/* Overlay for readability */}
         <div
@@ -609,70 +609,77 @@ export default function SolutionsPage() {
           className="relative flex flex-col items-center w-full px-4 sm:px-6 py-8 sm:py-12"
           style={{ fontFamily: "DIN Arabic, sans-serif" }}
         >
-          <h2 className="text-white text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">
+          <h2 className="text-white text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-center">
             {t.solutions.ourSolutions}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 w-full max-w-2xl mx-auto">
+          <p className="text-white/80 text-sm sm:text-base mb-6 sm:mb-8 text-center max-w-md">
+            Communication · Training · Defense
+          </p>
+          {/* الحلول الثلاثة الرئيسية — أكبر وأوضح */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 w-full max-w-4xl mx-auto mb-8 sm:mb-10">
             {/* Communication */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              transition={{ duration: 0.45 }}
+              className="flex flex-col items-center text-center gap-3 p-5 sm:p-6 rounded-2xl bg-white/15 backdrop-blur-md border-2 border-white/25 text-white shadow-xl"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/15">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/20">
                 <CommunicationIcon />
               </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+              <div>
+                <div className="font-bold text-base sm:text-lg leading-tight">
                   {t.solutions.communication}
                 </div>
-                <div className="text-white/85 text-sm leading-snug mt-0.5">
+                <div className="text-white/90 text-sm leading-snug mt-1">
                   {t.solutions.communicationSystems}
                 </div>
               </div>
             </motion.div>
             {/* Training */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4, delay: 0.05 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              transition={{ duration: 0.45, delay: 0.08 }}
+              className="flex flex-col items-center text-center gap-3 p-5 sm:p-6 rounded-2xl bg-white/15 backdrop-blur-md border-2 border-white/25 text-white shadow-xl"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/15">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/20">
                 <TrainingIcon />
               </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+              <div>
+                <div className="font-bold text-base sm:text-lg leading-tight">
                   {t.solutions.training}
                 </div>
-                <div className="text-white/85 text-sm leading-snug mt-0.5">
+                <div className="text-white/90 text-sm leading-snug mt-1">
                   {t.solutions.trainingAndServices}
                 </div>
               </div>
             </motion.div>
             {/* Defense */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              transition={{ duration: 0.45, delay: 0.16 }}
+              className="flex flex-col items-center text-center gap-3 p-5 sm:p-6 rounded-2xl bg-white/15 backdrop-blur-md border-2 border-white/25 text-white shadow-xl"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/15">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/20">
                 <DefenseIcon />
               </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+              <div>
+                <div className="font-bold text-base sm:text-lg leading-tight">
                   {t.solutions.defense}
                 </div>
-                <div className="text-white/85 text-sm leading-snug mt-0.5">
+                <div className="text-white/90 text-sm leading-snug mt-1">
                   {t.solutions.defenseSystems}
                 </div>
               </div>
             </motion.div>
+          </div>
+          {/* باقي الحلول (Defense Systems) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 w-full max-w-2xl mx-auto">
             {/* Space Defense */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}

@@ -28,10 +28,10 @@ import logoImage from "@/assets/dba262c104d43832d133ef6ded872493e7354dff.png";
 import cursorLogo from "@/assets/e868c967defa2ff1adabdce43f94676450e69b02.png";
 import droneImage from "@/assets/cd1779045309571142b8f0a31bf6fab645307577.png";
 
-// CustomCursor component - inline
+// المؤشر المخصص: أبيض على الخلفيات الداكنة، أسود على الخلفيات الفاتحة (مثل قسم الرؤية والمهمة) — فوق كل العناصر
 function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isOnWhiteBackground, setIsOnWhiteBackground] = useState(false);
+  const [isOnLightBackground, setIsOnLightBackground] = useState(false);
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
@@ -39,38 +39,41 @@ function CustomCursor() {
 
       const element = document.elementFromPoint(e.clientX, e.clientY);
       if (element) {
-        const bgColor = window.getComputedStyle(element).backgroundColor;
-        const parentBgColor = element.parentElement
-          ? window.getComputedStyle(element.parentElement).backgroundColor
-          : "";
-
-        const isWhite =
-          bgColor.includes("255, 255, 255") ||
-          bgColor.includes("rgb(255, 255, 255)") ||
-          bgColor.includes("249, 250, 251") ||
-          bgColor.includes("243, 244, 246") ||
-          parentBgColor.includes("255, 255, 255") ||
-          parentBgColor.includes("249, 250, 251") ||
-          parentBgColor.includes("243, 244, 246");
-
-        setIsOnWhiteBackground(isWhite);
+        let el: Element | null = element;
+        let isLight = false;
+        for (let i = 0; i < 8 && el; i++) {
+          const bg = window.getComputedStyle(el).backgroundColor;
+          const isWhiteOrLight =
+            bg.includes("255, 255, 255") ||
+            bg.includes("rgb(255, 255, 255)") ||
+            bg.includes("249, 250, 251") ||
+            bg.includes("243, 244, 246") ||
+            bg.includes("248, 248, 248") ||
+            bg.includes("245, 245, 245") ||
+            bg.includes("240, 240, 240") ||
+            bg.includes("250, 250, 250");
+          if (isWhiteOrLight) {
+            isLight = true;
+            break;
+          }
+          el = el.parentElement;
+        }
+        setIsOnLightBackground(isLight);
       }
     };
 
     window.addEventListener("mousemove", updateMousePosition);
-
-    return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
-    };
+    return () => window.removeEventListener("mousemove", updateMousePosition);
   }, []);
 
   return (
     <div
-      className="fixed pointer-events-none z-[9999]"
+      className="fixed pointer-events-none"
       style={{
         left: mousePosition.x - 14,
         top: mousePosition.y - 16,
         transform: "translate(0, 0)",
+        zIndex: 2147483647,
       }}
     >
       <img
@@ -78,9 +81,9 @@ function CustomCursor() {
         alt=""
         className="w-7 h-8"
         style={{
-          opacity: 0.9,
-          filter: isOnWhiteBackground ? "brightness(0)" : "none",
-          boxShadow: "none",
+          opacity: 0.95,
+          filter: isOnLightBackground ? "brightness(0)" : "none",
+          boxShadow: isOnLightBackground ? "0 0 0 1px rgba(0,0,0,0.1)" : "none",
           imageRendering: "crisp-edges",
         }}
       />
@@ -1246,13 +1249,15 @@ export default function App() {
             <SolutionsPage />
           </section>
 
-          {/* Our Achievements Section */}
-          <section
-            id="achievements"
-            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden bg-[#F5F3EE] relative"
-          >
-            <AchievementsPage />
-          </section>
+          {/* Our Achievements Section — معطّل مؤقتاً */}
+          {false && (
+            <section
+              id="achievements"
+              className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden bg-[#F5F3EE] relative"
+            >
+              <AchievementsPage />
+            </section>
+          )}
 
           {/* Contact Section - Before Footer */}
           <section
@@ -1263,7 +1268,7 @@ export default function App() {
           </section>
 
           {/* Footer */}
-          <footer className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative bg-gray-900">
+          <footer className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative bg-gray-900 flex flex-col justify-end">
             {/* Background Image */}
             <div className="absolute inset-0">
               <img
@@ -1273,11 +1278,11 @@ export default function App() {
               />
             </div>
 
-            {/* Footer Content */}
-            <div className="relative z-10 px-4 md:px-8 lg:px-20 py-10 md:py-14 lg:py-16">
-              <div className="max-w-7xl mx-auto">
+            {/* Footer Content — كتلة واحدة أسفل القسم: روابط ثم كوبي رايت */}
+            <div className="relative z-10 flex flex-col justify-end px-4 md:px-8 lg:px-20 pb-2">
+              <div className="max-w-7xl mx-auto w-full">
                 {/* Footer Links Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-10 lg:gap-12 mb-10 md:mb-16">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-10 lg:gap-12 mb-6 md:mb-8">
                   <div>
                     <h3
                       className="text-white text-sm mb-6"
@@ -1288,20 +1293,11 @@ export default function App() {
                     <ul className="space-y-3">
                       <li>
                         <a
-                          href="#home"
+                          href="#vision-mission"
                           className="text-white/70 text-xs hover:text-white transition-colors"
                           style={{ fontWeight: 300 }}
                         >
-                          {t.footer.vision}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#about"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.mission}
+                          {t.nav.visionMission}
                         </a>
                       </li>
                       <li>
@@ -1311,15 +1307,6 @@ export default function App() {
                           style={{ fontWeight: 300 }}
                         >
                           {t.footer.ourValues}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#sectors"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.allProducts}
                         </a>
                       </li>
                     </ul>
@@ -1433,24 +1420,6 @@ export default function App() {
                           {t.footer.leadership}
                         </a>
                       </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.careers}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.investors}
-                        </a>
-                      </li>
                     </ul>
                   </div>
                   <div>
@@ -1458,88 +1427,38 @@ export default function App() {
                       className="text-white text-sm mb-6"
                       style={{ fontWeight: 600 }}
                     >
-                      {t.footer.mediaCenter}
+                      {t.contact.emailUs}
                     </h3>
                     <ul className="space-y-3">
                       <li>
                         <a
-                          href="#achievements"
+                          href="mailto:info@sinan.om"
                           className="text-white/70 text-xs hover:text-white transition-colors"
                           style={{ fontWeight: 300 }}
                         >
-                          {t.footer.news}
+                          info@sinan.om
                         </a>
                       </li>
                       <li>
                         <a
-                          href="#achievements"
+                          href="mailto:sales@sinan.om"
                           className="text-white/70 text-xs hover:text-white transition-colors"
                           style={{ fontWeight: 300 }}
                         >
-                          {t.footer.pressReleases}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#achievements"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.gallery}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3
-                      className="text-white text-sm mb-6"
-                      style={{ fontWeight: 600 }}
-                    >
-                      {t.footer.connect}
-                    </h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a
-                          href="https://linkedin.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          LinkedIn
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://youtube.com"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          YouTube
+                          sales@sinan.om
                         </a>
                       </li>
                     </ul>
                   </div>
                 </div>
-                <div className="pt-6 md:pt-8 border-t border-white/10">
-                  <p
-                    className="text-white/60 text-xs text-center"
-                    style={{ fontWeight: 300 }}
-                  >
-                    {t.footer.copyright} |
-                    <a href="#" className="hover:text-white transition-colors">
-                      {" "}
-                      {t.footer.privacyPolicy}
-                    </a>{" "}
-                    |
-                    <a href="#" className="hover:text-white transition-colors">
-                      {" "}
-                      {t.footer.termsOfUse}
-                    </a>
-                  </p>
-                </div>
+              </div>
+              <div className="pt-6 md:pt-8 border-t border-white/10 pb-3 md:pb-4">
+                <p
+                  className="text-white/60 text-xs text-center"
+                  style={{ fontWeight: 300 }}
+                >
+                  {t.footer.copyright}
+                </p>
               </div>
             </div>
           </footer>
