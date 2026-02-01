@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 
 // Import components directly
-import LayerHome from "@/imports/Layer1-57-519";
+import LayerHome, { TRIANGLE_TO_SECTION } from "@/imports/Layer1-57-519";
 import LayerDynamics from "@/imports/Layer1-146-688";
 import LayerMarine from "@/imports/Layer1-146-793";
 import LayerBackground from "@/imports/Layer1";
@@ -294,6 +294,7 @@ export default function App() {
   const [sectionInView, setSectionInView] = useState<Record<string, boolean>>(
     {}
   );
+  const [heroHoveredTriangleId, setHeroHoveredTriangleId] = useState<number | null>(null);
 
   const sectionIdByEl = useRef<WeakMap<Element, string>>(new WeakMap());
 
@@ -363,23 +364,106 @@ export default function App() {
               aria-hidden
             >
               <div className="absolute inset-0 w-full h-full bg-gray-950" />
-              {/* استخدام img لضمان تحميل وعرض الـ SVG بشكل موثوق */}
+              {/* خلفية مقلوبة رأسياً: المجسمات من الأسفل دون التأثير على اللوغو */}
               <img
-                src={`${import.meta.env.BASE_URL || "/"}Assxet.svg`}
+                src={`${import.meta.env.BASE_URL || "/"}hero-bg.png`}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover object-center opacity-90"
-                style={{ objectFit: "cover", objectPosition: "center" }}
+                className="absolute inset-0 w-full h-full object-cover object-center"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  transform: "scaleY(-1)",
+                }}
               />
             </div>
-
-            {/* Logo centered in hero — heartbeat on load and on hover */}
+            {/* طبقة المثلثات الملونة: هوفر + نقر للانتقال إلى قسم محدد */}
             <div
-              className="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-8 min-h-0"
+              className="absolute inset-y-0 left-1/2 w-[110vw] max-w-none -translate-x-1/2 pointer-events-none"
+              style={{ zIndex: 1 }}
+            >
+              <div className="absolute inset-0 w-full h-full min-w-full min-h-full pointer-events-auto">
+                {typeof LayerHome === "function" ? (
+                  <LayerHome
+                    hideGrayRect
+                    trianglesOnly
+                    onTriangleHoverChange={setHeroHoveredTriangleId}
+                    onTriangleClick={(triangleId) => {
+                      const sectionId = TRIANGLE_TO_SECTION[triangleId];
+                      const el = sectionRefs.current[sectionId] ?? document.getElementById(sectionId);
+                      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                  />
+                ) : null}
+              </div>
+            </div>
+
+            {/* لوغو عائم فوق منتصف كل مثلث عند الهوفر — الموضع: مركز كل مثلث (16%, 40%, 64%, 88%) */}
+            {heroHoveredTriangleId === 1 && (
+              <div
+                className="absolute left-[16%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
+                style={{ width: "min(22vw, 220px)" }}
+              >
+                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
+                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
+                    {typeof LayerDynamics === "function" ? <LayerDynamics /> : null}
+                  </div>
+                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN DYNAMICS</span>
+                </div>
+              </div>
+            )}
+            {heroHoveredTriangleId === 2 && (
+              <div
+                className="absolute left-[40%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
+                style={{ width: "min(22vw, 220px)" }}
+              >
+                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
+                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
+                    {typeof LayerMarine === "function" ? <LayerMarine /> : null}
+                  </div>
+                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN MARINE</span>
+                </div>
+              </div>
+            )}
+            {heroHoveredTriangleId === 3 && (
+              <div
+                className="absolute left-[64%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
+                style={{ width: "min(22vw, 220px)" }}
+              >
+                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
+                  <img
+                    src={`${import.meta.env.BASE_URL || "/"}simnfor.png`}
+                    alt="SINAN FRONTIERS"
+                    className="h-12 md:h-14 w-auto object-contain"
+                  />
+                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN FRONTIERS</span>
+                </div>
+              </div>
+            )}
+            {heroHoveredTriangleId === 4 && (
+              <div
+                className="absolute left-[88%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
+                style={{ width: "min(22vw, 220px)" }}
+              >
+                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
+                  <img
+                    src={`${import.meta.env.BASE_URL || "/"}logo-assislian.png`}
+                    alt="Sinan Aselsan"
+                    className="h-12 md:h-14 w-auto object-contain"
+                  />
+                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN ASELSAN</span>
+                </div>
+              </div>
+            )}
+
+            {/* Logo centered in hero — pointer-events-none حتى لا تغطي المثلثات؛ اللوغو فقط يلتقط الأحداث */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-8 min-h-0 pointer-events-none"
               style={{ zIndex: 10 }}
             >
               {/* دخول الصفحة: ظهور ثم نبضة قلب واحدة — يعاد عند كل دخول للقسم */}
               <motion.div
                 initial={false}
+                className="pointer-events-auto flex flex-col items-center justify-center"
                 animate={
                   sectionInView["home"]
                     ? {
@@ -398,7 +482,6 @@ export default function App() {
                       }
                     : { duration: 0.3 },
                 }}
-                className="flex flex-col items-center justify-center"
               >
                 {/* عند مرور الماوس: نبض القلب يتكرر */}
                 <motion.div

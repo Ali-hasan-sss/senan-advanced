@@ -15,7 +15,7 @@ function ValueCard({ icon: Icon, title, description, delay }: ValueCardProps) {
 
   return (
     <motion.div
-      className="relative p-4 md:p-6 lg:p-8 rounded-2xl cursor-pointer transition-all duration-300 flex flex-col items-end text-end"
+      className="relative p-5 md:p-6 lg:p-8 rounded-2xl cursor-pointer transition-all duration-300 flex flex-col items-end text-end h-full min-h-[200px] md:min-h-[220px]"
       style={{
         border: isHovered
           ? "1px solid rgba(200, 200, 200, 0.8)"
@@ -72,7 +72,7 @@ export default function ValuesPage() {
   ];
 
   return (
-    <div className="w-full h-full min-h-[calc(100vh-50px)] flex flex-col overflow-hidden relative">
+    <div className="w-full h-full min-h-[calc(100vh-50px)] flex overflow-hidden relative">
       {/* Background - keep current */}
       <img
         src="/ourvalue.jpeg"
@@ -80,34 +80,36 @@ export default function ValuesPage() {
         className="absolute inset-0 w-full h-full object-cover object-center"
         style={{ zIndex: 0 }}
       />
-      {/* Content */}
-      <div className="relative z-10 flex flex-col flex-1 px-4 md:px-8 lg:px-16 py-8 md:py-12">
-        {/* Centered title and subtitle */}
-        <motion.div
-          className="text-center mb-8 md:mb-12"
-          initial={{ opacity: 0, y: -12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1
-            className="text-white font-bold text-xl md:text-2xl lg:text-3xl mb-2"
-            style={{ fontFamily: "DIN Arabic, sans-serif" }}
+      {/* المحتوى في منتصف الصفحة طولياً — حاوية على قياس المحتوى أكبر بقليل، بطاقات موحدة الطول */}
+      <div className="relative z-10 flex flex-1 min-h-0 items-center justify-center px-4 md:px-8 lg:px-12 py-8">
+        <div className="w-full max-w-5xl flex flex-col items-center gap-6 md:gap-8 shrink-0">
+          {/* العنوان */}
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: -12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5 }}
           >
-            {t.values.title}
-          </h1>
-        </motion.div>
-        {/* Three columns */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 items-stretch">
-          {values.map((value, index) => (
-            <ValueCard
-              key={index}
-              icon={value.icon}
-              title={value.title}
-              description={value.description}
-              delay={0.15 + index * 0.1}
-            />
-          ))}
+            <h1
+              className="text-white font-bold text-xl md:text-2xl lg:text-3xl"
+              style={{ fontFamily: "DIN Arabic, sans-serif" }}
+            >
+              {t.values.title}
+            </h1>
+          </motion.div>
+          {/* ثلاث حاويات موحدة الطول */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 items-stretch">
+            {values.map((value, index) => (
+              <ValueCard
+                key={index}
+                icon={value.icon}
+                title={value.title}
+                description={value.description}
+                delay={0.15 + index * 0.1}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

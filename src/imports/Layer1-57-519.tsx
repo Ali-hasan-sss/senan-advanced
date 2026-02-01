@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import svgPaths from "./svg-gb3clc6l4h";
 import imgRectangle1 from "@/assets/6361bdb9bfba5f30f5c0c8a84044844a6e47b954.png";
 import { imgRectangle } from "./svg-k0tkk";
@@ -73,163 +74,160 @@ function ClipPathGroup() {
   );
 }
 
-function Group2({ hideGrayRect }: { hideGrayRect?: boolean }) {
+type Group2Props = {
+  hideGrayRect?: boolean;
+  hoveredId?: number | null;
+  setHoveredId?: (id: number | null) => void;
+  onTriangleClick?: (id: number) => void;
+};
+
+function Group2({ hideGrayRect, hoveredId = null, setHoveredId, onTriangleClick }: Group2Props) {
+  const isHoverable = typeof setHoveredId === "function";
+  const isClickable = typeof onTriangleClick === "function";
+  const interactiveClass =
+    isHoverable || isClickable ? "cursor-pointer transition-[filter,opacity] duration-300" : "";
+  const triangleProps = (id: number) => ({
+    ...(isHoverable
+      ? {
+          onMouseEnter: () => setHoveredId!(id),
+          onMouseLeave: () => setHoveredId!(null),
+        }
+      : {}),
+    ...(isClickable ? { onClick: () => onTriangleClick!(id) } : {}),
+  });
+
+  // أربعة مثلثات أسفل الشاشة — أضلاع بزاوية 45° لمطابقة شبكة low-poly في الخلفية
+  // الشكل: قاعدة أفقية أسفل، ضلعان قطريان 45° (0,100→50,50 و 50,50→100,100)
+  const lowPolyPoints = "0,100 50,50 100,100";
+  const bottomTriangles = [
+    {
+      id: 1,
+      color: "#00ADEE",
+      inset: "inset-[58%_72%_0%_4%]",
+      viewBox: "0 0 100 100",
+      points: lowPolyPoints,
+    },
+    {
+      id: 2,
+      color: "#9333ea",
+      inset: "inset-[58%_48%_0%_28%]",
+      viewBox: "0 0 100 100",
+      points: lowPolyPoints,
+    },
+    {
+      id: 3,
+      color: "#f97316",
+      inset: "inset-[58%_24%_0%_52%]",
+      viewBox: "0 0 100 100",
+      points: lowPolyPoints,
+    },
+    {
+      id: 4,
+      color: "#0a0a0a",
+      inset: "inset-[58%_0%_0%_76%]",
+      viewBox: "0 0 100 100",
+      points: lowPolyPoints,
+    },
+  ] as const;
+
   return (
     <div
-      className="absolute contents inset-[47.07%_0_11.93%_0.01%]"
+      className="absolute contents inset-[47.07%_0_0_0]"
       data-name="Group"
     >
       {!hideGrayRect && <ClipPathGroup />}
-      <div
-        className="absolute inset-[70.51%_6.45%_12.06%_80.85%]"
-        data-name="Vector"
-      >
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 244 213.76"
-        >
-          <path d={svgPaths.p2a848180} fill="#2E3191" opacity="0.4">
-            <animate
-              attributeName="opacity"
-              values="0.4;0.8;0.4"
-              dur="3s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </svg>
-      </div>
-      <div
-        className="absolute inset-[77.21%_73.31%_12.17%_15.97%]"
-        data-name="Vector"
-      >
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 206 130.22"
-        >
-          <path d={svgPaths.p2b208600} fill="#808B42" opacity="0.4">
-            <animate
-              attributeName="opacity"
-              values="0.4;0.9;0.4"
-              dur="2.5s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </svg>
-      </div>
-      <div
-        className="absolute inset-[62.1%_38.4%_29.41%_58.48%]"
-        data-name="Vector"
-      >
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 60 104.16"
-        >
-          <path d={svgPaths.pca4b00} fill="#00ADEE" opacity="0.4">
-            <animate
-              attributeName="opacity"
-              values="0.4;0.85;0.4"
-              dur="2.8s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </svg>
-      </div>
-      {/* Additional pulsing triangles */}
-      <div className="absolute inset-[65%_60%_20%_30%]">
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 100 90"
-        >
-          <polygon points="50,8 95,82 5,82" fill="#3b82f6" opacity="0.3">
-            <animate
-              attributeName="opacity"
-              values="0.3;0.8;0.3"
-              dur="3.5s"
-              repeatCount="indefinite"
-            />
-          </polygon>
-        </svg>
-      </div>
-      <div className="absolute inset-[68%_10%_22%_70%]">
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 150 120"
-        >
-          <polygon points="75,10 140,110 10,110" fill="#9333ea" opacity="0.3">
-            <animate
-              attributeName="opacity"
-              values="0.2;0.7;0.2"
-              dur="3.2s"
-              repeatCount="indefinite"
-            />
-          </polygon>
-        </svg>
-      </div>
-      <div className="absolute inset-[74%_15%_12%_75%]">
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 120 140"
-        >
-          <polygon points="60,5 115,135 5,135" fill="#f97316" opacity="0.3">
-            <animate
-              attributeName="opacity"
-              values="0.25;0.75;0.25"
-              dur="2.7s"
-              repeatCount="indefinite"
-            />
-          </polygon>
-        </svg>
-      </div>
-      <div className="absolute inset-[75%_55%_12%_35%]">
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 80 100"
-        >
-          <polygon points="40,5 75,95 5,95" fill="#a855f7" opacity="0.25">
-            <animate
-              attributeName="opacity"
-              values="0.2;0.65;0.2"
-              dur="2.9s"
-              repeatCount="indefinite"
-            />
-          </polygon>
-        </svg>
-      </div>
+      {bottomTriangles.map(({ id, color, inset, viewBox, points }) => {
+        const isBlueTriangle = id === 1;
+        const content = (
+          <div
+            className={`absolute ${inset} ${interactiveClass}`.trim()}
+            data-name="Vector"
+            {...triangleProps(id)}
+          >
+            <svg
+              className="block size-full"
+              fill="none"
+              preserveAspectRatio="none"
+              viewBox={viewBox}
+            >
+              <polygon
+                points={points}
+                fill={color}
+                opacity={hoveredId === id ? 1 : id === 4 ? 0.7 : 0.5}
+                style={
+                  hoveredId === id
+                    ? {
+                        filter:
+                          id === 4
+                            ? "drop-shadow(0 0 12px rgba(255,255,255,0.35)) drop-shadow(0 0 24px rgba(255,255,255,0.2))"
+                            : `drop-shadow(0 0 12px ${color}) drop-shadow(0 0 24px ${color})`,
+                      }
+                    : undefined
+                }
+              >
+                {hoveredId !== id && (
+                  <animate
+                    attributeName="opacity"
+                    values={id === 4 ? "0.7;0.95;0.7" : "0.5;0.85;0.5"}
+                    dur="2.5s"
+                    repeatCount="indefinite"
+                  />
+                )}
+              </polygon>
+            </svg>
+          </div>
+        );
+        if (isBlueTriangle) {
+          return <React.Fragment key={id}>{content}</React.Fragment>;
+        }
+        return <React.Fragment key={id}>{content}</React.Fragment>;
+      })}
     </div>
   );
 }
 
-type LayerProps = { hideGrayRect?: boolean };
+type LayerProps = {
+  hideGrayRect?: boolean;
+  trianglesOnly?: boolean;
+  onTriangleClick?: (id: number) => void;
+  onTriangleHoverChange?: (id: number | null) => void;
+};
 
-export default function Layer({ hideGrayRect }: LayerProps = {}) {
+/** ربط المثلثات الأربعة (1–4: أزرق→Dynamics، بنفسجي→Marine، برتقالي→Frontiers، أسود→Aselsan) بأقسام الصفحة للانتقال عند النقر */
+export const TRIANGLE_TO_SECTION: Record<number, string> = {
+  1: "sectors", // المثلث الأزرق → قسم داينمك (Sinan Dynamics)
+  2: "marine", // المثلث البنفسجي → قسم مارين (Sinan Marine)
+  3: "frontiers", // المثلث البرتقالي → قسم فرونتيرس (Sinan Frontiers)
+  4: "aselsan", // المثلث الأسود → قسم أسيلسان (Sinan Aselsan)
+};
+
+export default function Layer({ hideGrayRect, trianglesOnly, onTriangleClick, onTriangleHoverChange }: LayerProps = {}) {
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
+
+  React.useEffect(() => {
+    onTriangleHoverChange?.(hoveredId);
+  }, [hoveredId, onTriangleHoverChange]);
+
   return (
     <div className="relative size-full min-w-full min-h-full" data-name="Layer_1">
-      <div className="absolute inset-0" data-name="Vector">
-        <svg
-          className="block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 1919.75 644"
-        >
-          <path d="M1919.75 0H0V644H1919.75V0Z" fill="#08080A" id="Vector" />
-        </svg>
-      </div>
-      {/* Group (Explore our Solutions button) removed per request — logo only in hero */}
-      <Group2 hideGrayRect={hideGrayRect} />
+      {!trianglesOnly && (
+        <div className="absolute inset-0" data-name="Vector">
+          <svg
+            className="block size-full"
+            fill="none"
+            preserveAspectRatio="none"
+            viewBox="0 0 1919.75 644"
+          >
+            <path d="M1919.75 0H0V644H1919.75V0Z" fill="#08080A" id="Vector" />
+          </svg>
+        </div>
+      )}
+      <Group2
+        hideGrayRect={hideGrayRect}
+        hoveredId={hoveredId}
+        setHoveredId={trianglesOnly ? setHoveredId : undefined}
+        onTriangleClick={trianglesOnly ? onTriangleClick : undefined}
+      />
     </div>
   );
 }
