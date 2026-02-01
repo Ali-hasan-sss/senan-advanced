@@ -25,7 +25,6 @@ import aselsanBg from "@/assets/910d9064a27b83a840b1d9cdf3c5030c1f2a0077.png";
 import aselsanLogoImage from "@/assets/dc8f1005d190b58e6f8f96897819fea19bca9829.png";
 import footerBg from "@/assets/81747934bf98e8003972a07405afdd63cbeb3630.png";
 import logoImage from "@/assets/dba262c104d43832d133ef6ded872493e7354dff.png";
-import frontiersLogoImage from "@/assets/ded94a3583f28236c45323579cf0780af7fcb517.png";
 import cursorLogo from "@/assets/e868c967defa2ff1adabdce43f94676450e69b02.png";
 import droneImage from "@/assets/cd1779045309571142b8f0a31bf6fab645307577.png";
 
@@ -158,27 +157,47 @@ function MobileMenu({
 
 function Header({
   menuItems,
+  contactLabel,
   locale,
   setLocale,
 }: {
   menuItems: NavItem[];
+  contactLabel: string;
   locale: "en" | "ar";
   setLocale: (l: "en" | "ar") => void;
 }) {
   return (
     <header className="h-[50px] flex-shrink-0 bg-black text-white px-4 md:px-6 lg:px-8 flex items-center">
       <div className="max-w-[1920px] mx-auto w-full flex items-center justify-between h-full">
-        {/* Desktop nav */}
-        <div className="hidden lg:flex flex-1 justify-around items-center px-4 xl:px-20">
+        {/* Desktop nav — توزيع الروابط الخمسة بشكل متساوٍ على عرض الشاشة */}
+        <div className="hidden lg:flex flex-1 items-center justify-evenly px-4 xl:px-20">
           {menuItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-xs xl:text-sm text-white hover:text-gray-400 transition-colors"
+              className="text-xs xl:text-sm text-white hover:text-gray-400 transition-colors whitespace-nowrap"
             >
               {item.label}
             </a>
           ))}
+          <a
+            href="#contact"
+            className="text-xs xl:text-sm text-white hover:text-gray-400 transition-colors whitespace-nowrap"
+          >
+            {contactLabel}
+          </a>
+        </div>
+
+        {/* سويتش اللغة — أقصى اليمين */}
+        <div className="hidden lg:flex items-center flex-shrink-0 pl-4">
+          <button
+            type="button"
+            onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
+            className="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded border border-white/30 hover:border-white/60 transition-colors"
+            aria-label="Toggle language"
+          >
+            {locale === "ar" ? "EN" : "ar"}
+          </button>
         </div>
 
         {/* Mobile: logo (left) */}
@@ -194,22 +213,12 @@ function Header({
           />
         </a>
 
-        <div className="flex items-center gap-4 lg:gap-6">
-          <button
-            type="button"
-            onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
-            className="hidden lg:inline-flex text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded border border-white/30 hover:border-white/60 transition-colors"
-            aria-label="Toggle language"
-          >
-            {locale === "ar" ? "EN" : "ar"}
-          </button>
-          <div className="lg:hidden ml-auto">
-            <MobileMenu
-              menuItems={menuItems}
-              locale={locale}
-              setLocale={setLocale}
-            />
-          </div>
+        <div className="lg:hidden ml-auto flex items-center gap-4">
+          <MobileMenu
+            menuItems={[...menuItems, { href: "#contact", label: contactLabel }]}
+            locale={locale}
+            setLocale={setLocale}
+          />
         </div>
       </div>
     </header>
@@ -250,19 +259,23 @@ function DroneOverlay() {
   );
 }
 
+/* ترتيب روابط النافبار = home, about, vision-mission, values فقط في النافبار؛ Contact بجانب سويتش اللغة */
 const NAV_IDS = [
   "home",
   "about",
   "vision-mission",
   "values",
-  // "experience",
-  "contact",
+  "sectors",
   "marine",
   "frontiers",
   "aselsan",
   "solutions",
   "achievements",
+  "contact",
 ] as const;
+
+/** عناوين تظهر في الهيدر (بدون Dynamics, Marine, Frontiers, Aselsan, Solutions, Achievements) */
+const HEADER_NAV_IDS = ["home", "about", "vision-mission", "values"] as const;
 
 export default function App() {
   const { t, locale, setLocale } = useLanguage();
@@ -270,6 +283,50 @@ export default function App() {
     href: `#${id}`,
     label: t.nav[id === "vision-mission" ? "visionMission" : id],
   }));
+  /** عناصر النافبار في الهيدر فقط: home, about, vision-mission, values */
+  const headerMenuItems: NavItem[] = HEADER_NAV_IDS.map((id) => ({
+    href: `#${id}`,
+    label: t.nav[id === "vision-mission" ? "visionMission" : id],
+  }));
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<Partial<Record<string, HTMLElement>>>({});
+  const [sectionInView, setSectionInView] = useState<Record<string, boolean>>(
+    {}
+  );
+
+  const sectionIdByEl = useRef<WeakMap<Element, string>>(new WeakMap());
+
+  useEffect(() => {
+    const scrollEl = scrollContainerRef.current;
+    if (!scrollEl) return;
+    const refs = sectionRefs.current;
+    const idByEl = sectionIdByEl.current;
+    const elements: { el: HTMLElement; id: string }[] = [];
+    for (const id of NAV_IDS) {
+      const el = refs[id];
+      if (el) {
+        idByEl.set(el, id);
+        elements.push({ el, id });
+      }
+    }
+    if (elements.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setSectionInView((prev) => {
+          const next = { ...prev };
+          for (const entry of entries) {
+            const id = idByEl.get(entry.target);
+            if (id != null) next[id] = entry.isIntersecting;
+          }
+          return next;
+        });
+      },
+      { root: scrollEl, rootMargin: "0px", threshold: 0.15 }
+    );
+    elements.forEach(({ el }) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -279,878 +336,1130 @@ export default function App() {
 
       {/* Layout: header (50px) + scroll area (rest). Header is NOT fixed — space reserved at top. */}
       <div className="h-screen flex flex-col overflow-hidden">
-        <Header menuItems={menuItems} locale={locale} setLocale={setLocale} />
+        <Header
+          menuItems={headerMenuItems}
+          contactLabel={t.nav.contact}
+          locale={locale}
+          setLocale={setLocale}
+        />
         {/* Single scroll container: fills rest of viewport below header */}
         <div
+          ref={scrollContainerRef}
           className="app-scroll-container flex-1 min-h-0 overflow-y-scroll snap-y snap-mandatory scroll-smooth"
           style={{ scrollSnapType: "y mandatory" }}
         >
-        {/* Home Section (Hero): dark base + LayerHome (triangles) + LayerBackground (polygonal); logo only, no button */}
-        <section
-          id="home"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate bg-gray-950"
-        >
-          {/* Hero background: dark base + glowing triangles (LayerHome) + polygonal (LayerBackground) */}
-          <div
-            className="absolute inset-0 w-full h-full"
-            style={{ zIndex: 0 }}
+          {/* Home Section (Hero): خلفية Assxet.svg (مثلثات ملونة)؛ logo فقط */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["home"] = el;
+            }}
+            id="home"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate bg-gray-950"
           >
-            <div className="absolute inset-0 w-full h-full bg-gray-950" aria-hidden />
-          </div>
-          <div
-            className="absolute inset-y-0 left-1/2 w-[110vw] max-w-none -translate-x-1/2"
-            style={{ zIndex: 1 }}
-          >
-            {typeof LayerHome === "function" ? (
-              <div className="absolute inset-0 w-full h-full min-w-full min-h-full">
-                <LayerHome hideGrayRect />
-              </div>
-            ) : null}
-            {typeof LayerBackground === "function" ? (
-              <div className="absolute inset-0 w-full h-full min-w-full min-h-full pointer-events-none">
-                <LayerBackground />
-              </div>
-            ) : null}
-          </div>
-
-          {/* Logo centered in hero — no button underneath */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-8 min-h-0"
-            style={{ zIndex: 10 }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              className="flex flex-col items-center justify-center"
+            {/* خلفية الهيرو: SVG المثلثات الملونة (Assxet.svg) — تغطي القسم بالكامل */}
+            <div
+              className="absolute inset-0 w-full h-full"
+              style={{ zIndex: 0 }}
+              aria-hidden
             >
+              <div className="absolute inset-0 w-full h-full bg-gray-950" />
+              {/* استخدام img لضمان تحميل وعرض الـ SVG بشكل موثوق */}
               <img
-                src={logoImage}
-                alt="SINAN Logo"
-                className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto"
+                src={`${import.meta.env.BASE_URL || "/"}Assxet.svg`}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover object-center opacity-90"
+                style={{ objectFit: "cover", objectPosition: "center" }}
               />
-            </motion.div>
-          </div>
-        </section>
+            </div>
 
-        {/* About Us Section */}
-        <section
-          id="about"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden"
-        >
-        <AboutUsPage />
-        </section>
+            {/* Logo centered in hero — heartbeat on load and on hover */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-8 min-h-0"
+              style={{ zIndex: 10 }}
+            >
+              {/* دخول الصفحة: ظهور ثم نبضة قلب واحدة — يعاد عند كل دخول للقسم */}
+              <motion.div
+                initial={false}
+                animate={
+                  sectionInView["home"]
+                    ? {
+                        opacity: 1,
+                        scale: [0.92, 1, 1.07, 1, 1.04, 1],
+                      }
+                    : { opacity: 0, scale: 0.92 }
+                }
+                transition={{
+                  opacity: { duration: 0.5 },
+                  scale: sectionInView["home"]
+                    ? {
+                        duration: 1.4,
+                        times: [0, 0.35, 0.5, 0.65, 0.82, 1],
+                        ease: "easeOut",
+                      }
+                    : { duration: 0.3 },
+                }}
+                className="flex flex-col items-center justify-center"
+              >
+                {/* عند مرور الماوس: نبض القلب يتكرر */}
+                <motion.div
+                  className="flex flex-col items-center justify-center cursor-default"
+                  whileHover={{
+                    scale: [1, 1.07, 1, 1.04, 1],
+                  }}
+                  transition={{
+                    scale: {
+                      duration: 0.75,
+                      repeat: Infinity,
+                      repeatDelay: 0.2,
+                      ease: "easeOut",
+                    },
+                  }}
+                >
+                  <img
+                    src={logoImage}
+                    alt="SINAN Logo"
+                    className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none"
+                    draggable={false}
+                  />
+                </motion.div>
+              </motion.div>
+            </div>
+          </section>
 
-        {/* Vision & Mission Section */}
-        <section
-          id="vision-mission"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden"
-        >
-        <VisionMissionPage />
-        </section>
+          {/* About Us Section */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["about"] = el;
+            }}
+            id="about"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden"
+          >
+            <AboutUsPage isInView={!!sectionInView["about"]} />
+          </section>
 
-        {/* Our Values Section */}
-        <section
-          id="values"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden flex"
-        >
-        <ValuesPage />
-        </section>
+          {/* Vision & Mission Section */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["vision-mission"] = el;
+            }}
+            id="vision-mission"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden"
+          >
+            <VisionMissionPage isInView={!!sectionInView["vision-mission"]} />
+          </section>
 
-        {/* Our Experience Section - commented out */}
-      {/* <section
+          {/* Our Values Section */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["values"] = el;
+            }}
+            id="values"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden flex"
+          >
+            <ValuesPage isInView={!!sectionInView["values"]} />
+          </section>
+
+          {/* Our Experience Section - commented out */}
+          {/* <section
         id="experience"
         className="min-h-[calc(100vh-50px)] relative overflow-x-hidden snap-start snap-always"
       >
         <ExperiencePage />
       </section> */}
 
-        {/* Sectors Section - SINAN DYNAMICS: animated bg, content from image, drone top-right, teal overlay */}
-        <section
-          id="sectors"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
-        >
-          {/* Animated strip background (same as Aselsan / Frontiers / Marine) */}
-          <div
-            className="absolute inset-0 w-full h-full overflow-hidden"
-            style={{ zIndex: 0, direction: "ltr" }}
+          {/* Sectors Section - SINAN DYNAMICS: animated bg, content from image, drone top-right, teal overlay */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["sectors"] = el;
+            }}
+            id="sectors"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
           >
+            {/* Animated strip background (same as Aselsan / Frontiers / Marine) */}
             <div
-              className="flex h-full animate-strip-scroll-60"
-              style={{ width: "300vw", direction: "ltr" }}
+              className="absolute inset-0 w-full h-full overflow-hidden"
+              style={{ zIndex: 0, direction: "ltr" }}
             >
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-            </div>
-          </div>
-
-          {/* Geometric overlay */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-            {typeof LayerBackground === "function" ? (
-              <div className="absolute inset-0 w-full h-full opacity-90">
-                <LayerBackground />
-              </div>
-            ) : null}
-          </div>
-
-          {/* Faint background text (left side) */}
-          <div
-            className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
-            style={{ zIndex: 2 }}
-          >
-            <p
-              className="text-white/10 text-left leading-tight max-w-md"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
-                fontWeight: 700,
-                fontFamily: "DIN Arabic, sans-serif",
-              }}
-            >
-              {t.bgWatermark.split("\n").map((line, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && <br />}
-                  {line}
-                </React.Fragment>
-              ))}
-            </p>
-          </div>
-
-          {/* Transparent teal/cyan layer — full section, under text */}
-          <div
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 3, backgroundColor: "rgba(0, 174, 239, 0.35)" }}
-          />
-
-          {/* Drone — top right, entrance animation, translucent (same placement as image) */}
-          <motion.div
-            className="hidden sm:block absolute top-[8%] right-[4%] md:top-[6%] md:right-[3%] pointer-events-none w-[min(45vw,420px)] max-h-[35vh] flex items-start justify-end"
-            style={{ zIndex: 5 }}
-            initial={{ opacity: 0, scale: 0.85, y: 20 }}
-            whileInView={{ opacity: 0.5, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <img
-              src="/droun.png"
-              alt=""
-              className="w-auto h-auto max-w-full max-h-full object-contain object-top-right"
-              style={{ mixBlendMode: "lighten", opacity: 0.9 }}
-            />
-          </motion.div>
-
-          {/* Centered content: logo SINAN DYNAMICS + heading + paragraph */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 overflow-y-auto"
-            style={{ zIndex: 10 }}
-          >
-            <div
-              className="max-w-2xl w-full px-6 py-8 md:px-8 md:py-10"
-              style={{ fontFamily: "DIN Arabic, sans-serif" }}
-            >
-              {/* Logo: icon + SINAN + DYNAMICS (with line between) */}
-              <motion.div
-                className="flex flex-col items-center text-center mb-6 md:mb-8"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative mb-3 md:mb-4 [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
-                  {typeof LayerDynamics === "function" ? <LayerDynamics /> : null}
-                </div>
-                <p className="text-white font-bold text-2xl md:text-3xl lg:text-4xl tracking-tight uppercase">
-                  SINAN
-                </p>
-                <div className="w-16 md:w-20 h-px bg-white/80 my-1 md:my-1.5" />
-                <p className="text-white font-medium text-lg md:text-xl lg:text-2xl uppercase tracking-wide">
-                  DYNAMICS
-                </p>
-              </motion.div>
-
-              {/* Heading (dynamicsDesc) */}
-              <p
-                className="text-white text-base md:text-lg lg:text-xl text-center mb-4 md:mb-6 leading-relaxed"
-                style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}
-              >
-                {t.sectors.dynamicsDesc}
-              </p>
-
-              {/* Paragraph (dynamicsIntro) */}
-              <p
-                className="text-white/95 text-sm md:text-base lg:text-lg leading-relaxed text-center max-w-xl mx-auto"
-                style={{ fontFamily: "DIN Arabic, sans-serif" }}
-              >
-                {t.sectors.dynamicsIntro}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Sinan Marine Section — animated bg, content from image, submarine top-right, purple overlay under text/logo */}
-        <section
-          id="marine"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
-        >
-          {/* Animated strip background (same as Aselsan / Frontiers) */}
-          <div
-            className="absolute inset-0 w-full h-full overflow-hidden"
-            style={{ zIndex: 0, direction: "ltr" }}
-          >
-            <div
-              className="flex h-full animate-strip-scroll-60"
-              style={{ width: "300vw", direction: "ltr" }}
-            >
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-            </div>
-          </div>
-
-          {/* Geometric overlay */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-            {typeof LayerBackground === "function" ? (
-              <div className="absolute inset-0 w-full h-full opacity-90">
-                <LayerBackground />
-              </div>
-            ) : null}
-          </div>
-
-          {/* Faint background text (left side) */}
-          <div
-            className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
-            style={{ zIndex: 2 }}
-          >
-            <p
-              className="text-white/10 text-left leading-tight max-w-md"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
-                fontWeight: 700,
-                fontFamily: "DIN Arabic, sans-serif",
-              }}
-            >
-              {t.bgWatermark.split("\n").map((line, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && <br />}
-                  {line}
-                </React.Fragment>
-              ))}
-            </p>
-          </div>
-
-          {/* Transparent purple layer — full section */}
-          <div
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 3, backgroundColor: "rgba(46, 49, 146, 0.35)" }}
-          />
-
-          {/* Submarine — top right, entrance animation, translucent */}
-          <motion.div
-            className="hidden sm:block absolute top-[8%] right-[4%] md:top-[6%] md:right-[3%] pointer-events-none w-[min(45vw,420px)] max-h-[35vh] flex items-start justify-end"
-            style={{ zIndex: 5 }}
-            initial={{ opacity: 0, scale: 0.85, y: 20 }}
-            whileInView={{ opacity: 0.5, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            <img
-              src={submarineImage}
-              alt=""
-              className="w-auto h-auto max-w-full max-h-full object-contain object-top-right"
-              style={{ mixBlendMode: "lighten", opacity: 0.9 }}
-            />
-          </motion.div>
-
-          {/* Centered content: logo + intro (purple overlay is full section above) */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 overflow-y-auto"
-            style={{ zIndex: 10 }}
-          >
-            <div
-              className="max-w-2xl w-full px-6 py-8 md:px-8 md:py-10"
-              style={{ fontFamily: "DIN Arabic, sans-serif" }}
-            >
-              {/* Logo: icon + SINAN + MARINE */}
-              <motion.div
-                className="flex flex-col items-center text-center mb-6 md:mb-8"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative mb-3 md:mb-4 [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
-                  {typeof LayerMarine === "function" ? <LayerMarine /> : null}
-                </div>
-                <p className="text-white font-bold text-2xl md:text-3xl lg:text-4xl tracking-tight uppercase">
-                  SINAN
-                </p>
-                <p className="text-white font-medium text-lg md:text-xl lg:text-2xl uppercase tracking-widest mt-0.5">
-                  MARINE
-                </p>
-              </motion.div>
-
-              {/* Intro paragraph (same as image) */}
-              <p
-                className="text-white/95 text-sm md:text-base lg:text-lg leading-relaxed text-center max-w-xl mx-auto"
-                style={{ fontFamily: "DIN Arabic, sans-serif" }}
-              >
-                {t.marine.intro}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Sinan Frontiers Section — same animated bg as Aselsan, content from reference image */}
-        <section
-          id="frontiers"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
-        >
-          {/* Animated strip background (same as Aselsan) */}
-          <div
-            className="absolute inset-0 w-full h-full overflow-hidden"
-            style={{ zIndex: 0, direction: "ltr" }}
-          >
-            <div
-              className="flex h-full animate-strip-scroll-60"
-              style={{ width: "300vw", direction: "ltr" }}
-            >
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-            </div>
-          </div>
-
-          {/* Geometric overlay (plexus) */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-            {typeof LayerBackground === "function" ? (
-              <div className="absolute inset-0 w-full h-full opacity-90">
-                <LayerBackground />
-              </div>
-            ) : null}
-          </div>
-
-          {/* Faint background text: "Empowering National Capabilities..." (left side) */}
-          <div
-            className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
-            style={{ zIndex: 2 }}
-          >
-            <p
-              className="text-white/10 text-left leading-tight max-w-md"
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
-                fontWeight: 700,
-                fontFamily: "DIN Arabic, sans-serif",
-              }}
-            >
-              {t.bgWatermark.split("\n").map((line, i) => (
-                <React.Fragment key={i}>
-                  {i > 0 && <br />}
-                  {line}
-                </React.Fragment>
-              ))}
-            </p>
-          </div>
-
-          {/* Transparent orange layer — full section, under text */}
-          <div
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 3, backgroundColor: "rgba(247, 148, 29, 0.35)" }}
-          />
-
-          {/* Centered content: logo, tagline, two paragraphs */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 sm:px-8 md:px-12 overflow-y-auto"
-            style={{ zIndex: 10 }}
-          >
-            <div className="flex flex-col items-center max-w-2xl mx-auto py-6 md:py-8">
-              {/* SINAN FRONTIERS logo */}
-              <motion.div
-                className="flex flex-col items-center mb-5 md:mb-6"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
+              <div
+                className="flex h-full animate-strip-scroll-60"
+                style={{ width: "300vw", direction: "ltr" }}
               >
                 <img
-                  src={frontiersLogoImage}
-                  alt="SINAN FRONTIERS"
-                  className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain"
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
                 />
-              </motion.div>
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+              </div>
+            </div>
 
-              {/* Tagline */}
-              <p
-                className="text-white text-base md:text-lg lg:text-xl mb-4 md:mb-6 leading-relaxed"
-                style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}
-              >
-                {t.frontiers.tagline}
-              </p>
+            {/* Geometric overlay */}
+            <div
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 1 }}
+            >
+              {typeof LayerBackground === "function" ? (
+                <div className="absolute inset-0 w-full h-full opacity-90">
+                  <LayerBackground />
+                </div>
+              ) : null}
+            </div>
 
-              {/* First paragraph */}
+            {/* نص الخلفية — نفس ستايل Marine تماماً */}
+            <div
+              className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
+              style={{ zIndex: 2 }}
+            >
               <p
-                className="text-white/90 text-sm md:text-base lg:text-lg leading-relaxed mb-4 md:mb-5"
-                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+                className="text-white/10 text-left font-bold leading-tight max-w-md"
+                style={{
+                  fontSize: "clamp(3rem, 5vw, 5rem)",
+                  fontWeight: 700,
+                  fontFamily: "DIN Arabic, sans-serif",
+                }}
               >
-                {t.frontiers.intro}
-              </p>
-
-              {/* Second paragraph */}
-              <p
-                className="text-white/90 text-sm md:text-base lg:text-lg leading-relaxed"
-                style={{ fontFamily: "DIN Arabic, sans-serif" }}
-              >
-                {t.frontiers.paragraph2}
+                {t.bgWatermark.split("\n").map((line, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <br />}
+                    {line}
+                  </React.Fragment>
+                ))}
               </p>
             </div>
-          </div>
-        </section>
 
-        {/* SINAN ASELSAN Section — joint venture announcement (layout from reference image) */}
-        <section
-          id="aselsan"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
-        >
-          {/* Animated strip background (3×100vw seamless loop) */}
-          <div
-            className="absolute inset-0 w-full h-full overflow-hidden"
-            style={{ zIndex: 0, direction: "ltr" }}
-          >
+            {/* Transparent teal/cyan layer — full section, under text */}
             <div
-              className="flex h-full animate-strip-scroll-60"
-              style={{ width: "300vw", direction: "ltr" }}
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 3, backgroundColor: "rgba(0, 174, 239, 0.35)" }}
+            />
+
+            {/* Drone — top right, يهبط من أعلى الشاشة عند كل دخول للقسم */}
+            <motion.div
+              className="hidden sm:block absolute top-[8%] right-[4%] md:top-[6%] md:right-[3%] pointer-events-none w-[min(45vw,420px)] max-h-[35vh] flex items-start justify-end"
+              style={{ zIndex: 5 }}
+              initial={false}
+              animate={
+                sectionInView["sectors"]
+                  ? { opacity: 0.5, scale: 1, y: 0 }
+                  : { opacity: 0, scale: 0.9, y: -120 }
+              }
+              transition={{
+                duration: 1,
+                delay: sectionInView["sectors"] ? 0.25 : 0,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
               <img
-                src={aselsanBg}
+                src="/droun.png"
                 alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
+                className="w-auto h-auto max-w-full max-h-full object-contain object-top-right"
+                style={{ mixBlendMode: "lighten", opacity: 0.9 }}
               />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-              <img
-                src={aselsanBg}
-                alt=""
-                className="h-full flex-shrink-0 object-cover object-left"
-                style={{ width: "100vw", minWidth: "100vw", display: "block" }}
-              />
-            </div>
-          </div>
+            </motion.div>
 
-          {/* Plexus-style overlay: geometric polygons + dots */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
-            {typeof LayerBackground === "function" ? (
-              <div className="absolute inset-0 w-full h-full opacity-90">
-                <LayerBackground />
+            {/* Centered content: logo SINAN DYNAMICS + paragraphs — أنيميشن دخول عند كل دخول للقسم */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 overflow-y-auto"
+              style={{ zIndex: 10 }}
+            >
+              <div
+                className="max-w-2xl w-full px-6 py-8 md:px-8 md:py-10"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {/* Logo: icon + SINAN + DYNAMICS — أنيميشن عند كل دخول */}
+                <motion.div
+                  className="flex flex-col items-center text-center mb-6 md:mb-8"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                  viewport={{
+                    once: false,
+                    root: scrollContainerRef,
+                    amount: 0.2,
+                  }}
+                >
+                  <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative mb-3 md:mb-4 [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
+                    {typeof LayerDynamics === "function" ? (
+                      <LayerDynamics />
+                    ) : null}
+                  </div>
+                </motion.div>
+
+                {/* First paragraph (dynamicsDesc) — عرض حاوية يكفي لظهور النص في 3 أسطر */}
+                <motion.p
+                  className="text-white text-center mb-4 md:mb-6 leading-relaxed mx-auto max-w-[52%] text-base md:text-lg lg:text-xl"
+                  style={{
+                    fontFamily: "DIN Arabic, sans-serif",
+                    fontWeight: 700,
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.55,
+                    delay: 0.15,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  viewport={{
+                    once: false,
+                    root: scrollContainerRef,
+                    amount: 0.2,
+                  }}
+                >
+                  {t.sectors.dynamicsDesc}
+                </motion.p>
+
+                {/* Second paragraph (dynamicsIntro) — حاوية أوسع من الأولى */}
+                <motion.p
+                  className="text-white text-center leading-relaxed mx-auto max-w-[85%] text-base md:text-lg lg:text-xl"
+                  style={{
+                    fontFamily: "DIN Arabic, sans-serif",
+                    fontWeight: 700,
+                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.55,
+                    delay: 0.28,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  viewport={{
+                    once: false,
+                    root: scrollContainerRef,
+                    amount: 0.2,
+                  }}
+                >
+                  {t.sectors.dynamicsIntro}
+                </motion.p>
               </div>
-            ) : null}
-          </div>
+            </div>
+          </section>
 
-          {/* Content: strictly centered in the middle of the screen */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 sm:px-8 md:px-12"
-            style={{ zIndex: 10 }}
+          {/* Sinan Marine Section — animated bg, content from image, submarine top-right, purple overlay under text/logo */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["marine"] = el;
+            }}
+            id="marine"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
           >
-            <div className="flex flex-col items-center justify-center max-w-2xl mx-auto">
-              {/* Logo (symbol + SINAN + ADVANCED INDUSTRIES) */}
-              <motion.div
-                className="flex flex-col items-center mb-5 md:mb-7"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
+            {/* Animated strip background (same as Aselsan / Frontiers) */}
+            <div
+              className="absolute inset-0 w-full h-full overflow-hidden"
+              style={{ zIndex: 0, direction: "ltr" }}
+            >
+              <div
+                className="flex h-full animate-strip-scroll-60"
+                style={{ width: "300vw", direction: "ltr" }}
               >
                 <img
-                  src={logoImage}
-                  alt="SINAN ADVANCED INDUSTRIES"
-                  className="h-24 sm:h-28 md:h-36 lg:h-44 xl:h-52 w-auto object-contain"
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
                 />
-              </motion.div>
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+              </div>
+            </div>
 
-              {/* "has formed a strategic joint venture with" */}
+            {/* Geometric overlay */}
+            <div
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 1 }}
+            >
+              {typeof LayerBackground === "function" ? (
+                <div className="absolute inset-0 w-full h-full opacity-90">
+                  <LayerBackground />
+                </div>
+              ) : null}
+            </div>
+
+            {/* نص الخلفية — نفس التموضع والستايل كـ Frontiers تماماً */}
+            <div
+              className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
+              style={{ zIndex: 2 }}
+            >
               <p
-                className="text-gray-400 text-sm md:text-base lg:text-lg mb-3 md:mb-5"
-                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+                className="text-white/10 text-left font-bold leading-tight max-w-md"
+                style={{
+                  fontSize: "clamp(3rem, 5vw, 5rem)",
+                  fontWeight: 700,
+                  fontFamily: "DIN Arabic, sans-serif",
+                }}
               >
-                {t.aselsan.jointVentureLine}
-              </p>
-
-              {/* "aselsan" — most prominent, extra bold */}
-              <motion.p
-                className="text-white font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl lowercase tracking-tight mb-5 md:mb-7"
-                style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 900 }}
-                initial={{ opacity: 0, scale: 0.98 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                viewport={{ once: true }}
-              >
-                {t.aselsan.aselsanName}
-              </motion.p>
-
-              {/* "to establish a leading defense and advanced technology company in the Sultanate of Oman." */}
-              <p
-                className="text-gray-400 text-sm md:text-base lg:text-lg leading-relaxed"
-                style={{ fontFamily: "DIN Arabic, sans-serif" }}
-              >
-                {t.aselsan.establishLine}
+                {t.bgWatermark.split("\n").map((line, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <br />}
+                    {line}
+                  </React.Fragment>
+                ))}
               </p>
             </div>
-          </div>
-        </section>
 
-        {/* Our Solutions Infographic Section */}
-        <section
-          id="solutions"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden bg-white relative"
-        >
-          <SolutionsPage />
-        </section>
+            {/* Transparent overlay — full section (#312783) */}
+            <div
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 3, backgroundColor: "rgba(49, 39, 131, 0.35)" }}
+            />
 
-        {/* Our Achievements Section */}
-        <section
-          id="achievements"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden bg-[#F5F3EE] relative"
-        >
-          <AchievementsPage />
-        </section>
+            {/* Submarine — top right, entrance animation at every section entry */}
+            <motion.div
+              className="hidden sm:block absolute top-[8%] right-[4%] md:top-[6%] md:right-[3%] pointer-events-none w-[min(45vw,420px)] max-h-[35vh] flex items-start justify-end"
+              style={{ zIndex: 5 }}
+              initial={false}
+              animate={
+                sectionInView["marine"]
+                  ? { opacity: 0.5, scale: 1, x: 0, y: 0 }
+                  : { opacity: 0, scale: 0.88, x: 80, y: 30 }
+              }
+              transition={{
+                duration: 1,
+                delay: sectionInView["marine"] ? 0.25 : 0,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <img
+                src={submarineImage}
+                alt=""
+                className="w-auto h-auto max-w-full max-h-full object-contain object-top-right"
+                style={{ mixBlendMode: "lighten", opacity: 0.9 }}
+              />
+            </motion.div>
 
-        {/* Contact Section - Before Footer */}
-        <section
-          id="contact"
-          className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative"
-        >
-          <ContactPage />
-        </section>
-
-        {/* Footer */}
-        <footer className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative bg-gray-900">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src={footerBg}
-            alt=""
-            className="w-full h-full object-cover opacity-30"
-          />
-        </div>
-
-        {/* Footer Content */}
-        <div className="relative z-10 px-4 md:px-8 lg:px-20 py-10 md:py-14 lg:py-16">
-          <div className="max-w-7xl mx-auto">
-            {/* Footer Links Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-10 lg:gap-12 mb-10 md:mb-16">
-              <div>
-                <h3
-                  className="text-white text-sm mb-6"
-                  style={{ fontWeight: 600 }}
+            {/* Centered content — هيكل طائرة: لوجو مثلث + SINAN MARINE + فقرتان بتباعد عمودي واضح */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 sm:px-8 md:px-12 overflow-y-auto"
+              style={{ zIndex: 10 }}
+            >
+              <div className="flex flex-col items-center max-w-2xl mx-auto py-6 md:py-8">
+                {/* Logo: أيقونة مثلثة (أنف الطائرة) + SINAN (عريض) + MARINE (أرفع مع تباعد حروف) */}
+                <motion.div
+                  className="flex flex-col items-center text-center mb-8 md:mb-12"
+                  initial={false}
+                  animate={
+                    sectionInView["marine"]
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 24 }
+                  }
+                  transition={{
+                    duration: 0.6,
+                    delay: sectionInView["marine"] ? 0 : 0,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  style={{ fontFamily: "DIN Arabic, sans-serif" }}
                 >
-                  {t.footer.aboutUs}
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <a
-                      href="#home"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.vision}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#about"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.mission}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#values"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.ourValues}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#sectors"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.allProducts}
-                    </a>
-                  </li>
-                </ul>
+                  <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 relative mb-3 md:mb-4 [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
+                    {typeof LayerMarine === "function" ? <LayerMarine /> : null}
+                  </div>
+                </motion.div>
+
+                {/* الفقرة الأولى — سطران (الأول أقصر من الثاني)، وزن عادي، محاذاة وسط مثل الصورة الثانية */}
+                <motion.p
+                  className="text-white text-base md:text-lg lg:text-xl mb-4 leading-relaxed max-w-xl mx-auto whitespace-pre-line text-center"
+                  style={{
+                    fontFamily: "DIN Arabic, sans-serif",
+                    fontWeight: 700,
+                  }}
+                  initial={false}
+                  animate={
+                    sectionInView["marine"]
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 20 }
+                  }
+                  transition={{
+                    duration: 0.55,
+                    delay: sectionInView["marine"] ? 0.15 : 0,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  {t.marine.intro.split("\n\n")[0]}
+                </motion.p>
+
+                {/* سطر فارغ بين الفقرتين */}
+                <div className="h-6 md:h-8 shrink-0" aria-hidden="true" />
+
+                {/* الفقرة الثانية — 4 أسطر، نفس حجم الفقرة الأولى، وزن عادي، محاذاة وسط مثل الصورة الثانية */}
+                <motion.p
+                  className="text-white text-base md:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto whitespace-pre-line text-center"
+                  style={{
+                    fontFamily: "DIN Arabic, sans-serif",
+                    fontWeight: 700,
+                  }}
+                  initial={false}
+                  animate={
+                    sectionInView["marine"]
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 20 }
+                  }
+                  transition={{
+                    duration: 0.55,
+                    delay: sectionInView["marine"] ? 0.28 : 0,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  {t.marine.intro.split("\n\n")[1] ?? ""}
+                </motion.p>
               </div>
-              <div>
-                <h3
-                  className="text-white text-sm mb-6"
-                  style={{ fontWeight: 600 }}
-                >
-                  {t.footer.products}
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <a
-                      href="#marine"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.sinanMarine}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#sectors"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.sinanDynamics}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#aselsan"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.sinanTera}
-                    </a>
-                  </li>
-                </ul>
+            </div>
+          </section>
+
+          {/* Sinan Frontiers Section — same animated bg as Aselsan, content from reference image */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["frontiers"] = el;
+            }}
+            id="frontiers"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
+          >
+            {/* Animated strip background (same as Aselsan) */}
+            <div
+              className="absolute inset-0 w-full h-full overflow-hidden"
+              style={{ zIndex: 0, direction: "ltr" }}
+            >
+              <div
+                className="flex h-full animate-strip-scroll-60"
+                style={{ width: "300vw", direction: "ltr" }}
+              >
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
               </div>
-              <div>
-                <h3
-                  className="text-white text-sm mb-6"
-                  style={{ fontWeight: 600 }}
+            </div>
+
+            {/* Geometric overlay (plexus) */}
+            <div
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 1 }}
+            >
+              {typeof LayerBackground === "function" ? (
+                <div className="absolute inset-0 w-full h-full opacity-90">
+                  <LayerBackground />
+                </div>
+              ) : null}
+            </div>
+
+            {/* Faint background text: "Empowering National Capabilities..." (left side) */}
+            <div
+              className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
+              style={{ zIndex: 2 }}
+            >
+              <p
+                className="text-white/10 text-left font-bold leading-tight max-w-md"
+                style={{
+                  fontSize: "clamp(3rem, 5vw, 5rem)",
+                  fontWeight: 700,
+                  fontFamily: "DIN Arabic, sans-serif",
+                }}
+              >
+                {t.bgWatermark.split("\n").map((line, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && <br />}
+                    {line}
+                  </React.Fragment>
+                ))}
+              </p>
+            </div>
+
+            {/* Transparent orange layer — full section, under text (#f39422) */}
+            <div
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 3, backgroundColor: "rgba(243, 148, 34, 0.35)" }}
+            />
+
+            {/* الكرة الأرضية — بدون انميشن */}
+            <div
+              className="absolute inset-0 pointer-events-none overflow-hidden"
+              style={{ zIndex: 4 }}
+            >
+              <img
+                src="/earth.png"
+                alt=""
+                className="absolute w-auto object-contain object-top-right opacity-95"
+                style={{
+                  height: "110vh",
+                  top: "-12%",
+                  right: "-9%",
+                  maxWidth: "none",
+                }}
+              />
+            </div>
+
+            {/* Centered content: logo, tagline, two paragraphs */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 sm:px-8 md:px-12 overflow-y-auto"
+              style={{ zIndex: 10 }}
+            >
+              <div className="flex flex-col items-center max-w-2xl mx-auto py-6 md:py-8">
+                {/* SINAN FRONTIERS logo — انميشن عند كل دخول للقسم */}
+                <motion.div
+                  className="flex flex-col items-center mb-5 md:mb-6"
+                  initial={false}
+                  animate={
+                    sectionInView["frontiers"]
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 10 }
+                  }
+                  transition={{
+                    duration: 0.5,
+                    delay: sectionInView["frontiers"] ? 0 : 0,
+                  }}
                 >
-                  {t.footer.solutions}
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <a
-                      href="#solutions"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.commercial}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#solutions"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.defense}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#solutions"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.government}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#solutions"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.research}
-                    </a>
-                  </li>
-                </ul>
+                  <img
+                    src="/simnfor.png"
+                    alt="SINAN FRONTIERS"
+                    className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain"
+                  />
+                </motion.div>
+
+                {/* الفقرة الأولى — انميشن عند كل دخول للقسم */}
+                <motion.p
+                  className="text-white text-base md:text-lg lg:text-xl mb-4 md:mb-6 leading-relaxed font-weight-900"
+                  style={{ fontFamily: "DIN Arabic, sans-serif" }}
+                  initial={false}
+                  animate={
+                    sectionInView["frontiers"]
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 24 }
+                  }
+                  transition={{
+                    duration: 0.55,
+                    delay: sectionInView["frontiers"] ? 0.25 : 0,
+                  }}
+                >
+                  {t.frontiers.tagline}
+                </motion.p>
+
+                {/* الفقرة الثانية — انميشن عند كل دخول للقسم */}
+                <motion.p
+                  className="text-white text-sm md:text-base lg:text-lg leading-relaxed font-weight-900"
+                  style={{ fontFamily: "DIN Arabic, sans-serif" }}
+                  initial={false}
+                  animate={
+                    sectionInView["frontiers"]
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 24 }
+                  }
+                  transition={{
+                    duration: 0.55,
+                    delay: sectionInView["frontiers"] ? 0.4 : 0,
+                  }}
+                >
+                  {t.frontiers.intro} {t.frontiers.paragraph2}
+                </motion.p>
               </div>
-              <div>
-                <h3
-                  className="text-white text-sm mb-6"
-                  style={{ fontWeight: 600 }}
+            </div>
+          </section>
+
+          {/* SINAN ASELSAN Section — joint venture announcement (layout from reference image) */}
+          <section
+            ref={(el) => {
+              if (el) sectionRefs.current["aselsan"] = el;
+            }}
+            id="aselsan"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
+          >
+            {/* Animated strip background (3×100vw seamless loop) */}
+            <div
+              className="absolute inset-0 w-full h-full overflow-hidden"
+              style={{ zIndex: 0, direction: "ltr" }}
+            >
+              <div
+                className="flex h-full animate-strip-scroll-60"
+                style={{ width: "300vw", direction: "ltr" }}
+              >
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+                <img
+                  src={aselsanBg}
+                  alt=""
+                  className="h-full flex-shrink-0 object-cover object-left"
+                  style={{
+                    width: "100vw",
+                    minWidth: "100vw",
+                    display: "block",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Plexus-style overlay: geometric polygons + dots */}
+            <div
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ zIndex: 1 }}
+            >
+              {typeof LayerBackground === "function" ? (
+                <div className="absolute inset-0 w-full h-full opacity-90">
+                  <LayerBackground />
+                </div>
+              ) : null}
+            </div>
+
+            {/* Content: strictly centered in the middle of the screen */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 sm:px-8 md:px-12"
+              style={{ zIndex: 10 }}
+            >
+              <div className="flex flex-col items-center justify-center max-w-2xl mx-auto">
+                {/* Logo أسيلسان — animation on every section entry */}
+                <motion.div
+                  className="flex flex-col items-center mb-5 md:mb-7"
+                  initial={false}
+                  animate={
+                    sectionInView["aselsan"]
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 10 }
+                  }
+                  transition={{ duration: 0.5 }}
                 >
-                  {t.footer.company}
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <a
-                      href="#about"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
+                  <img
+                    src="/logo-assislian.png"
+                    alt="Sinan Aselsan"
+                    className="h-24 sm:h-28 md:h-36 lg:h-44 xl:h-52 w-auto object-contain"
+                  />
+                </motion.div>
+
+                {/* "has formed a strategic joint venture with" — نفس اللون والستايل كباقي الأقسام */}
+                <p
+                  className="text-white text-base md:text-lg lg:text-xl mb-3 md:mb-5 leading-relaxed"
+                  style={{
+                    fontFamily: "DIN Arabic, sans-serif",
+                    fontWeight: 500,
+                  }}
+                >
+                  {t.aselsan.jointVentureLine}
+                </p>
+
+                {/* عنوان أسيلسان — صورة، animation on every section entry */}
+                <motion.div
+                  className="mb-5 md:mb-7"
+                  initial={false}
+                  animate={
+                    sectionInView["aselsan"]
+                      ? { opacity: 1, scale: 1 }
+                      : { opacity: 0, scale: 0.98 }
+                  }
+                  transition={{
+                    duration: 0.5,
+                    delay: sectionInView["aselsan"] ? 0.1 : 0,
+                  }}
+                >
+                  <img
+                    src="/title-assislian.png"
+                    alt="Sinan Aselsan"
+                    className="h-12 sm:h-14 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"
+                  />
+                </motion.div>
+
+                {/* "to establish a leading defense and advanced technology company in the Sultanate of Oman" — نفس اللون والستايل كباقي الأقسام */}
+                <p
+                  className="text-white text-base md:text-lg lg:text-xl leading-relaxed"
+                  style={{
+                    fontFamily: "DIN Arabic, sans-serif",
+                    fontWeight: 500,
+                  }}
+                >
+                  {t.aselsan.establishLine}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Our Solutions Infographic Section */}
+          <section
+            id="solutions"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden bg-white relative"
+          >
+            <SolutionsPage />
+          </section>
+
+          {/* Our Achievements Section */}
+          <section
+            id="achievements"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden bg-[#F5F3EE] relative"
+          >
+            <AchievementsPage />
+          </section>
+
+          {/* Contact Section - Before Footer */}
+          <section
+            id="contact"
+            className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative"
+          >
+            <ContactPage />
+          </section>
+
+          {/* Footer */}
+          <footer className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative bg-gray-900">
+            {/* Background Image */}
+            <div className="absolute inset-0">
+              <img
+                src={footerBg}
+                alt=""
+                className="w-full h-full object-cover opacity-30"
+              />
+            </div>
+
+            {/* Footer Content */}
+            <div className="relative z-10 px-4 md:px-8 lg:px-20 py-10 md:py-14 lg:py-16">
+              <div className="max-w-7xl mx-auto">
+                {/* Footer Links Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-10 lg:gap-12 mb-10 md:mb-16">
+                  <div>
+                    <h3
+                      className="text-white text-sm mb-6"
+                      style={{ fontWeight: 600 }}
                     >
                       {t.footer.aboutUs}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#about"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
+                    </h3>
+                    <ul className="space-y-3">
+                      <li>
+                        <a
+                          href="#home"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.vision}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#about"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.mission}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#values"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.ourValues}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#sectors"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.allProducts}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3
+                      className="text-white text-sm mb-6"
+                      style={{ fontWeight: 600 }}
                     >
-                      {t.footer.leadership}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
+                      {t.footer.products}
+                    </h3>
+                    <ul className="space-y-3">
+                      <li>
+                        <a
+                          href="#marine"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.sinanMarine}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#sectors"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.sinanDynamics}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#aselsan"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.sinanTera}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3
+                      className="text-white text-sm mb-6"
+                      style={{ fontWeight: 600 }}
                     >
-                      {t.footer.careers}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
+                      {t.footer.solutions}
+                    </h3>
+                    <ul className="space-y-3">
+                      <li>
+                        <a
+                          href="#solutions"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.commercial}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#solutions"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.defense}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#solutions"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.government}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#solutions"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.research}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3
+                      className="text-white text-sm mb-6"
+                      style={{ fontWeight: 600 }}
                     >
-                      {t.footer.investors}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3
-                  className="text-white text-sm mb-6"
-                  style={{ fontWeight: 600 }}
-                >
-                  {t.footer.mediaCenter}
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <a
-                      href="#achievements"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
+                      {t.footer.company}
+                    </h3>
+                    <ul className="space-y-3">
+                      <li>
+                        <a
+                          href="#about"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.aboutUs}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#about"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.leadership}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.careers}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.investors}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3
+                      className="text-white text-sm mb-6"
+                      style={{ fontWeight: 600 }}
                     >
-                      {t.footer.news}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#achievements"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
+                      {t.footer.mediaCenter}
+                    </h3>
+                    <ul className="space-y-3">
+                      <li>
+                        <a
+                          href="#achievements"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.news}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#achievements"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.pressReleases}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#achievements"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          {t.footer.gallery}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3
+                      className="text-white text-sm mb-6"
+                      style={{ fontWeight: 600 }}
                     >
-                      {t.footer.pressReleases}
+                      {t.footer.connect}
+                    </h3>
+                    <ul className="space-y-3">
+                      <li>
+                        <a
+                          href="https://linkedin.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          LinkedIn
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://youtube.com"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white/70 text-xs hover:text-white transition-colors"
+                          style={{ fontWeight: 300 }}
+                        >
+                          YouTube
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="pt-6 md:pt-8 border-t border-white/10">
+                  <p
+                    className="text-white/60 text-xs text-center"
+                    style={{ fontWeight: 300 }}
+                  >
+                    {t.footer.copyright} |
+                    <a href="#" className="hover:text-white transition-colors">
+                      {" "}
+                      {t.footer.privacyPolicy}
+                    </a>{" "}
+                    |
+                    <a href="#" className="hover:text-white transition-colors">
+                      {" "}
+                      {t.footer.termsOfUse}
                     </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#achievements"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      {t.footer.gallery}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h3
-                  className="text-white text-sm mb-6"
-                  style={{ fontWeight: 600 }}
-                >
-                  {t.footer.connect}
-                </h3>
-                <ul className="space-y-3">
-                  <li>
-                    <a
-                      href="https://linkedin.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      LinkedIn
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://youtube.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white/70 text-xs hover:text-white transition-colors"
-                      style={{ fontWeight: 300 }}
-                    >
-                      YouTube
-                    </a>
-                  </li>
-                </ul>
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="pt-6 md:pt-8 border-t border-white/10">
-              <p
-                className="text-white/60 text-xs text-center"
-                style={{ fontWeight: 300 }}
-              >
-                {t.footer.copyright} |
-                <a href="#" className="hover:text-white transition-colors">
-                  {" "}
-                  {t.footer.privacyPolicy}
-                </a>{" "}
-                |
-                <a href="#" className="hover:text-white transition-colors">
-                  {" "}
-                  {t.footer.termsOfUse}
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-        </footer>
+          </footer>
         </div>
       </div>
     </>

@@ -4,11 +4,12 @@ export const translations = {
   en: {
     nav: {
       home: "Home",
-      about: "About",
-      visionMission: "Vision & Mission",
-      values: "Values",
-      experience: "Experience",
-      contact: "Contact",
+      about: "About Us",
+      visionMission: "Our Vision & Mission",
+      values: "Our Values",
+      experience: "Our Experience",
+      contact: "Contact us",
+      sectors: "Sinan Dynamics",
       marine: "Sinan Marine",
       frontiers: "Sinan Frontiers",
       aselsan: "Sinan Aselsan",
@@ -46,7 +47,7 @@ export const translations = {
     marine: {
       tagline: "Advanced surface and underwater\nunmanned vehicles",
       intro:
-        "Specializing in the development and manufacturing of maritime drones and autonomous systems for surface and underwater operations, the Company aims to enhance national capabilities in advanced maritime technologies through surveillance, protection, maintenance, data collection, and analysis.",
+        "Advanced surface and underwater\nunmanned vehicles for defense applications.\n\nSpecializing in the development and manufacturing of maritime\ndrones and autonomous systems for surface and underwater operations,\nthe company aims to enhance national capabilities in advanced maritime\ntechnologies through surveillance, protection, maintenance, data collection, and analysis.",
       keyObjectives: "Key Objectives",
       obj1: "Mission sets: coastal/EEZ patrol, anti-smuggling, port and terminal security, search & rescue, and offshore asset protection.",
       obj2: "Platforms hardened for marine ops with EO/IR, AIS, marine radar, EN, and acoustic sensors.",
@@ -59,7 +60,7 @@ export const translations = {
       intro:
         "Sinan Frontiers is a wholly owned subsidiary of Sinan Advanced Industries, established as the Group's international gateway for global trade, strategic partnerships and market expansion.",
       paragraph2:
-        "The company serves as a platform to connect Sinan Advanced Industries with international partners, investors, and technology leaders, enabling cross-border collaboration and long-term value creation.",
+        "The Sinan Frontiers serves as a platform to connect Sinan Advanced Industries with international partners, investors, and technology leaders, enabling cross-border collaboration and long-term value creation.",
       keyObjectives: "Key Objectives",
       obj1: "Advance cross-border cooperation and build long-term economic relationships with global industry leaders.",
       obj2: "Identify, structure, and enable value-driven investments that align with national priorities and support sustainable growth.",
@@ -69,7 +70,7 @@ export const translations = {
       jointVentureLine: "has formed a strategic joint venture with",
       aselsanName: "aselsan",
       establishLine:
-        "to establish a leading defense and advanced technology company in the Sultanate of Oman.",
+        "to establish a leading defense and advanced technology company in the Sultanate of Oman",
       tagline:
         "An international gateway enabling global\ntrade and market expansion for Sinan\nAdvanced Industries.",
       intro:
@@ -95,7 +96,8 @@ export const translations = {
         "Sinan Advanced Industries is a state-owned company, established to be the first Omani company to develop and improve defense products in the Sultanate of Oman, unlocking the latest technologies and best-in-class practices and services in this field. Our team has the longest experience in the Sultanate of Oman in operating, monitoring, and maintaining unmanned aerial systems and artificial intelligence (AI). We have worked in multiple sectors, such as energy, minerals, and transportation.",
       vision: "Our Vision",
       mission: "Our Mission",
-      empoweringLines: "Empowering\nNational\nCapabilities\nin Defense\n& Advanced\nIndustries",
+      empoweringLines:
+        "Empowering\nNational\nCapabilities\nin Defense\n& Advanced\nIndustries",
       visionText:
         "To be a pioneering force in the development and advancement of innovative defense systems, setting new standards for excellence and national security.",
       missionText:
@@ -219,6 +221,7 @@ export const translations = {
       values: "قيمنا",
       experience: "خبرتنا",
       contact: "تواصل",
+      sectors: "سنان ديناميكس",
       marine: "سنان البحرية",
       frontiers: "سنان فرونتيرز",
       aselsan: "سنان أسيلسان",
@@ -253,7 +256,7 @@ export const translations = {
     marine: {
       tagline: "مركبات سطحية وتحت سطحية\nدون طيار متقدمة",
       intro:
-        "متخصصون في تطوير وتصنيع الطائرات البحرية دون طيار والأنظمة المستقلة للعمليات السطحية وتحت الماء، وتهدف الشركة إلى تعزيز القدرات الوطنية في التقنيات البحرية المتقدمة من خلال المراقبة والحماية والصيانة وجمع البيانات والتحليل.",
+        "مركبات سطحية وتحت سطحية\nدون طيار متقدمة لتطبيقات الدفاع.\n\nتتخصص الشركة في تطوير وتصنيع الطائرات البحرية\nدون طيار والأنظمة المستقلة للعمليات السطحية وتحت الماء،\nتهدف إلى تعزيز القدرات الوطنية في التقنيات البحرية المتقدمة\nمن خلال المراقبة والحماية والصيانة وجمع البيانات والتحليل.",
       keyObjectives: "الأهداف الرئيسية",
       obj1: "مجموعات المهام: دوريات ساحلية/المنطقة الاقتصادية، مكافحة التهريب، أمن الموانئ والمحطات، البحث والإنقاذ، وحماية الأصول البحرية.",
       obj2: "منصات مجهزة للعمليات البحرية مع EO/IR وAIS ورادار بحري وEN ومستشعرات صوتية.",
@@ -266,7 +269,7 @@ export const translations = {
       intro:
         "سنان فرونتيرز شركة تابعة بالكامل لشركة سنان للصناعات المتقدمة، أُنشئت كبوابة دولية للمجموعة للتجارة العالمية والشراكات الاستراتيجية وتوسيع الأسواق.",
       paragraph2:
-        "تخدم الشركة منصة لربط شركة سنان للصناعات المتقدمة بالشركاء الدوليين والمستثمرين وقادة التكنولوجيا، وتمكين التعاون عبر الحدود وخلق قيمة على المدى الطويل.",
+        "تخدم سنان فرونتيرز منصة لربط شركة سنان للصناعات المتقدمة بالشركاء الدوليين والمستثمرين وقادة التكنولوجيا، وتمكين التعاون عبر الحدود وخلق قيمة على المدى الطويل.",
       keyObjectives: "الأهداف الرئيسية",
       obj1: "تعزيز التعاون عبر الحدود وبناء علاقات اقتصادية طويلة الأمد مع قادة الصناعة العالميين.",
       obj2: "تحديد وهيكلة وتمكين استثمارات قائمة على القيمة تتماشى مع الأولويات الوطنية وتدعم النمو المستدام.",

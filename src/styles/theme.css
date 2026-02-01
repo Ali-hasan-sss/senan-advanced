@@ -123,9 +123,9 @@
   * {
     @apply border-border outline-ring/50;
     cursor: none;
-    font-family: "Tajawal", "DINNextLTArabic", -apple-system, BlinkMacSystemFont,
-      "Segoe UI", sans-serif !important;
-    font-weight: 300 !important;
+    font-family: "DIN Arabic", "DINNextLTArabic", "Tajawal", -apple-system,
+      BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+    font-weight: 300;
   }
 
   /* Main page scroll disabled — only the app scroll container scrolls */
@@ -149,8 +149,8 @@
   body {
     @apply bg-background text-foreground;
     cursor: none;
-    font-family: "Tajawal", "DINNextLTArabic", -apple-system, BlinkMacSystemFont,
-      "Segoe UI", sans-serif !important;
+    font-family: "DIN Arabic", "DINNextLTArabic", "Tajawal", -apple-system,
+      BlinkMacSystemFont, "Segoe UI", sans-serif !important;
     margin: 0;
     background: radial-gradient(circle at 20% 30%, #3a3a3a 0%, transparent 40%),
       radial-gradient(circle at 80% 70%, #2c2c2c 0%, transparent 40%),
@@ -312,4 +312,9 @@
 
 .app-scroll-container::-webkit-scrollbar-thumb:hover {
   background: rgba(42, 42, 42, 0.5);
+}
+
+/* فرض ثخانة الخط — يتجاوز font-weight: 300 !important العام */
+.font-weight-900 {
+  font-weight: 900 !important;
 }
