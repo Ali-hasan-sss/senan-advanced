@@ -509,18 +509,18 @@ export default function App() {
                   </>
                 )}
                 {heroHoveredTriangleId === 4 && (
-                  <>
+                  <div className="flex items-center gap-2">
                     <img
                       src={`${
                         import.meta.env.BASE_URL || "/"
                       }logo-assislian.png`}
-                      alt="Sinan Aselsan"
+                      alt="GV Partner"
                       className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
                     />
-                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                      SINAN ASELSAN
+                    <span className="text-white text-xs font-semibold tracking-wider drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                      GV Partner
                     </span>
-                  </>
+                  </div>
                 )}
               </div>
             )}
