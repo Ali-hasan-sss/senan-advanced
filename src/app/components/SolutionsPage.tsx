@@ -638,193 +638,220 @@ export default function SolutionsPage() {
         </div>
       </div>
 
-      {/* Mobile: الحلول الثلاثة الرئيسية أولاً ثم باقي الحلول */}
-      <div className="md:hidden relative z-20 w-full">
-        {/* Overlay for readability */}
+      {/* Mobile: الحلول الثلاثة الرئيسية أولاً ثم الدوائر الدوارة */}
+      <div className="md:hidden relative z-20 w-full flex-1 min-h-0 overflow-x-hidden overflow-y-auto flex flex-col items-center justify-center">
         <div
-          className="absolute inset-0 min-h-full bg-gray-900/70 pointer-events-none"
-          aria-hidden="true"
-        />
-        <div
-          className="relative flex flex-col items-center w-full px-4 sm:px-6 py-8 sm:py-12"
+          className="relative flex flex-col items-center w-full px-3 sm:px-4 py-4 sm:py-5 overflow-visible"
           style={{ fontFamily: "DIN Arabic, sans-serif" }}
         >
-          <h2 className="text-white text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-center">
+          <h2 className="text-white text-lg sm:text-xl font-bold mb-1 sm:mb-2 text-center flex-shrink-0 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
             {t.solutions.ourSolutions}
           </h2>
-          <p className="text-white/80 text-sm sm:text-base mb-6 sm:mb-8 text-center max-w-md">
-            Communication · Training · Defense
-          </p>
-          {/* الحلول الثلاثة الرئيسية — أكبر وأوضح */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 w-full max-w-4xl mx-auto mb-8 sm:mb-10">
-            {/* Communication */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.45 }}
-              className="flex flex-col items-center text-center gap-3 p-5 sm:p-6 rounded-2xl bg-white/15 backdrop-blur-md border-2 border-white/25 text-white shadow-xl"
-            >
-              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/20">
-                <CommunicationIcon />
-              </div>
-              <div>
-                <div className="font-bold text-base sm:text-lg leading-tight">
-                  {t.solutions.communication}
+          {/* حاوية النصوص — صغيرة وخلفية بيضاء */}
+          <div className="w-full max-w-xs sm:max-w-sm mx-auto mb-3 sm:mb-4 flex-shrink-0">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-2 sm:p-2.5 rounded-xl bg-white shadow-lg">
+              {/* Communication */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.35 }}
+                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg"
+              >
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                  <CommunicationIcon />
                 </div>
-                <div className="text-white/90 text-sm leading-snug mt-1">
-                  {t.solutions.communicationSystems}
+                <div className="min-w-0">
+                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-gray-900 truncate">
+                    {t.solutions.communication}
+                  </div>
+                  <div className="text-gray-600 text-[9px] sm:text-[10px] leading-tight truncate">
+                    {t.solutions.communicationSystems}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-            {/* Training */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.45, delay: 0.08 }}
-              className="flex flex-col items-center text-center gap-3 p-5 sm:p-6 rounded-2xl bg-white/15 backdrop-blur-md border-2 border-white/25 text-white shadow-xl"
-            >
-              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/20">
-                <TrainingIcon />
-              </div>
-              <div>
-                <div className="font-bold text-base sm:text-lg leading-tight">
-                  {t.solutions.training}
+              </motion.div>
+              {/* Training */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.35, delay: 0.05 }}
+                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg"
+              >
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                  <TrainingIcon />
                 </div>
-                <div className="text-white/90 text-sm leading-snug mt-1">
-                  {t.solutions.trainingAndServices}
+                <div className="min-w-0">
+                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-gray-900 truncate">
+                    {t.solutions.training}
+                  </div>
+                  <div className="text-gray-600 text-[9px] sm:text-[10px] leading-tight truncate">
+                    {t.solutions.trainingAndServices}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-            {/* Defense */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.45, delay: 0.16 }}
-              className="flex flex-col items-center text-center gap-3 p-5 sm:p-6 rounded-2xl bg-white/15 backdrop-blur-md border-2 border-white/25 text-white shadow-xl"
-            >
-              <div className="w-14 h-14 sm:w-16 sm:h-16 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/20">
-                <DefenseIcon />
-              </div>
-              <div>
-                <div className="font-bold text-base sm:text-lg leading-tight">
-                  {t.solutions.defense}
+              </motion.div>
+              {/* Defense */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.35, delay: 0.1 }}
+                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg"
+              >
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                  <DefenseIcon />
                 </div>
-                <div className="text-white/90 text-sm leading-snug mt-1">
-                  {t.solutions.defenseSystems}
+                <div className="min-w-0">
+                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-gray-900 truncate">
+                    {t.solutions.defense}
+                  </div>
+                  <div className="text-gray-600 text-[9px] sm:text-[10px] leading-tight truncate">
+                    {t.solutions.defenseSystems}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
-          {/* باقي الحلول (Defense Systems) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 w-full max-w-2xl mx-auto">
-            {/* Space Defense */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4, delay: 0.15 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
-            >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
+          {/* الدائرة الدوارة والحلول حولها — موبايل */}
+          <div className="w-full flex items-center justify-center flex-1 min-h-0 py-16 sm:py-20 pb-20 sm:pb-24 overflow-visible">
+            <div className="relative w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] flex-shrink-0">
+              {/* Rotating Circle 1 - أصغر لترك مساحة للدوائر الخارجية */}
+              <motion.div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] z-[5]"
+                animate={{ rotate: 360 }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              >
                 <img
-                  src={spaceLogo}
+                  src={circleGraphic}
                   alt=""
-                  className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+                  className="w-full h-full object-contain"
+                />
+              </motion.div>
+              {/* Rotating Circle 2 - Counter Clockwise */}
+              <motion.div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] z-[5]"
+                animate={{ rotate: -360 }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              >
+                <img
+                  src={circleGraphic}
+                  alt=""
+                  className="w-full h-full object-contain"
+                />
+              </motion.div>
+              {/* Static Logo in Center */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] flex items-center justify-center pointer-events-none z-[6]">
+                <img
+                  src={centerLogo}
+                  alt="Center Logo"
+                  className="w-[44px] h-[44px] sm:w-[52px] sm:h-[52px] object-contain"
                 />
               </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+              {/* 5 Orbiting Solutions — بعيدة عن المركز، فوق الدائرة الكبيرة، ألوان ظاهرة */}
+              {/* Space - Top */}
+              <div className="absolute left-1/2 top-[-58px] sm:top-[-64px] -translate-x-1/2 flex flex-col items-center gap-0.5 z-[20]">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
+                  <motion.svg
+                    viewBox="0 0 44 44"
+                    className="absolute inset-0 w-full h-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  >
+                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                  </motion.svg>
+                  <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
+                    <img src={spaceLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                  </div>
+                </div>
+                <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
                   {t.solutions.spaceDefense}
+                </span>
+              </div>
+              {/* Air - Right */}
+              <div className="absolute right-[-58px] sm:right-[-64px] top-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5 z-[20]">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
+                  <motion.svg
+                    viewBox="0 0 44 44"
+                    className="absolute inset-0 w-full h-full"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  >
+                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                  </motion.svg>
+                  <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
+                    <img src={airLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-            {/* Air Defense */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
-            >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
-                <img
-                  src={airLogo}
-                  alt=""
-                  className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                />
-              </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+                <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
                   {t.solutions.airDefense}
+                </span>
+              </div>
+              {/* Land - Bottom Right */}
+              <div className="absolute right-[24px] sm:right-[28px] bottom-[-54px] sm:bottom-[-60px] flex flex-col items-center gap-0.5 z-[20]">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
+                  <motion.svg
+                    viewBox="0 0 44 44"
+                    className="absolute inset-0 w-full h-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                  >
+                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                  </motion.svg>
+                  <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
+                    <img src={landLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-            {/* Land Defense */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4, delay: 0.25 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
-            >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
-                <img
-                  src={landLogo}
-                  alt=""
-                  className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                />
-              </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+                <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
                   {t.solutions.landDefense}
+                </span>
+              </div>
+              {/* Maritime - Bottom Left */}
+              <div className="absolute left-[24px] sm:left-[28px] bottom-[-54px] sm:bottom-[-60px] flex flex-col items-center gap-0.5 z-[20]">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
+                  <motion.svg
+                    viewBox="0 0 44 44"
+                    className="absolute inset-0 w-full h-full"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 11, repeat: Infinity, ease: "linear" }}
+                  >
+                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                  </motion.svg>
+                  <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
+                    <img src={maritimeLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-            {/* Maritime Defense */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
-            >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
-                <img
-                  src={maritimeLogo}
-                  alt=""
-                  className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                />
-              </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+                <p className="text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap drop-shadow-[0_0_2px_rgba(255,255,255,1),0_1px_2px_rgba(0,0,0,0.3)]">
                   {t.solutions.maritimeDefense}
+                </p>
+              </div>
+              {/* Cyber - Left */}
+              <div className="absolute left-[-58px] sm:left-[-64px] top-1/2 -translate-y-1/2 flex flex-col items-center gap-0.5 z-[20]">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
+                  <motion.svg
+                    viewBox="0 0 44 44"
+                    className="absolute inset-0 w-full h-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+                  >
+                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                  </motion.svg>
+                  <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
+                    <img src={cyberLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-            {/* Cyber Defense */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ duration: 0.4, delay: 0.35 }}
-              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg sm:col-span-2"
-            >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
-                <img
-                  src={cyberLogo}
-                  alt=""
-                  className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
-                />
-              </div>
-              <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-sm sm:text-base leading-tight">
+                <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
                   {t.solutions.cyberDefense}
-                </div>
+                </span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

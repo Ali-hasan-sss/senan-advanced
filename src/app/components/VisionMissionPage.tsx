@@ -14,30 +14,44 @@ export default function VisionMissionPage({ isInView = false }: VisionMissionPag
   return (
     <div
       dir="ltr"
-      className="w-full h-full min-h-0 max-h-full bg-[#f8f8f8] flex flex-col lg:flex-row items-stretch overflow-hidden"
+      className="w-full h-full min-h-0 max-h-full bg-[#f8f8f8] flex flex-col 2xl:flex-row items-stretch overflow-hidden"
     >
-      {/* موبايل: إخفاء صورة الرمح — النصوص فقط */}
-      <motion.div
-        className="relative z-10 flex flex-col justify-end min-h-0 flex-1 px-4 pb-6 pt-12 sm:px-6 sm:pb-8 sm:pt-14 lg:hidden"
-        initial={false}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-        transition={{ ...tBase, delay: 0.15 }}
-      >
-        <div className="max-w-xl space-y-6 sm:space-y-7">
-          <div className="space-y-2 sm:space-y-2.5">
-            <h3 className="text-gray-900 font-bold text-lg sm:text-xl tracking-tight" style={{ fontFamily: "DIN Arabic, sans-serif" }}>{t.about.vision}</h3>
-            <p className="text-gray-700 text-[15px] sm:text-base leading-[1.65] max-w-lg" style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}>{t.about.visionText}</p>
-          </div>
-          <div className="space-y-2 sm:space-y-2.5">
-            <h3 className="text-gray-900 font-bold text-lg sm:text-xl tracking-tight" style={{ fontFamily: "DIN Arabic, sans-serif" }}>{t.about.mission}</h3>
-            <p className="text-gray-700 text-[15px] sm:text-base leading-[1.65] max-w-lg" style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}>{t.about.missionText}</p>
-          </div>
+      {/* موبايل وتابلت: الرمح كخلفية + النص فوقها — يظهر حتى تحت 2xl لضمان التجاوب على التابلت */}
+      <div className="relative flex-1 min-h-0 2xl:hidden overflow-hidden">
+        {/* خلفية الرمح — موبايل وتابلت فقط */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          aria-hidden
+        >
+          <img
+            src="/rmh.png"
+            alt=""
+            className="absolute bottom-0 left-0 w-auto h-[70%] max-h-[420px] sm:h-[75%] sm:max-h-[480px] md:h-[80%] md:max-h-[520px] object-contain object-left-bottom opacity-[0.12] sm:opacity-[0.14] md:opacity-[0.16]"
+            style={{ transform: "rotate(-18deg) translateY(10%)" }}
+          />
         </div>
-      </motion.div>
+        <motion.div
+          className="relative z-10 flex flex-col justify-center min-h-full overflow-y-auto px-4 pb-6 pt-8 sm:px-6 sm:pb-8 sm:pt-10 md:px-8 md:pb-10 md:pt-12"
+          initial={false}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ ...tBase, delay: 0.15 }}
+        >
+          <div className="max-w-xl mx-auto w-full space-y-6 sm:space-y-7 md:space-y-8 md:max-w-2xl">
+            <div className="space-y-2 sm:space-y-2.5">
+              <h3 className="text-gray-900 font-bold text-lg sm:text-xl md:text-2xl tracking-tight" style={{ fontFamily: "DIN Arabic, sans-serif" }}>{t.about.vision}</h3>
+              <p className="text-gray-700 text-[15px] sm:text-base md:text-lg leading-[1.65] max-w-lg md:max-w-xl" style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}>{t.about.visionText}</p>
+            </div>
+            <div className="space-y-2 sm:space-y-2.5">
+              <h3 className="text-gray-900 font-bold text-lg sm:text-xl md:text-2xl tracking-tight" style={{ fontFamily: "DIN Arabic, sans-serif" }}>{t.about.mission}</h3>
+              <p className="text-gray-700 text-[15px] sm:text-base md:text-lg leading-[1.65] max-w-lg md:max-w-xl" style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}>{t.about.missionText}</p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
 
-      {/* لابتوب: ثلاثة أعمدة — يسار: النص الكبير | وسط: الرمح | يمين: الرؤية والمهمة */}
+      {/* ديسكتوب 2xl فما فوق فقط: ثلاثة أعمدة — يسار: النص الكبير | وسط: الرمح | يمين: الرؤية والمهمة */}
       <motion.div
-        className="hidden lg:flex flex-1 min-h-0 items-center justify-start pl-12 xl:pl-20 py-12 overflow-hidden"
+        className="hidden 2xl:flex flex-1 min-h-0 items-center justify-start pl-12 py-12 overflow-hidden"
         initial={false}
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
         transition={tBase}
@@ -55,8 +69,8 @@ export default function VisionMissionPage({ isInView = false }: VisionMissionPag
         </div>
       </motion.div>
 
-      {/* لابتوب: الرمح يبدأ من أسفل الصفحة */}
-      <div className="hidden lg:flex flex-shrink-0 items-end justify-center px-4 xl:px-8 min-h-0 self-stretch">
+      {/* ديسكتوب 2xl: الرمح يبدأ من أسفل الصفحة */}
+      <div className="hidden 2xl:flex flex-shrink-0 items-end justify-center px-4 min-h-0 self-stretch">
         <motion.img
           src="/rmh.png"
           alt=""
@@ -68,7 +82,7 @@ export default function VisionMissionPage({ isInView = false }: VisionMissionPag
       </div>
 
       <motion.div
-        className="hidden lg:flex flex-1 min-h-0 flex-col justify-center items-start pr-12 xl:pr-20 py-12 overflow-hidden"
+        className="hidden 2xl:flex flex-1 min-h-0 flex-col justify-center items-start pr-12 py-12 overflow-hidden"
         initial={false}
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
         transition={{ ...tBase, delay: 0.2 }}

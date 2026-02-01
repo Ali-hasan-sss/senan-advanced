@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Linkedin, Youtube } from "lucide-react";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 
 // Import components directly
@@ -1531,6 +1531,27 @@ export default function App() {
                     </ul>
                   </div>
                 </div>
+              </div>
+              {/* Social Icons — LinkedIn first, then YouTube */}
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <a
+                  href="https://linkedin.com/company/sinan-advanced-industries"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/70 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin size={24} strokeWidth={1.5} />
+                </a>
+                <a
+                  href="https://www.youtube.com/@SinanAdvancedIndustries"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/70 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10"
+                  aria-label="YouTube"
+                >
+                  <Youtube size={24} strokeWidth={1.5} />
+                </a>
               </div>
               <div className="pt-6 md:pt-8 border-t border-white/10 pb-3 md:pb-4">
                 <p
