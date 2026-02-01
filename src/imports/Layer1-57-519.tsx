@@ -73,13 +73,13 @@ function ClipPathGroup() {
   );
 }
 
-function Group2() {
+function Group2({ hideGrayRect }: { hideGrayRect?: boolean }) {
   return (
     <div
       className="absolute contents inset-[47.07%_0_11.93%_0.01%]"
       data-name="Group"
     >
-      <ClipPathGroup />
+      {!hideGrayRect && <ClipPathGroup />}
       <div
         className="absolute inset-[70.51%_6.45%_12.06%_80.85%]"
         data-name="Vector"
@@ -90,7 +90,7 @@ function Group2() {
           preserveAspectRatio="none"
           viewBox="0 0 244 213.76"
         >
-          <path d={svgPaths.p2a848180} fill="#2E3191" id="Vector" opacity="0.4">
+          <path d={svgPaths.p2a848180} fill="#2E3191" opacity="0.4">
             <animate
               attributeName="opacity"
               values="0.4;0.8;0.4"
@@ -110,7 +110,7 @@ function Group2() {
           preserveAspectRatio="none"
           viewBox="0 0 206 130.22"
         >
-          <path d={svgPaths.p2b208600} fill="#808B42" id="Vector" opacity="0.4">
+          <path d={svgPaths.p2b208600} fill="#808B42" opacity="0.4">
             <animate
               attributeName="opacity"
               values="0.4;0.9;0.4"
@@ -130,7 +130,7 @@ function Group2() {
           preserveAspectRatio="none"
           viewBox="0 0 60 104.16"
         >
-          <path d={svgPaths.pca4b00} fill="#00ADEE" id="Vector" opacity="0.4">
+          <path d={svgPaths.pca4b00} fill="#00ADEE" opacity="0.4">
             <animate
               attributeName="opacity"
               values="0.4;0.85;0.4"
@@ -140,13 +140,8 @@ function Group2() {
           </path>
         </svg>
       </div>
-
-      {/* Additional pulsing shapes - Blue */}
-      <div
-        className="absolute inset-[65%_60%_20%_30%]"
-        data-name="PulseShape3"
-        style={{ transform: "rotate(120deg)" }}
-      >
+      {/* Additional pulsing triangles */}
+      <div className="absolute inset-[65%_60%_20%_30%]">
         <svg
           className="block size-full"
           fill="none"
@@ -163,13 +158,7 @@ function Group2() {
           </polygon>
         </svg>
       </div>
-
-      {/* Additional pulsing shapes - Purple */}
-      <div
-        className="absolute inset-[68%_10%_22%_70%]"
-        data-name="PulseShape1"
-        style={{ transform: "rotate(45deg)" }}
-      >
+      <div className="absolute inset-[68%_10%_22%_70%]">
         <svg
           className="block size-full"
           fill="none"
@@ -186,13 +175,7 @@ function Group2() {
           </polygon>
         </svg>
       </div>
-
-      {/* Additional pulsing shapes - Orange */}
-      <div
-        className="absolute inset-[74%_15%_12%_75%]"
-        data-name="PulseShape2"
-        style={{ transform: "rotate(-30deg) scaleX(-1)" }}
-      >
+      <div className="absolute inset-[74%_15%_12%_75%]">
         <svg
           className="block size-full"
           fill="none"
@@ -209,13 +192,7 @@ function Group2() {
           </polygon>
         </svg>
       </div>
-
-      {/* Additional pulsing shapes - Purple variant */}
-      <div
-        className="absolute inset-[75%_55%_12%_35%]"
-        data-name="PulseShape4"
-        style={{ transform: "rotate(-60deg) scaleY(-1)" }}
-      >
+      <div className="absolute inset-[75%_55%_12%_35%]">
         <svg
           className="block size-full"
           fill="none"
@@ -236,10 +213,12 @@ function Group2() {
   );
 }
 
-export default function Layer() {
+type LayerProps = { hideGrayRect?: boolean };
+
+export default function Layer({ hideGrayRect }: LayerProps = {}) {
   return (
-    <div className="relative size-full" data-name="Layer_1">
-      <div className="absolute inset-[0_0.12%_47.48%_0]" data-name="Vector">
+    <div className="relative size-full min-w-full min-h-full" data-name="Layer_1">
+      <div className="absolute inset-0" data-name="Vector">
         <svg
           className="block size-full"
           fill="none"
@@ -249,8 +228,8 @@ export default function Layer() {
           <path d="M1919.75 0H0V644H1919.75V0Z" fill="#08080A" id="Vector" />
         </svg>
       </div>
-      <Group />
-      <Group2 />
+      {/* Group (Explore our Solutions button) removed per request — logo only in hero */}
+      <Group2 hideGrayRect={hideGrayRect} />
     </div>
   );
 }

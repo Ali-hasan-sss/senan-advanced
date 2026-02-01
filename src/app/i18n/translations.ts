@@ -5,6 +5,7 @@ export const translations = {
     nav: {
       home: "Home",
       about: "About",
+      visionMission: "Vision & Mission",
       values: "Values",
       experience: "Experience",
       contact: "Contact",
@@ -54,15 +55,21 @@ export const translations = {
     },
     frontiers: {
       tagline:
-        "An international gateway enabling global\ntrade and market expansion for Sinan\nAdvanced Industries.",
+        "An international gateway enabling global trade and market expansion for Sinan Advanced Industries.",
       intro:
         "Sinan Frontiers is a wholly owned subsidiary of Sinan Advanced Industries, established as the Group's international gateway for global trade, strategic partnerships and market expansion.",
+      paragraph2:
+        "The company serves as a platform to connect Sinan Advanced Industries with international partners, investors, and technology leaders, enabling cross-border collaboration and long-term value creation.",
       keyObjectives: "Key Objectives",
       obj1: "Advance cross-border cooperation and build long-term economic relationships with global industry leaders.",
       obj2: "Identify, structure, and enable value-driven investments that align with national priorities and support sustainable growth.",
       obj3: "Ensure that every project, and investment delivers mutual benefit while reinforcing Sinan's vision for industrial and technological leadership.",
     },
     aselsan: {
+      jointVentureLine: "has formed a strategic joint venture with",
+      aselsanName: "aselsan",
+      establishLine:
+        "to establish a leading defense and advanced technology company in the Sultanate of Oman.",
       tagline:
         "An international gateway enabling global\ntrade and market expansion for Sinan\nAdvanced Industries.",
       intro:
@@ -84,14 +91,15 @@ export const translations = {
     },
     about: {
       title: "About Us",
-      vision: "Our Vision",
-      mission: "Our Mission",
       aboutText:
         "Sinan Advanced Industries is a state-owned company, established to be the first Omani company to develop and improve defense products in the Sultanate of Oman, unlocking the latest technologies and best-in-class practices and services in this field. Our team has the longest experience in the Sultanate of Oman in operating, monitoring, and maintaining unmanned aerial systems and artificial intelligence (AI). We have worked in multiple sectors, such as energy, minerals, and transportation.",
+      vision: "Our Vision",
+      mission: "Our Mission",
+      empoweringLines: "Empowering\nNational\nCapabilities\nin Defense\n& Advanced\nIndustries",
       visionText:
-        "To be the leading provider of advanced defense and security solutions in Oman, contributing to national sovereignty and regional stability.",
+        "To be a pioneering force in the development and advancement of innovative defense systems, setting new standards for excellence and national security.",
       missionText:
-        "To deliver cutting-edge defense technologies through strategic partnerships, local expertise, and continuous innovation, ensuring the highest standards of quality and reliability.",
+        "To provide cutting-edge, reliable, and sustainable defense systems through innovation, strategic partnerships, and a commitment to national empowerment. We strive to strengthen Oman's security while enhancing global competitiveness.",
     },
     values: {
       title: "Our Values",
@@ -154,10 +162,10 @@ export const translations = {
       patents: "Registered\npatents",
     },
     contact: {
-      title: "Get in Touch",
-      visitUs: "Visit Us",
+      title: "Contact Us",
+      visitUs: "Our Address",
       callUs: "Call Us",
-      emailUs: "Email Us",
+      emailUs: "Our Email",
       address: "Muscat, 18th of November street\nBuilding 02, Office 007",
       fullName: "Full Name",
       yourName: "Your Name",
@@ -207,6 +215,7 @@ export const translations = {
     nav: {
       home: "الرئيسية",
       about: "من نحن",
+      visionMission: "رؤيتنا ومهمتنا",
       values: "قيمنا",
       experience: "خبرتنا",
       contact: "تواصل",
@@ -253,15 +262,21 @@ export const translations = {
     },
     frontiers: {
       tagline:
-        "بوابة دولية تُمكّن التجارة العالمية\nوتوسيع الأسواق لشركة سنان\nللصناعات المتقدمة.",
+        "بوابة دولية تُمكّن التجارة العالمية وتوسيع الأسواق لشركة سنان للصناعات المتقدمة.",
       intro:
         "سنان فرونتيرز شركة تابعة بالكامل لشركة سنان للصناعات المتقدمة، أُنشئت كبوابة دولية للمجموعة للتجارة العالمية والشراكات الاستراتيجية وتوسيع الأسواق.",
+      paragraph2:
+        "تخدم الشركة منصة لربط شركة سنان للصناعات المتقدمة بالشركاء الدوليين والمستثمرين وقادة التكنولوجيا، وتمكين التعاون عبر الحدود وخلق قيمة على المدى الطويل.",
       keyObjectives: "الأهداف الرئيسية",
       obj1: "تعزيز التعاون عبر الحدود وبناء علاقات اقتصادية طويلة الأمد مع قادة الصناعة العالميين.",
       obj2: "تحديد وهيكلة وتمكين استثمارات قائمة على القيمة تتماشى مع الأولويات الوطنية وتدعم النمو المستدام.",
       obj3: "ضمان أن كل مشروع واستثمار يحقق منفعة متبادلة ويعزز رؤية سنان للقيادة الصناعية والتقنية.",
     },
     aselsan: {
+      jointVentureLine: "أبرمت شراكة استراتيجية مشتركة مع",
+      aselsanName: "أسيلسان",
+      establishLine:
+        "لتأسيس شركة رائدة في الدفاع والتكنولوجيا المتقدمة في سلطنة عُمان.",
       tagline:
         "بوابة دولية تُمكّن التجارة العالمية\nوتوسيع الأسواق لشركة سنان\nللصناعات المتقدمة.",
       intro:
@@ -282,14 +297,15 @@ export const translations = {
     },
     about: {
       title: "من نحن",
-      vision: "رؤيتنا",
-      mission: "مهمتنا",
       aboutText:
         "شركة سنان للصناعات المتقدمة شركة مملوكة للدولة، أُنشئت لتكون أول شركة عُمانية لتطوير وتحسين منتجات الدفاع في سلطنة عُمان، مستثمرة أحدث التقنيات وأفضل الممارسات والخدمات في هذا المجال. يمتلك فريقنا أطول خبرة في سلطنة عُمان في تشغيل ومراقبة وصيانة الأنظمة الجوية دون طيار والذكاء الاصطناعي. عملنا في قطاعات متعددة مثل الطاقة والمعادن والنقل.",
+      vision: "رؤيتنا",
+      mission: "مهمتنا",
+      empoweringLines: "تمكين\nالقدرات الوطنية\nفي الدفاع\nوالصناعات\nالمتقدمة",
       visionText:
-        "أن نكون المزود الرائد لحلول الدفاع والأمن المتقدمة في عُمان، مساهمين في السيادة الوطنية والاستقرار الإقليمي.",
+        "أن نكون قوة رائدة في تطوير وتطوير أنظمة الدفاع المبتكرة، ووضع معايير جديدة للتميز والأمن الوطني.",
       missionText:
-        "تقديم تقنيات دفاعية متطورة من خلال شراكات استراتيجية وخبرة محلية وابتكار مستمر، مع ضمان أعلى معايير الجودة والموثوقية.",
+        "توفير أنظمة دفاعية مبتكرة وموثوقة ومستدامة من خلال الابتكار والشراكات الاستراتيجية والالتزام بالتمكين الوطني. نسعى لتعزيز أمن عُمان مع تحسين القدرة التنافسية العالمية.",
     },
     values: {
       title: "قيمنا",
@@ -353,9 +369,9 @@ export const translations = {
     },
     contact: {
       title: "تواصل معنا",
-      visitUs: "زيارتنا",
+      visitUs: "عنواننا",
       callUs: "اتصل بنا",
-      emailUs: "راسلنا",
+      emailUs: "بريدنا الإلكتروني",
       address: "مسقط، شارع 18 نوفمبر\nالمبنى 02، المكتب 007",
       fullName: "الاسم الكامل",
       yourName: "اسمك",

@@ -17,7 +17,7 @@ export default function SolutionsPage() {
   const { t } = useLanguage();
   return (
     <div
-      className="w-full min-h-screen md:min-h-[140vh] relative overflow-x-hidden flex flex-col"
+      className="w-full h-full min-h-0 relative overflow-hidden flex flex-col"
       style={{
         cursor:
           'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%278%27 fill=%27black%27/%3E%3C/svg%3E") 16 16, auto',
@@ -28,8 +28,15 @@ export default function SolutionsPage() {
         <img src={solutionsBg} alt="" className="w-full h-full object-cover" />
       </div>
 
-      {/* Desktop: infographic + left block (hidden on mobile, animations unchanged) */}
-      <div className="hidden md:block absolute inset-0 min-h-[140vh]" style={{ zIndex: 5 }}>
+      {/* Desktop: infographic + left block - scaled to fit viewport */}
+      <div
+        className="hidden md:block absolute inset-0 flex items-center justify-center overflow-hidden"
+        style={{ zIndex: 5 }}
+      >
+        <div
+          className="absolute inset-0 origin-center"
+          style={{ transform: "scale(0.78)", transformOrigin: "center center" }}
+        >
         {/* Rotating Circle 1 - Clockwise */}
         <motion.div
           className="absolute"
@@ -585,6 +592,7 @@ export default function SolutionsPage() {
             height: "auto",
           }}
         />
+        </div>
       </div>
 
       {/* Mobile: all solutions in a responsive grid – flows with page scroll */}
@@ -595,23 +603,23 @@ export default function SolutionsPage() {
           className="relative flex flex-col items-center w-full px-4 sm:px-6 py-8 sm:py-12"
           style={{ fontFamily: "DIN Arabic, sans-serif" }}
         >
-          <h2 className="text-white text-xl sm:text-2xl font-bold mb-6 sm:mb-10 text-center">
+          <h2 className="text-white text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-center">
             {t.solutions.ourSolutions}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-2xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 w-full max-w-2xl mx-auto">
             {/* Communication */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/15">
                 <CommunicationIcon />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.communication}
                 </div>
                 <div className="text-white/85 text-sm leading-snug mt-0.5">
@@ -625,13 +633,13 @@ export default function SolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: 0.05 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/15">
                 <TrainingIcon />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.training}
                 </div>
                 <div className="text-white/85 text-sm leading-snug mt-0.5">
@@ -645,13 +653,13 @@ export default function SolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 flex items-center justify-center rounded-lg bg-white/15">
                 <DefenseIcon />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.defense}
                 </div>
                 <div className="text-white/85 text-sm leading-snug mt-0.5">
@@ -665,13 +673,13 @@ export default function SolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: 0.15 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
             >
               <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
                 <img src={spaceLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.spaceDefense}
                 </div>
               </div>
@@ -682,13 +690,13 @@ export default function SolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: 0.2 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
             >
               <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
                 <img src={airLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.airDefense}
                 </div>
               </div>
@@ -699,13 +707,13 @@ export default function SolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: 0.25 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
             >
               <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
                 <img src={landLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.landDefense}
                 </div>
               </div>
@@ -716,13 +724,13 @@ export default function SolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: 0.3 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
             >
               <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
                 <img src={maritimeLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.maritimeDefense}
                 </div>
               </div>
@@ -733,13 +741,13 @@ export default function SolutionsPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.4, delay: 0.35 }}
-              className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg sm:col-span-2"
+              className="flex items-start gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg sm:col-span-2"
             >
               <div className="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 flex items-center justify-center rounded-xl bg-white/15 overflow-hidden">
                 <img src={cyberLogo} alt="" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="font-bold text-base sm:text-lg leading-tight">
+                <div className="font-bold text-sm sm:text-base leading-tight">
                   {t.solutions.cyberDefense}
                 </div>
               </div>

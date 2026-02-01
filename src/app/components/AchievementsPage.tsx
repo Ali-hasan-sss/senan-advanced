@@ -68,6 +68,10 @@ function useAchievementsScrollProgress() {
     const el = ref.current;
     if (!el) return;
 
+    // التمرير يحدث داخل app-scroll-container وليس في window
+    const scrollContainer =
+      (el.closest(".app-scroll-container") as HTMLElement | null) ?? undefined;
+
     const update = () => {
       const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
@@ -89,10 +93,18 @@ function useAchievementsScrollProgress() {
     };
 
     update();
-    window.addEventListener("scroll", update, { passive: true });
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", update, { passive: true });
+    } else {
+      window.addEventListener("scroll", update, { passive: true });
+    }
     window.addEventListener("resize", update);
     return () => {
-      window.removeEventListener("scroll", update);
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", update);
+      } else {
+        window.removeEventListener("scroll", update);
+      }
       window.removeEventListener("resize", update);
     };
   }, []);
@@ -112,7 +124,7 @@ export default function AchievementsPage() {
         <img
           src={droneIcon}
           alt="Drone"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 30000,
@@ -125,7 +137,7 @@ export default function AchievementsPage() {
         <img
           src={pipelineIcon}
           alt="Pipeline"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 15000,
@@ -138,7 +150,7 @@ export default function AchievementsPage() {
         <img
           src={powerlineIcon}
           alt="Powerline"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 30000,
@@ -151,7 +163,7 @@ export default function AchievementsPage() {
         <img
           src={oilFacilityIcon}
           alt="Oil Facility"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 2400,
@@ -164,7 +176,7 @@ export default function AchievementsPage() {
         <img
           src={dataAnalyzedIcon}
           alt="Data Analyzed"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 550,
@@ -177,7 +189,7 @@ export default function AchievementsPage() {
         <img
           src={flareTowerIcon}
           alt="Flare Tower"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 500,
@@ -190,7 +202,7 @@ export default function AchievementsPage() {
         <img
           src={inventionsIcon}
           alt="Inventions"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 8,
@@ -203,7 +215,7 @@ export default function AchievementsPage() {
         <img
           src={patentsIcon}
           alt="Patents"
-          className="w-auto h-auto max-w-32 max-h-32 object-contain"
+          className="w-auto h-auto max-w-20 max-h-20 md:max-w-24 md:max-h-24 object-contain"
         />
       ),
       targetNumber: 6,
@@ -218,13 +230,13 @@ export default function AchievementsPage() {
   return (
     <div
       ref={sectionRef}
-      className="w-full min-h-screen relative overflow-x-hidden flex flex-col items-center px-4 md:px-8 lg:px-12"
+      className="w-full h-full min-h-0 relative overflow-hidden flex flex-col items-center px-4 md:px-8 lg:px-12"
       style={{ backgroundColor: "#F5F3EE" }}
     >
       {/* Background Image - Architectural Landmarks - Moving like News Ticker (as in old component) */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 md:h-64 lg:h-80 overflow-hidden" style={{ direction: "ltr" }}>
+      <div className="absolute bottom-0 left-0 right-0 h-32 md:h-40 lg:h-48 overflow-hidden" style={{ direction: "ltr" }}>
         <motion.div
-          className="absolute bottom-0 left-0 h-48 md:h-64 lg:h-80 bg-no-repeat w-[300%]"
+          className="absolute bottom-0 left-0 h-32 md:h-40 lg:h-48 bg-no-repeat w-[300%]"
           style={{
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: "auto 120%",
@@ -233,7 +245,7 @@ export default function AchievementsPage() {
             opacity: 0.6,
             direction: "ltr",
           }}
-          animate={{ x: [0, "-66.666%"] }}
+          animate={{ x: [0, "-33.333%"] }}
           transition={{
             duration: 60,
             repeat: Infinity,
@@ -244,7 +256,7 @@ export default function AchievementsPage() {
 
       {/* Title */}
       <motion.h1
-        className="absolute top-6 left-6 md:top-12 md:left-12 text-gray-900 text-lg md:text-xl lg:text-[24pt]"
+        className="absolute top-4 left-4 md:top-6 md:left-8 text-gray-900 text-base md:text-lg lg:text-xl"
         style={{
           fontFamily: "DIN Arabic, sans-serif",
           fontWeight: 500,
@@ -258,7 +270,7 @@ export default function AchievementsPage() {
 
       {/* Achievements */}
       <div
-        className="relative w-full flex flex-col items-center pt-20 md:pt-24 lg:pt-[100px] flex-1 min-h-0"
+        className="relative w-full flex flex-col items-center pt-12 md:pt-14 lg:pt-16 flex-1 min-h-0"
         style={{ zIndex: 10 }}
       >
         {/* Desktop: horizontal row with wave pattern */}
@@ -270,7 +282,7 @@ export default function AchievementsPage() {
             return (
               <motion.div
                 key={index}
-                className={`flex flex-col items-center w-[130px] ${shouldMoveDown ? "mt-[70px]" : ""}`}
+                className={`flex flex-col items-center w-[100px] lg:w-[110px] ${shouldMoveDown ? "mt-[45px]" : ""}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1 + index * 0.15 }}
@@ -355,7 +367,7 @@ export default function AchievementsPage() {
                     </svg>
                   )}
                   {/* Icon */}
-                  <Icon className="w-9 h-9 text-gray-700 relative z-10" />
+                  <Icon className="w-7 h-7 md:w-8 md:h-8 text-gray-700 relative z-10" />
                 </motion.div>
 
                 {/* Number */}
@@ -373,15 +385,15 @@ export default function AchievementsPage() {
                 {/* Vertical Dotted Line with Drawing Animation */}
                 <motion.svg
                   width="2"
-                  height={shouldMoveDown ? "90" : "160"}
-                  viewBox={`0 0 2 ${shouldMoveDown ? 90 : 160}`}
+                  height={shouldMoveDown ? "55" : "100"}
+                  viewBox={`0 0 2 ${shouldMoveDown ? 55 : 100}`}
                   className="overflow-visible"
                 >
                   <motion.line
                     x1="1"
                     y1="0"
                     x2="1"
-                    y2={shouldMoveDown ? 90 : 160}
+                    y2={shouldMoveDown ? 55 : 100}
                     stroke="#9CA3AF"
                     strokeWidth="2"
                     strokeDasharray="4 4"
@@ -389,8 +401,8 @@ export default function AchievementsPage() {
                       hoveredIndex === index || isInView
                         ? 0
                         : shouldMoveDown
-                          ? 94
-                          : 164
+                          ? 58
+                          : 104
                     }
                     transition={{
                       duration: 0.8,
@@ -402,7 +414,7 @@ export default function AchievementsPage() {
 
                 {/* Dot at bottom of line */}
                 <motion.div
-                  className="w-3.5 h-3.5 bg-gray-800 rounded-full my-4"
+                  className="w-2.5 h-2.5 bg-gray-800 rounded-full my-2"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.3, delay: 1.5 + index * 0.15 }}
@@ -410,7 +422,7 @@ export default function AchievementsPage() {
 
                 {/* Label */}
                 <div
-                  className="text-gray-800 text-center leading-tight whitespace-pre-line text-xs lg:text-[12pt]"
+                  className="text-gray-800 text-center leading-tight whitespace-pre-line text-[10px] md:text-xs"
                   style={{
                     fontWeight: 500,
                     fontFamily: "DIN Arabic, sans-serif",
@@ -424,7 +436,7 @@ export default function AchievementsPage() {
         </div>
 
         {/* Mobile: 2-column grid, no horizontal scroll, same counter & style */}
-        <div className="md:hidden grid grid-cols-2 gap-x-4 gap-y-6 sm:gap-y-8 px-2 sm:px-4 mb-6 w-full max-w-lg mx-auto">
+        <div className="md:hidden grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-y-5 px-2 sm:px-4 mb-4 w-full max-w-lg mx-auto">
           {achievements.map((achievement, index) => {
             const Icon = achievement.icon;
 
