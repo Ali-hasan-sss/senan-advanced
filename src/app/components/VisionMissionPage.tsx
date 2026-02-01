@@ -1,11 +1,15 @@
 import { motion } from "motion/react";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 
-export default function VisionMissionPage() {
+type VisionMissionPageProps = { isInView?: boolean };
+
+export default function VisionMissionPage({ isInView = false }: VisionMissionPageProps) {
   const { t } = useLanguage();
   const lines =
     (t.about as { empoweringLines?: string }).empoweringLines?.split("\n") ??
     [];
+
+  const tBase = { duration: 0.6, ease: "easeOut" as const };
 
   return (
     <div
@@ -15,10 +19,9 @@ export default function VisionMissionPage() {
       {/* موبايل: إخفاء صورة الرمح — النصوص فقط */}
       <motion.div
         className="relative z-10 flex flex-col justify-end min-h-0 flex-1 px-4 pb-6 pt-12 sm:px-6 sm:pb-8 sm:pt-14 lg:hidden"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+        initial={false}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+        transition={{ ...tBase, delay: 0.15 }}
       >
         <div className="max-w-xl space-y-6 sm:space-y-7">
           <div className="space-y-2 sm:space-y-2.5">
@@ -35,10 +38,9 @@ export default function VisionMissionPage() {
       {/* لابتوب: ثلاثة أعمدة — يسار: النص الكبير | وسط: الرمح | يمين: الرؤية والمهمة */}
       <motion.div
         className="hidden lg:flex flex-1 min-h-0 items-center justify-start pl-12 xl:pl-20 py-12 overflow-hidden"
-        initial={{ opacity: 0, x: -60 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        initial={false}
+        animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
+        transition={tBase}
       >
         <div className="space-y-0.5 xl:space-y-1">
           {lines.map((line, i) => (
@@ -59,19 +61,17 @@ export default function VisionMissionPage() {
           src="/rmh.png"
           alt=""
           className="h-[55vh] xl:h-[60vh] 2xl:h-[65vh] w-auto object-contain object-bottom rotate-[-18deg]"
-          initial={{ opacity: 0, y: 80 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          initial={false}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
           transition={{ duration: 0.65, delay: 0.1, ease: "easeOut" }}
         />
       </div>
 
       <motion.div
         className="hidden lg:flex flex-1 min-h-0 flex-col justify-center items-start pr-12 xl:pr-20 py-12 overflow-hidden"
-        initial={{ opacity: 0, x: 60 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+        initial={false}
+        animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
+        transition={{ ...tBase, delay: 0.2 }}
       >
         <div className="max-w-lg space-y-8 xl:space-y-10 w-full">
           <div>

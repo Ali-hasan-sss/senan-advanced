@@ -8,9 +8,10 @@ interface ValueCardProps {
   title: string;
   description: string;
   delay: number;
+  isInView: boolean;
 }
 
-function ValueCard({ icon: Icon, title, description, delay }: ValueCardProps) {
+function ValueCard({ icon: Icon, title, description, delay, isInView }: ValueCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -23,10 +24,9 @@ function ValueCard({ icon: Icon, title, description, delay }: ValueCardProps) {
         backgroundColor: isHovered ? "rgba(60, 60, 70, 0.5)" : "transparent",
         backdropFilter: isHovered ? "blur(12px)" : "none",
       }}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.5, delay }}
+      initial={false}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
@@ -51,7 +51,9 @@ function ValueCard({ icon: Icon, title, description, delay }: ValueCardProps) {
   );
 }
 
-export default function ValuesPage() {
+type ValuesPageProps = { isInView?: boolean };
+
+export default function ValuesPage({ isInView = false }: ValuesPageProps) {
   const { t } = useLanguage();
   const values = [
     {
@@ -86,10 +88,9 @@ export default function ValuesPage() {
           {/* العنوان */}
           <motion.div
             className="text-center"
-            initial={{ opacity: 0, y: -12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5 }}
+            initial={false}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -12 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
           >
             <h1
               className="text-white font-bold text-xl md:text-2xl lg:text-3xl"
@@ -107,6 +108,7 @@ export default function ValuesPage() {
                 title={value.title}
                 description={value.description}
                 delay={0.15 + index * 0.1}
+                isInView={isInView}
               />
             ))}
           </div>

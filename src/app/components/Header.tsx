@@ -31,37 +31,59 @@ export function Header() {
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto pr-6 pl-0">
         <div className="flex items-center justify-between h-16">
-          {/* Desktop Navigation - Full Width Spread */}
-          <nav className="hidden md:flex items-center justify-between w-full">
-            {navItems.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <button
-                  onClick={() => scrollToSection(item.id)}
-                  className={`text-sm font-normal transition-colors relative ${
-                    activeSection === item.id
-                      ? 'text-white'
-                      : 'text-white/70 hover:text-white'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              </motion.div>
-            ))}
-            <motion.button
-              className="text-sm font-normal text-white/70 hover:text-white transition-colors"
+          {/* Desktop Navigation — Home ببداية الهيدر، والباقي يتوزع بالتساوي */}
+          <nav className="hidden md:flex items-center w-full">
+            {/* Home — ببداية الهيدر */}
+            <motion.div
+              key="home"
+              className="flex-shrink-0"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: navItems.length * 0.1 }}
+              transition={{ duration: 0.5, delay: 0 }}
             >
-              English
-            </motion.button>
+              <button
+                onClick={() => scrollToSection('home')}
+                className={`text-sm font-normal transition-colors ${
+                  activeSection === 'home'
+                    ? 'text-white'
+                    : 'text-white/70 hover:text-white'
+                }`}
+              >
+                Home
+              </button>
+            </motion.div>
+            {/* الباقي — توزيع بالتساوي */}
+            <div className="flex-1 flex items-center justify-evenly">
+              {navItems.slice(1).map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: (index + 1) * 0.1 }}
+                >
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className={`text-sm font-normal transition-colors ${
+                      activeSection === item.id
+                        ? 'text-white'
+                        : 'text-white/70 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                </motion.div>
+              ))}
+              <motion.button
+                className="text-sm font-normal text-white/70 hover:text-white transition-colors"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: navItems.length * 0.1 }}
+              >
+                English
+              </motion.button>
+            </div>
           </nav>
 
           {/* Mobile Menu Button */}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import solutionsBg from "@/assets/3004dc5a5d12ee327e0bb3709f487de52a320930.png";
@@ -14,9 +14,26 @@ import TrainingIcon from "@/imports/IsolationMode-203-189";
 import DefenseIcon from "@/imports/IsolationMode-203-207";
 import centerLogo from "@/assets/64074ce9782b043bd0cc2630c3456e4497e318bc.png";
 
+const CANVAS_W = 1300;
+const CANVAS_H = 900;
+
 export default function SolutionsPage() {
   const { t } = useLanguage();
   const [defenseHovered, setDefenseHovered] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [fitScale, setFitScale] = useState(1);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight - 50;
+      const s = Math.min(1, w / CANVAS_W, h / CANVAS_H);
+      setFitScale(Math.max(0.3, s));
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
   return (
     <div
       className="w-full h-full min-h-0 relative overflow-hidden flex flex-col"
@@ -33,23 +50,33 @@ export default function SolutionsPage() {
         <img src={solutionsBg} alt="" className="w-full h-full object-cover" />
       </div>
 
-      {/* Desktop: infographic + left block - scaled to fit viewport */}
+      {/* Desktop: لوحة ثابتة بأبعاد دقيقة — نفس التموضع على جميع الشاشات الكبيرة */}
       <div
-        className="hidden md:block absolute inset-0 flex items-center justify-center overflow-hidden"
+        ref={sectionRef}
+        className="hidden md:flex absolute inset-0 items-center justify-center overflow-hidden"
         style={{ zIndex: 5 }}
       >
         <div
-          className="absolute inset-0 origin-center"
-          style={{ transform: "scale(0.78)", transformOrigin: "center center" }}
+          className="relative flex-shrink-0 overflow-hidden"
+          style={{
+            width: CANVAS_W,
+            height: CANVAS_H,
+            transform: `scale(${fitScale})`,
+            transformOrigin: "center center",
+          }}
         >
-          {/* Rotating Circle 1 - Clockwise */}
+          {/* خلفية اللوحة */}
+          <div className="absolute inset-0">
+            <img src={solutionsBg} alt="" className="w-full h-full object-cover" />
+          </div>
+          {/* Rotating Circle 1 - Clockwise — موضع ثابت بالبكسل */}
           <motion.div
             className="absolute"
             style={{
-              right: "20%",
-              top: "25%",
-              width: "400px",
-              height: "400px",
+              left: 640,
+              top: 225,
+              width: 400,
+              height: 400,
               zIndex: 5,
             }}
             animate={{ rotate: 360 }}
@@ -94,10 +121,10 @@ export default function SolutionsPage() {
           <div
             className="absolute"
             style={{
-              right: "20%",
-              top: "25%",
-              width: "400px",
-              height: "400px",
+              left: 640,
+              top: 225,
+              width: 400,
+              height: 400,
               zIndex: 10,
               display: "flex",
               alignItems: "center",
@@ -527,33 +554,34 @@ export default function SolutionsPage() {
             </div>
           </div>
 
-          {/* Connecting Lines — تظهر عند الهوفر على Defense systems */}
+          {/* Connecting Lines — محاذاة طولية: بجانب كلمة Defense — أبعاد ثابتة */}
           <img
             src={connectingLines}
             alt=""
-            className="absolute z-[7] transition-opacity duration-300"
+            className="absolute z-[7] transition-opacity duration-300 object-left"
             style={{
-              left: "70px",
-              top: "300px",
-              width: "680px",
+              left: 104,
+              top: 368,
+              width: 536,
               height: "auto",
               opacity: defenseHovered ? 1 : 0,
             }}
           />
 
-          {/* الحلول الثلاثة — أقصى اليسار لضمان عدم التداخل مع الصورة */}
+          {/* النصوص يسار — أبعاد ومواضع ثابتة بالبكسل */}
           <div
-            className="absolute z-20 text-left max-w-[260px] pl-1 pr-1 py-5 -translate-x-8 xl:-translate-x-12"
+            className="absolute z-20 text-left"
             style={{
-              left: "0",
-              bottom: "22%",
-              top: "auto",
+              left: 40,
+              top: 180,
+              width: 260,
+              fontFamily: "DIN Arabic, sans-serif",
             }}
           >
             <h2
-              className="text-gray-900 text-xl xl:text-2xl font-bold mb-5"
+              className="text-gray-900 font-bold mb-4"
               style={{
-                fontFamily: "DIN Arabic, sans-serif",
+                fontSize: 22,
                 letterSpacing: "0.5px",
               }}
             >
@@ -568,8 +596,12 @@ export default function SolutionsPage() {
                   <CommunicationIcon />
                 </div>
                 <div className="text-gray-800 leading-tight">
-                  <div className="font-bold text-base xl:text-lg text-gray-900">{t.solutions.communication}</div>
-                  <div className="text-gray-600 text-sm xl:text-base mt-0.5">{t.solutions.communicationSystems}</div>
+                  <div className="font-bold text-gray-900" style={{ fontSize: 16 }}>
+                    {t.solutions.communication}
+                  </div>
+                  <div className="text-gray-600 mt-0.5" style={{ fontSize: 14 }}>
+                    {t.solutions.communicationSystems}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-4 py-2">
@@ -577,8 +609,12 @@ export default function SolutionsPage() {
                   <TrainingIcon />
                 </div>
                 <div className="text-gray-800 leading-tight">
-                  <div className="font-bold text-base xl:text-lg text-gray-900">{t.solutions.training}</div>
-                  <div className="text-gray-600 text-sm xl:text-base mt-0.5">{t.solutions.trainingAndServices}</div>
+                  <div className="font-bold text-gray-900" style={{ fontSize: 16 }}>
+                    {t.solutions.training}
+                  </div>
+                  <div className="text-gray-600 mt-0.5" style={{ fontSize: 14 }}>
+                    {t.solutions.trainingAndServices}
+                  </div>
                 </div>
               </div>
               <div
@@ -589,8 +625,12 @@ export default function SolutionsPage() {
                   <DefenseIcon />
                 </div>
                 <div className="text-gray-800 leading-tight">
-                  <div className="font-bold text-base xl:text-lg text-gray-900">{t.solutions.defense}</div>
-                  <div className="text-gray-600 text-sm xl:text-base mt-0.5">{t.solutions.defenseSystems}</div>
+                  <div className="font-bold text-gray-900" style={{ fontSize: 16 }}>
+                    {t.solutions.defense}
+                  </div>
+                  <div className="text-gray-600 mt-0.5" style={{ fontSize: 14 }}>
+                    {t.solutions.defenseSystems}
+                  </div>
                 </div>
               </div>
             </div>

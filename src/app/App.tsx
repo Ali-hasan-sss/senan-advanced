@@ -163,29 +163,46 @@ function Header({
   contactLabel,
   locale,
   setLocale,
+  scrollDown,
 }: {
   menuItems: NavItem[];
   contactLabel: string;
   locale: "en" | "ar";
   setLocale: (l: "en" | "ar") => void;
+  scrollDown?: boolean;
 }) {
+  const [isHovered, setIsHovered] = useState(false);
+  const opaque = isHovered || !scrollDown;
+  const textClass = opaque
+    ? "text-white hover:text-gray-400"
+    : "text-white/50 hover:text-white/70";
+  const btnClass = opaque
+    ? "text-white/80 hover:text-white border-white/30 hover:border-white/60"
+    : "text-white/40 hover:text-white/60 border-white/20 hover:border-white/40";
   return (
-    <header className="h-[50px] flex-shrink-0 bg-black text-white px-4 md:px-6 lg:px-8 flex items-center">
+    <header
+      className="h-[50px] flex-shrink-0 px-4 md:px-6 lg:px-8 flex items-center transition-all duration-300"
+      style={{
+        backgroundColor: opaque ? "rgb(0,0,0)" : "rgba(0,0,0,0.5)",
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="max-w-[1920px] mx-auto w-full flex items-center justify-between h-full">
-        {/* Desktop nav — توزيع الروابط الخمسة بشكل متساوٍ على عرض الشاشة */}
+        {/* Desktop nav */}
         <div className="hidden lg:flex flex-1 items-center justify-evenly px-4 xl:px-20">
           {menuItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-xs xl:text-sm text-white hover:text-gray-400 transition-colors whitespace-nowrap"
+              className={`text-xs xl:text-sm transition-colors whitespace-nowrap ${textClass}`}
             >
               {item.label}
             </a>
           ))}
           <a
             href="#contact"
-            className="text-xs xl:text-sm text-white hover:text-gray-400 transition-colors whitespace-nowrap"
+            className={`text-xs xl:text-sm transition-colors whitespace-nowrap ${textClass}`}
           >
             {contactLabel}
           </a>
@@ -196,7 +213,7 @@ function Header({
           <button
             type="button"
             onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
-            className="text-white/80 hover:text-white text-sm font-medium px-3 py-1.5 rounded border border-white/30 hover:border-white/60 transition-colors"
+            className={`text-sm font-medium px-3 py-1.5 rounded border transition-colors ${btnClass}`}
             aria-label="Toggle language"
           >
             {locale === "ar" ? "EN" : "ar"}
@@ -206,7 +223,7 @@ function Header({
         {/* Mobile: logo (left) */}
         <a
           href="#home"
-          className="lg:hidden flex-shrink-0 h-8 w-auto"
+          className={`lg:hidden flex-shrink-0 h-8 w-auto transition-opacity duration-300 ${opaque ? "opacity-100" : "opacity-60"}`}
           aria-label="senan advanced – Home"
         >
           <img
@@ -218,7 +235,10 @@ function Header({
 
         <div className="lg:hidden ml-auto flex items-center gap-4">
           <MobileMenu
-            menuItems={[...menuItems, { href: "#contact", label: contactLabel }]}
+            menuItems={[
+              ...menuItems,
+              { href: "#contact", label: contactLabel },
+            ]}
             locale={locale}
             setLocale={setLocale}
           />
@@ -297,9 +317,29 @@ export default function App() {
   const [sectionInView, setSectionInView] = useState<Record<string, boolean>>(
     {}
   );
-  const [heroHoveredTriangleId, setHeroHoveredTriangleId] = useState<number | null>(null);
+  const [heroHoveredTriangleId, setHeroHoveredTriangleId] = useState<
+    number | null
+  >(null);
+  const [heroMousePosition, setHeroMousePosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const [scrollDown, setScrollDown] = useState(false);
+  const lastScrollTop = useRef(0);
 
   const sectionIdByEl = useRef<WeakMap<Element, string>>(new WeakMap());
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const st = el.scrollTop;
+      setScrollDown(st > lastScrollTop.current && st > 10);
+      lastScrollTop.current = st;
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const scrollEl = scrollContainerRef.current;
@@ -338,15 +378,15 @@ export default function App() {
         <CustomCursor />
       </div>
 
-      {/* Layout: header (50px) + scroll area (rest). Header is NOT fixed — space reserved at top. */}
+      {/* Layout: header (مكان محجوز) + scroll area — الهيدر بدون fixed/sticky */}
       <div className="h-screen flex flex-col overflow-hidden">
         <Header
           menuItems={headerMenuItems}
           contactLabel={t.nav.contact}
           locale={locale}
           setLocale={setLocale}
+          scrollDown={scrollDown}
         />
-        {/* Single scroll container: fills rest of viewport below header */}
         <div
           ref={scrollContainerRef}
           className="app-scroll-container flex-1 min-h-0 overflow-y-scroll snap-y snap-mandatory scroll-smooth"
@@ -384,77 +424,104 @@ export default function App() {
               className="absolute inset-y-0 left-1/2 w-[110vw] max-w-none -translate-x-1/2 pointer-events-none"
               style={{ zIndex: 1 }}
             >
-              <div className="absolute inset-0 w-full h-full min-w-full min-h-full pointer-events-auto">
+              <div
+                className="absolute inset-0 w-full h-full min-w-full min-h-full pointer-events-auto"
+                onMouseMove={(e) => {
+                  if (heroHoveredTriangleId !== null) {
+                    setHeroMousePosition({ x: e.clientX, y: e.clientY });
+                  }
+                }}
+                onMouseLeave={() => {
+                  setHeroHoveredTriangleId(null);
+                  setHeroMousePosition(null);
+                }}
+              >
                 {typeof LayerHome === "function" ? (
                   <LayerHome
                     hideGrayRect
                     trianglesOnly
-                    onTriangleHoverChange={setHeroHoveredTriangleId}
+                    onTriangleHoverChange={(id, e) => {
+                      setHeroHoveredTriangleId(id);
+                      if (e)
+                        setHeroMousePosition({ x: e.clientX, y: e.clientY });
+                      if (id === null) setHeroMousePosition(null);
+                    }}
                     onTriangleClick={(triangleId) => {
                       const sectionId = TRIANGLE_TO_SECTION[triangleId];
-                      const el = sectionRefs.current[sectionId] ?? document.getElementById(sectionId);
-                      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      const el =
+                        sectionRefs.current[sectionId] ??
+                        document.getElementById(sectionId);
+                      el?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
                     }}
                   />
                 ) : null}
               </div>
             </div>
 
-            {/* لوغو عائم فوق منتصف كل مثلث عند الهوفر — الموضع: مركز كل مثلث (16%, 40%, 64%, 88%) */}
-            {heroHoveredTriangleId === 1 && (
+            {/* لوغو عائم فوق مؤشر الماوس عند الهوفر — بلا خلفية */}
+            {heroHoveredTriangleId !== null && heroMousePosition && (
               <div
-                className="absolute left-[16%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
-                style={{ width: "min(22vw, 220px)" }}
+                className="fixed flex flex-col items-center justify-center pointer-events-none z-[20]"
+                style={{
+                  left: heroMousePosition.x,
+                  top: heroMousePosition.y - 90,
+                  transform: "translate(-50%, 0)",
+                  width: "min(22vw, 220px)",
+                }}
               >
-                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
-                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
-                    {typeof LayerDynamics === "function" ? <LayerDynamics /> : null}
-                  </div>
-                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN DYNAMICS</span>
-                </div>
-              </div>
-            )}
-            {heroHoveredTriangleId === 2 && (
-              <div
-                className="absolute left-[40%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
-                style={{ width: "min(22vw, 220px)" }}
-              >
-                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
-                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
-                    {typeof LayerMarine === "function" ? <LayerMarine /> : null}
-                  </div>
-                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN MARINE</span>
-                </div>
-              </div>
-            )}
-            {heroHoveredTriangleId === 3 && (
-              <div
-                className="absolute left-[64%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
-                style={{ width: "min(22vw, 220px)" }}
-              >
-                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
-                  <img
-                    src={`${import.meta.env.BASE_URL || "/"}simnfor.png`}
-                    alt="SINAN FRONTIERS"
-                    className="h-12 md:h-14 w-auto object-contain"
-                  />
-                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN FRONTIERS</span>
-                </div>
-              </div>
-            )}
-            {heroHoveredTriangleId === 4 && (
-              <div
-                className="absolute left-[88%] bottom-[38%] flex justify-center items-end pointer-events-none z-[15] -translate-x-1/2"
-                style={{ width: "min(22vw, 220px)" }}
-              >
-                <div className="flex flex-col items-center justify-center rounded-lg px-3 py-2 bg-black/70 backdrop-blur-sm border border-white/25 shadow-xl">
-                  <img
-                    src={`${import.meta.env.BASE_URL || "/"}logo-assislian.png`}
-                    alt="Sinan Aselsan"
-                    className="h-12 md:h-14 w-auto object-contain"
-                  />
-                  <span className="text-white text-xs font-semibold tracking-wider mt-1">SINAN ASELSAN</span>
-                </div>
+                {heroHoveredTriangleId === 1 && (
+                  <>
+                    <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                      {typeof LayerDynamics === "function" ? (
+                        <LayerDynamics />
+                      ) : null}
+                    </div>
+                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                      SINAN DYNAMICS
+                    </span>
+                  </>
+                )}
+                {heroHoveredTriangleId === 2 && (
+                  <>
+                    <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                      {typeof LayerMarine === "function" ? (
+                        <LayerMarine />
+                      ) : null}
+                    </div>
+                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                      SINAN MARINE
+                    </span>
+                  </>
+                )}
+                {heroHoveredTriangleId === 3 && (
+                  <>
+                    <img
+                      src={`${import.meta.env.BASE_URL || "/"}simnfor.png`}
+                      alt="SINAN FRONTIERS"
+                      className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                    />
+                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                      SINAN FRONTIERS
+                    </span>
+                  </>
+                )}
+                {heroHoveredTriangleId === 4 && (
+                  <>
+                    <img
+                      src={`${
+                        import.meta.env.BASE_URL || "/"
+                      }logo-assislian.png`}
+                      alt="Sinan Aselsan"
+                      className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                    />
+                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                      SINAN ASELSAN
+                    </span>
+                  </>
+                )}
               </div>
             )}
 
@@ -486,28 +553,41 @@ export default function App() {
                     : { duration: 0.3 },
                 }}
               >
-                {/* عند مرور الماوس: نبض القلب يتكرر */}
-                <motion.div
-                  className="flex flex-col items-center justify-center cursor-default"
-                  whileHover={{
-                    scale: [1, 1.07, 1, 1.04, 1],
+                {/* عند مرور الماوس: نبض القلب يتكرر — عند النقر ينتقل إلى صفحة About */}
+                <a
+                  href="#about"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const el =
+                      sectionRefs.current["about"] ??
+                      document.getElementById("about");
+                    el?.scrollIntoView({ behavior: "smooth", block: "start" });
                   }}
-                  transition={{
-                    scale: {
-                      duration: 0.75,
-                      repeat: Infinity,
-                      repeatDelay: 0.2,
-                      ease: "easeOut",
-                    },
-                  }}
+                  className="flex flex-col items-center justify-center cursor-none"
+                  aria-label="Go to About Us"
                 >
-                  <img
-                    src={logoImage}
-                    alt="SINAN Logo"
-                    className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none"
-                    draggable={false}
-                  />
-                </motion.div>
+                  <motion.div
+                    className="flex flex-col items-center justify-center"
+                    whileHover={{
+                      scale: [1, 1.07, 1, 1.04, 1],
+                    }}
+                    transition={{
+                      scale: {
+                        duration: 0.75,
+                        repeat: Infinity,
+                        repeatDelay: 0.2,
+                        ease: "easeOut",
+                      },
+                    }}
+                  >
+                    <img
+                      src={logoImage}
+                      alt="SINAN Logo"
+                      className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none"
+                      draggable={false}
+                    />
+                  </motion.div>
+                </a>
               </motion.div>
             </div>
           </section>
