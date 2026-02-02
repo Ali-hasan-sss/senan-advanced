@@ -223,12 +223,14 @@ function Header({
         {/* Mobile: logo (left) */}
         <a
           href="#home"
-          className={`lg:hidden flex-shrink-0 h-8 w-auto transition-opacity duration-300 ${opaque ? "opacity-100" : "opacity-60"}`}
-          aria-label="senan advanced – Home"
+          className={`lg:hidden flex-shrink-0 h-8 w-auto transition-opacity duration-300 ${
+            opaque ? "opacity-100" : "opacity-60"
+          }`}
+          aria-label="Sinan Advanced Industries – Home"
         >
           <img
             src={logoImage}
-            alt="senan advanced"
+            alt="Sinan Advanced Industries"
             className="h-full w-auto object-contain"
           />
         </a>
@@ -1358,178 +1360,63 @@ export default function App() {
               />
             </div>
 
-            {/* Footer Content — كتلة واحدة أسفل القسم: روابط ثم كوبي رايت */}
+            {/* Footer Content — روابط أساسية، إيميلات، أيقونات اجتماعية */}
             <div className="relative z-10 flex flex-col justify-end px-4 md:px-8 lg:px-20 pb-2">
               <div className="max-w-7xl mx-auto w-full">
-                {/* Footer Links Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-10 lg:gap-12 mb-6 md:mb-8">
-                  <div>
-                    <h3
-                      className="text-white text-sm mb-6"
-                      style={{ fontWeight: 600 }}
-                    >
-                      {t.footer.aboutUs}
-                    </h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a
-                          href="#vision-mission"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.nav.visionMission}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#values"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.ourValues}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3
-                      className="text-white text-sm mb-6"
-                      style={{ fontWeight: 600 }}
-                    >
-                      {t.footer.products}
-                    </h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a
-                          href="#marine"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.sinanMarine}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#sectors"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.sinanDynamics}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#aselsan"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.sinanTera}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3
-                      className="text-white text-sm mb-6"
-                      style={{ fontWeight: 600 }}
-                    >
-                      {t.footer.solutions}
-                    </h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a
-                          href="#solutions"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.commercial}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#solutions"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.defense}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#solutions"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.government}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#solutions"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.research}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3
-                      className="text-white text-sm mb-6"
-                      style={{ fontWeight: 600 }}
-                    >
-                      {t.footer.company}
-                    </h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a
-                          href="#about"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.aboutUs}
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#about"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          {t.footer.leadership}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3
-                      className="text-white text-sm mb-6"
-                      style={{ fontWeight: 600 }}
-                    >
-                      {t.contact.emailUs}
-                    </h3>
-                    <ul className="space-y-3">
-                      <li>
-                        <a
-                          href="mailto:info@sinan.om"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          info@sinan.om
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="mailto:sales@sinan.om"
-                          className="text-white/70 text-xs hover:text-white transition-colors"
-                          style={{ fontWeight: 300 }}
-                        >
-                          sales@sinan.om
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                {/* روابط أساسية */}
+                <nav className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 mb-4 md:mb-6">
+                  <a
+                    href="#home"
+                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
+                    style={{ fontWeight: 300 }}
+                  >
+                    {t.nav.home}
+                  </a>
+                  <a
+                    href="#about"
+                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
+                    style={{ fontWeight: 300 }}
+                  >
+                    {t.nav.about}
+                  </a>
+                  <a
+                    href="#vision-mission"
+                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
+                    style={{ fontWeight: 300 }}
+                  >
+                    {t.nav.visionMission}
+                  </a>
+                  <a
+                    href="#values"
+                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
+                    style={{ fontWeight: 300 }}
+                  >
+                    {t.nav.values}
+                  </a>
+                  <a
+                    href="#contact"
+                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
+                    style={{ fontWeight: 300 }}
+                  >
+                    {t.nav.contact}
+                  </a>
+                </nav>
+                {/* إيميلات */}
+                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 mb-4 md:mb-6">
+                  <a
+                    href="mailto:info@sinan.om"
+                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
+                    style={{ fontWeight: 300 }}
+                  >
+                    info@sinan.om
+                  </a>
+                  <a
+                    href="mailto:sales@sinan.om"
+                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
+                    style={{ fontWeight: 300 }}
+                  >
+                    sales@sinan.om
+                  </a>
                 </div>
               </div>
               {/* Social Icons — LinkedIn first, then YouTube */}

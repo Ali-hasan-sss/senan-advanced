@@ -11,12 +11,18 @@ interface ValueCardProps {
   isInView: boolean;
 }
 
-function ValueCard({ icon: Icon, title, description, delay, isInView }: ValueCardProps) {
+function ValueCard({
+  icon: Icon,
+  title,
+  description,
+  delay,
+  isInView,
+}: ValueCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
-      className="relative p-3 sm:p-4 md:p-6 lg:p-8 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-300 flex flex-col items-end text-end h-full min-h-0 md:min-h-[220px]"
+      className="relative p-3 sm:p-4 md:p-6 lg:p-8 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-300 flex flex-col items-center text-center h-full min-h-0 md:min-h-[220px]"
       style={{
         border: isHovered
           ? "1px solid rgba(200, 200, 200, 0.8)"
@@ -31,7 +37,7 @@ function ValueCard({ icon: Icon, title, description, delay, isInView }: ValueCar
       onHoverEnd={() => setIsHovered(false)}
     >
       <div className="text-white">
-        <div className="mb-2 sm:mb-4 md:mb-6 flex justify-end rtl:flex-row-reverse">
+        <div className="mb-2 sm:mb-4 md:mb-6 flex justify-center">
           <Icon className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 stroke-[1.5] text-white" />
         </div>
         <h3

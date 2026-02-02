@@ -67,7 +67,11 @@ export default function SolutionsPage() {
         >
           {/* خلفية اللوحة */}
           <div className="absolute inset-0">
-            <img src={solutionsBg} alt="" className="w-full h-full object-cover" />
+            <img
+              src={solutionsBg}
+              alt=""
+              className="w-full h-full object-cover"
+            />
           </div>
           {/* Rotating Circle 1 - Clockwise — موضع ثابت بالبكسل */}
           <motion.div
@@ -596,10 +600,16 @@ export default function SolutionsPage() {
                   <CommunicationIcon />
                 </div>
                 <div className="text-gray-800 leading-tight">
-                  <div className="font-bold text-gray-900" style={{ fontSize: 16 }}>
+                  <div
+                    className="font-bold text-gray-900"
+                    style={{ fontSize: 16 }}
+                  >
                     {t.solutions.communication}
                   </div>
-                  <div className="text-gray-600 mt-0.5" style={{ fontSize: 14 }}>
+                  <div
+                    className="text-gray-600 mt-0.5"
+                    style={{ fontSize: 14 }}
+                  >
                     {t.solutions.communicationSystems}
                   </div>
                 </div>
@@ -609,10 +619,16 @@ export default function SolutionsPage() {
                   <TrainingIcon />
                 </div>
                 <div className="text-gray-800 leading-tight">
-                  <div className="font-bold text-gray-900" style={{ fontSize: 16 }}>
+                  <div
+                    className="font-bold text-gray-900"
+                    style={{ fontSize: 16 }}
+                  >
                     {t.solutions.training}
                   </div>
-                  <div className="text-gray-600 mt-0.5" style={{ fontSize: 14 }}>
+                  <div
+                    className="text-gray-600 mt-0.5"
+                    style={{ fontSize: 14 }}
+                  >
                     {t.solutions.trainingAndServices}
                   </div>
                 </div>
@@ -625,10 +641,16 @@ export default function SolutionsPage() {
                   <DefenseIcon />
                 </div>
                 <div className="text-gray-800 leading-tight">
-                  <div className="font-bold text-gray-900" style={{ fontSize: 16 }}>
+                  <div
+                    className="font-bold text-gray-900"
+                    style={{ fontSize: 16 }}
+                  >
                     {t.solutions.defense}
                   </div>
-                  <div className="text-gray-600 mt-0.5" style={{ fontSize: 14 }}>
+                  <div
+                    className="text-gray-600 mt-0.5"
+                    style={{ fontSize: 14 }}
+                  >
                     {t.solutions.defenseSystems}
                   </div>
                 </div>
@@ -763,12 +785,28 @@ export default function SolutionsPage() {
                     viewBox="0 0 44 44"
                     className="absolute inset-0 w-full h-full"
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 8,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
-                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                    <circle
+                      cx="22"
+                      cy="22"
+                      r="20"
+                      fill="transparent"
+                      stroke="#4b5563"
+                      strokeWidth="2.5"
+                      strokeDasharray="3 3"
+                    />
                   </motion.svg>
                   <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
-                    <img src={spaceLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                    <img
+                      src={spaceLogo}
+                      alt=""
+                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                    />
                   </div>
                 </div>
                 <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
@@ -782,12 +820,28 @@ export default function SolutionsPage() {
                     viewBox="0 0 44 44"
                     className="absolute inset-0 w-full h-full"
                     animate={{ rotate: -360 }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
-                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                    <circle
+                      cx="22"
+                      cy="22"
+                      r="20"
+                      fill="transparent"
+                      stroke="#4b5563"
+                      strokeWidth="2.5"
+                      strokeDasharray="3 3"
+                    />
                   </motion.svg>
                   <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
-                    <img src={airLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                    <img
+                      src={airLogo}
+                      alt=""
+                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                    />
                   </div>
                 </div>
                 <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
@@ -795,18 +849,34 @@ export default function SolutionsPage() {
                 </span>
               </div>
               {/* Land - Bottom Right */}
-              <div className="absolute right-[24px] sm:right-[28px] bottom-[-54px] sm:bottom-[-60px] flex flex-col items-center gap-0.5 z-[20]">
+              <div className="absolute right-[2px] sm:right-[28px] bottom-[-54px] sm:bottom-[-60px] flex flex-col items-center gap-0.5 z-[20]">
                 <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
                   <motion.svg
                     viewBox="0 0 44 44"
                     className="absolute inset-0 w-full h-full"
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 12,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
-                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                    <circle
+                      cx="22"
+                      cy="22"
+                      r="20"
+                      fill="transparent"
+                      stroke="#4b5563"
+                      strokeWidth="2.5"
+                      strokeDasharray="3 3"
+                    />
                   </motion.svg>
                   <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
-                    <img src={landLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                    <img
+                      src={landLogo}
+                      alt=""
+                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                    />
                   </div>
                 </div>
                 <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
@@ -814,18 +884,34 @@ export default function SolutionsPage() {
                 </span>
               </div>
               {/* Maritime - Bottom Left */}
-              <div className="absolute left-[24px] sm:left-[28px] bottom-[-54px] sm:bottom-[-60px] flex flex-col items-center gap-0.5 z-[20]">
+              <div className="absolute left-[2px] sm:left-[28px] bottom-[-54px] sm:bottom-[-60px] flex flex-col items-center gap-0.5 z-[20]">
                 <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
                   <motion.svg
                     viewBox="0 0 44 44"
                     className="absolute inset-0 w-full h-full"
                     animate={{ rotate: -360 }}
-                    transition={{ duration: 11, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 11,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
-                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                    <circle
+                      cx="22"
+                      cy="22"
+                      r="20"
+                      fill="transparent"
+                      stroke="#4b5563"
+                      strokeWidth="2.5"
+                      strokeDasharray="3 3"
+                    />
                   </motion.svg>
                   <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
-                    <img src={maritimeLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                    <img
+                      src={maritimeLogo}
+                      alt=""
+                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                    />
                   </div>
                 </div>
                 <p className="text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap drop-shadow-[0_0_2px_rgba(255,255,255,1),0_1px_2px_rgba(0,0,0,0.3)]">
@@ -839,12 +925,28 @@ export default function SolutionsPage() {
                     viewBox="0 0 44 44"
                     className="absolute inset-0 w-full h-full"
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 9,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                   >
-                    <circle cx="22" cy="22" r="20" fill="transparent" stroke="#4b5563" strokeWidth="2.5" strokeDasharray="3 3" />
+                    <circle
+                      cx="22"
+                      cy="22"
+                      r="20"
+                      fill="transparent"
+                      stroke="#4b5563"
+                      strokeWidth="2.5"
+                      strokeDasharray="3 3"
+                    />
                   </motion.svg>
                   <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-white flex items-center justify-center shadow-[0_0_12px_rgba(255,255,255,0.8),0_2px_8px_rgba(0,0,0,0.5)]">
-                    <img src={cyberLogo} alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain" />
+                    <img
+                      src={cyberLogo}
+                      alt=""
+                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                    />
                   </div>
                 </div>
                 <span className="inline-block px-1.5 py-0.5 rounded bg-white/95 text-gray-900 text-[8px] sm:text-[9px] font-bold text-center whitespace-nowrap shadow-sm">
