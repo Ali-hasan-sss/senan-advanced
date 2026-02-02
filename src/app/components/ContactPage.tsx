@@ -50,15 +50,6 @@ export default function ContactPage() {
               >
                 {t.contact.visitUs}
               </h3>
-              <p
-                className="text-white/90 whitespace-pre-line text-[10px] sm:text-sm lg:text-[13pt] leading-tight sm:leading-snug"
-                style={{
-                  fontFamily: "DIN Arabic, sans-serif",
-                  lineHeight: "1.5",
-                }}
-              >
-                {t.contact.address}
-              </p>
             </motion.div>
             {/* Social Icons — منتصف النصوص على الموبايل */}
             <motion.div
