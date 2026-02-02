@@ -44,12 +44,15 @@ export default function ContactPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <h3
-                className="text-white mb-0.5 sm:mb-2 md:mb-3 text-[10px] sm:text-sm md:text-base lg:text-[16pt]"
-                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              <p
+                className="text-white/90 whitespace-pre-line text-[10px] sm:text-sm lg:text-[13pt] leading-tight sm:leading-snug"
+                style={{
+                  fontFamily: "DIN Arabic, sans-serif",
+                  lineHeight: "1.5",
+                }}
               >
-                {t.contact.visitUs}
-              </h3>
+                {t.contact.address}
+              </p>
             </motion.div>
             {/* Social Icons — منتصف النصوص على الموبايل */}
             <motion.div
