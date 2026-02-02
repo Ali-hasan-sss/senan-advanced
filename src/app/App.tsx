@@ -374,6 +374,49 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
+  // عند التحميل/الريفريش: العودة للقسم المخزن في الـ hash
+  useEffect(() => {
+    const hash = window.location.hash?.slice(1);
+    if (!hash || !NAV_IDS.includes(hash as (typeof NAV_IDS)[number])) return;
+    const el = document.getElementById(hash);
+    if (el) {
+      (el as HTMLElement).scrollIntoView({ behavior: "auto", block: "start" });
+    }
+  }, []);
+
+  // عند التمرير: تحديث الـ hash بالقسم المرئي
+  useEffect(() => {
+    const scrollEl = scrollContainerRef.current;
+    if (!scrollEl) return;
+    let rafId: number;
+    const onScroll = () => {
+      rafId = requestAnimationFrame(() => {
+        const st = scrollEl.scrollTop;
+        const refs = sectionRefs.current;
+        let bestId: string | null = null;
+        let bestDist = Infinity;
+        for (const id of NAV_IDS) {
+          const el = refs[id];
+          if (!el) continue;
+          const top = (el as HTMLElement).offsetTop - scrollEl.offsetTop;
+          const dist = Math.abs(top - st);
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestId = id;
+          }
+        }
+        if (bestId && window.location.hash.slice(1) !== bestId) {
+          window.history.replaceState(null, "", "#" + bestId);
+        }
+      });
+    };
+    scrollEl.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      scrollEl.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
     <>
       <div className="hidden md:block">
