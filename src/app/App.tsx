@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { Menu, X, Linkedin, Youtube } from "lucide-react";
 import { useLanguage } from "@/app/i18n/LanguageContext";
@@ -380,18 +380,23 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
-  // عند التحميل/الريفريش: إبقاء النافذة في الأعلى (لئلا يختفي الهيدر عند الرابط #...) ثم التمرير داخل الحاوية فقط
+  const scrollToSection = useCallback((sectionId: string) => {
+    window.scrollTo(0, 0);
+    const scrollEl = scrollContainerRef.current;
+    const el = document.getElementById(sectionId) as HTMLElement | null;
+    if (el && scrollEl) {
+      const top = el.offsetTop - scrollEl.offsetTop;
+      scrollEl.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }
+  }, []);
+
+  // عند التحميل/الريفريش: إبقاء النافذة في الأعلى ثم التمرير داخل الحاوية فقط
   useEffect(() => {
     const run = () => {
       window.scrollTo(0, 0);
       const hash = window.location.hash?.slice(1);
-      const scrollEl = scrollContainerRef.current;
       if (hash && NAV_IDS.includes(hash as (typeof NAV_IDS)[number])) {
-        const el = document.getElementById(hash) as HTMLElement | null;
-        if (el && scrollEl) {
-          const top = el.offsetTop - scrollEl.offsetTop;
-          scrollEl.scrollTo({ top: Math.max(0, top), behavior: "auto" });
-        }
+        scrollToSection(hash);
       }
     };
     run();
@@ -403,7 +408,41 @@ export default function App() {
       clearTimeout(t2);
       clearTimeout(t3);
     };
-  }, []);
+  }, [scrollToSection]);
+
+  // عند تغيير الـ hash (مثلاً بعد النقر على رابط): إبقاء النافذة في الأعلى لئلا يختفي الهيدر على الموبايل
+  useEffect(() => {
+    const onHashChange = () => {
+      window.scrollTo(0, 0);
+      const hash = window.location.hash?.slice(1);
+      if (hash && NAV_IDS.includes(hash as (typeof NAV_IDS)[number])) {
+        scrollToSection(hash);
+      }
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [scrollToSection]);
+
+  // اعتراض نقر روابط # والتمرير داخل الحاوية فقط (منع تمرير النافذة)
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest?.("a[href^='#']");
+      if (!target || !(target instanceof HTMLAnchorElement)) return;
+      const href = target.getAttribute("href") ?? "";
+      const sectionId = href.slice(1);
+      if (
+        !sectionId ||
+        !NAV_IDS.includes(sectionId as (typeof NAV_IDS)[number])
+      )
+        return;
+      e.preventDefault();
+      window.scrollTo(0, 0);
+      window.history.replaceState(null, "", href);
+      scrollToSection(sectionId);
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [scrollToSection]);
 
   // عند التمرير: تحديث الـ hash بالقسم المرئي
   useEffect(() => {
