@@ -155,7 +155,7 @@ export default function SolutionsPage() {
           >
             {/* Space Defense Systems - Top Center */}
             <div
-              className="absolute"
+              className="absolute flex flex-col items-center gap-1.5"
               style={{
                 left: "50%",
                 top: "-180px",
@@ -164,78 +164,61 @@ export default function SolutionsPage() {
                 height: "140px",
               }}
             >
-              {/* Rotating Dashed Circle Frame */}
-              <motion.svg
-                width="140"
-                height="140"
-                style={{ position: "absolute" }}
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              >
-                <circle
-                  cx="70"
-                  cy="70"
-                  r="65"
-                  fill="transparent"
-                  stroke="#9CA3AF"
-                  strokeWidth="3"
-                  strokeDasharray="4 4"
-                />
-              </motion.svg>
-              {/* Logo in Center of Space Defense Circle */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: "140px",
-                  height: "140px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 20,
-                }}
-              >
-                <img
-                  src={spaceLogo}
-                  alt="Space Defense Logo"
-                  style={{
-                    width: "280px",
-                    height: "280px",
-                    objectFit: "contain",
+              <div className="relative w-[140px] h-[140px] flex-shrink-0">
+                <motion.svg
+                  width="140"
+                  height="140"
+                  style={{ position: "absolute" }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "linear",
                   }}
-                />
-              </div>
-              {/* Curved Text */}
-              <svg
-                width="220"
-                height="220"
-                style={{ position: "absolute", left: "-40px", top: "-40px" }}
-              >
-                <defs>
-                  <path
-                    id="circlePath1"
-                    d="M 110,110 m -90,0 a 90,90 0 0,1 180,0"
-                  />
-                </defs>
-                <text
-                  fill="#000000"
-                  fontSize="12"
-                  fontFamily="DIN Arabic, sans-serif"
-                  fontWeight="bold"
                 >
-                  <textPath href="#circlePath1" startOffset="18%">
-                    Space Defense Systems
-                  </textPath>
-                </text>
-              </svg>
+                  <circle
+                    cx="70"
+                    cy="70"
+                    r="65"
+                    fill="transparent"
+                    stroke="#9CA3AF"
+                    strokeWidth="3"
+                    strokeDasharray="4 4"
+                  />
+                </motion.svg>
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "140px",
+                    height: "140px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 20,
+                  }}
+                >
+                  <img
+                    src={spaceLogo}
+                    alt="Space Defense Logo"
+                    style={{
+                      width: "280px",
+                      height: "280px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+              </div>
+              <span
+                className="inline-block px-2 py-1 rounded bg-white/95 text-gray-900 text-xs font-bold text-center whitespace-nowrap shadow-sm"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {t.solutions.spaceDefense}
+              </span>
             </div>
 
             {/* Air Defense Systems - Right */}
             <div
-              className="absolute"
+              className="absolute flex flex-col items-center gap-1.5"
               style={{
                 left: "calc(50% + 320px)",
                 top: "50%",
@@ -245,78 +228,61 @@ export default function SolutionsPage() {
                 height: "140px",
               }}
             >
-              {/* Rotating Dashed Circle Frame */}
-              <motion.svg
-                width="140"
-                height="140"
-                style={{ position: "absolute" }}
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 14,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              >
-                <circle
-                  cx="70"
-                  cy="70"
-                  r="65"
-                  fill="transparent"
-                  stroke="#3B82F6"
-                  strokeWidth="3"
-                  strokeDasharray="4 4"
-                />
-              </motion.svg>
-              {/* Logo in Center of Air Defense Circle */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: "140px",
-                  height: "140px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 20,
-                }}
-              >
-                <img
-                  src={airLogo}
-                  alt="Air Defense Logo"
-                  style={{
-                    width: "280px",
-                    height: "280px",
-                    objectFit: "contain",
+              <div className="relative w-[140px] h-[140px] flex-shrink-0">
+                <motion.svg
+                  width="140"
+                  height="140"
+                  style={{ position: "absolute" }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 14,
+                    repeat: Infinity,
+                    ease: "linear",
                   }}
-                />
-              </div>
-              {/* Curved Text */}
-              <svg
-                width="220"
-                height="220"
-                style={{ position: "absolute", left: "-40px", top: "-40px" }}
-              >
-                <defs>
-                  <path
-                    id="circlePath2"
-                    d="M 110,110 m -90,0 a 90,90 0 0,1 180,0"
-                  />
-                </defs>
-                <text
-                  fill="#000000"
-                  fontSize="12"
-                  fontFamily="DIN Arabic, sans-serif"
-                  fontWeight="bold"
                 >
-                  <textPath href="#circlePath2" startOffset="58%">
-                    Air Defense Systems
-                  </textPath>
-                </text>
-              </svg>
+                  <circle
+                    cx="70"
+                    cy="70"
+                    r="65"
+                    fill="transparent"
+                    stroke="#3B82F6"
+                    strokeWidth="3"
+                    strokeDasharray="4 4"
+                  />
+                </motion.svg>
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "140px",
+                    height: "140px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 20,
+                  }}
+                >
+                  <img
+                    src={airLogo}
+                    alt="Air Defense Logo"
+                    style={{
+                      width: "280px",
+                      height: "280px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+              </div>
+              <span
+                className="inline-block px-2 py-1 rounded bg-white/95 text-gray-900 text-xs font-bold text-center whitespace-nowrap shadow-sm"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {t.solutions.airDefense}
+              </span>
             </div>
 
             {/* Land Defense Systems - Bottom Right */}
             <div
-              className="absolute"
+              className="absolute flex flex-col items-center gap-1.5"
               style={{
                 left: "calc(50% + 250px)",
                 top: "calc(50% + 250px)",
@@ -326,78 +292,61 @@ export default function SolutionsPage() {
                 height: "140px",
               }}
             >
-              {/* Rotating Dashed Circle Frame */}
-              <motion.svg
-                width="140"
-                height="140"
-                style={{ position: "absolute" }}
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 18,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              >
-                <circle
-                  cx="70"
-                  cy="70"
-                  r="65"
-                  fill="transparent"
-                  stroke="#9CA3AF"
-                  strokeWidth="3"
-                  strokeDasharray="4 4"
-                />
-              </motion.svg>
-              {/* Logo in Center of Land Defense Circle */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: "140px",
-                  height: "140px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 20,
-                }}
-              >
-                <img
-                  src={landLogo}
-                  alt="Land Defense Logo"
-                  style={{
-                    width: "280px",
-                    height: "280px",
-                    objectFit: "contain",
+              <div className="relative w-[140px] h-[140px] flex-shrink-0">
+                <motion.svg
+                  width="140"
+                  height="140"
+                  style={{ position: "absolute" }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 18,
+                    repeat: Infinity,
+                    ease: "linear",
                   }}
-                />
-              </div>
-              {/* Curved Text */}
-              <svg
-                width="220"
-                height="220"
-                style={{ position: "absolute", left: "-40px", top: "-40px" }}
-              >
-                <defs>
-                  <path
-                    id="circlePath3"
-                    d="M 110,110 m -90,0 a 90,90 0 0,1 180,0"
-                  />
-                </defs>
-                <text
-                  fill="#000000"
-                  fontSize="12"
-                  fontFamily="DIN Arabic, sans-serif"
-                  fontWeight="bold"
                 >
-                  <textPath href="#circlePath3" startOffset="55%">
-                    Land Defense Systems
-                  </textPath>
-                </text>
-              </svg>
+                  <circle
+                    cx="70"
+                    cy="70"
+                    r="65"
+                    fill="transparent"
+                    stroke="#9CA3AF"
+                    strokeWidth="3"
+                    strokeDasharray="4 4"
+                  />
+                </motion.svg>
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "140px",
+                    height: "140px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 20,
+                  }}
+                >
+                  <img
+                    src={landLogo}
+                    alt="Land Defense Logo"
+                    style={{
+                      width: "280px",
+                      height: "280px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+              </div>
+              <span
+                className="inline-block px-2 py-1 rounded bg-white/95 text-gray-900 text-xs font-bold text-center whitespace-nowrap shadow-sm"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {t.solutions.landDefense}
+              </span>
             </div>
 
             {/* Maritime Defense Systems - Bottom Left */}
             <div
-              className="absolute"
+              className="absolute flex flex-col items-center gap-1.5"
               style={{
                 left: "calc(50% - 250px)",
                 top: "calc(50% + 250px)",
@@ -407,78 +356,61 @@ export default function SolutionsPage() {
                 height: "140px",
               }}
             >
-              {/* Rotating Dashed Circle Frame */}
-              <motion.svg
-                width="140"
-                height="140"
-                style={{ position: "absolute" }}
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 12,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              >
-                <circle
-                  cx="70"
-                  cy="70"
-                  r="65"
-                  fill="transparent"
-                  stroke="#9333EA"
-                  strokeWidth="3"
-                  strokeDasharray="4 4"
-                />
-              </motion.svg>
-              {/* Logo in Center of Maritime Defense Circle */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: "140px",
-                  height: "140px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 20,
-                }}
-              >
-                <img
-                  src={maritimeLogo}
-                  alt="Maritime Defense Logo"
-                  style={{
-                    width: "280px",
-                    height: "280px",
-                    objectFit: "contain",
+              <div className="relative w-[140px] h-[140px] flex-shrink-0">
+                <motion.svg
+                  width="140"
+                  height="140"
+                  style={{ position: "absolute" }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: "linear",
                   }}
-                />
-              </div>
-              {/* Curved Text */}
-              <svg
-                width="220"
-                height="220"
-                style={{ position: "absolute", left: "-40px", top: "-40px" }}
-              >
-                <defs>
-                  <path
-                    id="circlePath4"
-                    d="M 110,110 m -90,0 a 90,90 0 0,1 180,0"
-                  />
-                </defs>
-                <text
-                  fill="#000000"
-                  fontSize="12"
-                  fontFamily="DIN Arabic, sans-serif"
-                  fontWeight="bold"
                 >
-                  <textPath href="#circlePath4" startOffset="2%">
-                    Maritime Defense Systems
-                  </textPath>
-                </text>
-              </svg>
+                  <circle
+                    cx="70"
+                    cy="70"
+                    r="65"
+                    fill="transparent"
+                    stroke="#9333EA"
+                    strokeWidth="3"
+                    strokeDasharray="4 4"
+                  />
+                </motion.svg>
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "140px",
+                    height: "140px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 20,
+                  }}
+                >
+                  <img
+                    src={maritimeLogo}
+                    alt="Maritime Defense Logo"
+                    style={{
+                      width: "280px",
+                      height: "280px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+              </div>
+              <span
+                className="inline-block px-2 py-1 rounded bg-white/95 text-gray-900 text-xs font-bold text-center whitespace-nowrap shadow-sm"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {t.solutions.maritimeDefense}
+              </span>
             </div>
 
             {/* Cyber Defense Systems - Left */}
             <div
-              className="absolute"
+              className="absolute flex flex-col items-center gap-1.5"
               style={{
                 left: "calc(50% - 320px)",
                 top: "50%",
@@ -488,73 +420,56 @@ export default function SolutionsPage() {
                 height: "140px",
               }}
             >
-              {/* Rotating Dashed Circle Frame */}
-              <motion.svg
-                width="140"
-                height="140"
-                style={{ position: "absolute" }}
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 16,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              >
-                <circle
-                  cx="70"
-                  cy="70"
-                  r="65"
-                  fill="transparent"
-                  stroke="#10B981"
-                  strokeWidth="3"
-                  strokeDasharray="4 4"
-                />
-              </motion.svg>
-              {/* Logo in Center of Cyber Defense Circle */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: "140px",
-                  height: "140px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 20,
-                }}
-              >
-                <img
-                  src={cyberLogo}
-                  alt="Cyber Defense Logo"
-                  style={{
-                    width: "280px",
-                    height: "280px",
-                    objectFit: "contain",
+              <div className="relative w-[140px] h-[140px] flex-shrink-0">
+                <motion.svg
+                  width="140"
+                  height="140"
+                  style={{ position: "absolute" }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 16,
+                    repeat: Infinity,
+                    ease: "linear",
                   }}
-                />
-              </div>
-              {/* Curved Text */}
-              <svg
-                width="220"
-                height="220"
-                style={{ position: "absolute", left: "-40px", top: "-40px" }}
-              >
-                <defs>
-                  <path
-                    id="circlePath5"
-                    d="M 110,110 m -90,0 a 90,90 0 0,1 180,0"
-                  />
-                </defs>
-                <text
-                  fill="#000000"
-                  fontSize="12"
-                  fontFamily="DIN Arabic, sans-serif"
-                  fontWeight="bold"
                 >
-                  <textPath href="#circlePath5" startOffset="5%">
-                    Cyber Defense Systems
-                  </textPath>
-                </text>
-              </svg>
+                  <circle
+                    cx="70"
+                    cy="70"
+                    r="65"
+                    fill="transparent"
+                    stroke="#10B981"
+                    strokeWidth="3"
+                    strokeDasharray="4 4"
+                  />
+                </motion.svg>
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "140px",
+                    height: "140px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 20,
+                  }}
+                >
+                  <img
+                    src={cyberLogo}
+                    alt="Cyber Defense Logo"
+                    style={{
+                      width: "280px",
+                      height: "280px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+              </div>
+              <span
+                className="inline-block px-2 py-1 rounded bg-white/95 text-gray-900 text-xs font-bold text-center whitespace-nowrap shadow-sm"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {t.solutions.cyberDefense}
+              </span>
             </div>
           </div>
 
@@ -583,7 +498,7 @@ export default function SolutionsPage() {
             }}
           >
             <h2
-              className="text-gray-900 font-bold mb-4"
+              className="text-black font-bold mb-4"
               style={{
                 fontSize: 22,
                 letterSpacing: "0.5px",
@@ -592,43 +507,37 @@ export default function SolutionsPage() {
               {t.solutions.ourSolutions}
             </h2>
             <div
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-3 text-black [&_path]:fill-black"
               style={{ fontFamily: "DIN Arabic, sans-serif" }}
             >
               <div className="flex items-center gap-4 py-2">
-                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-gray-700">
+                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-black [&_path]:fill-black">
                   <CommunicationIcon />
                 </div>
-                <div className="text-gray-800 leading-tight">
+                <div className="text-black leading-tight">
                   <div
-                    className="font-bold text-gray-900"
+                    className="font-bold text-black"
                     style={{ fontSize: 16 }}
                   >
                     {t.solutions.communication}
                   </div>
-                  <div
-                    className="text-gray-600 mt-0.5"
-                    style={{ fontSize: 14 }}
-                  >
+                  <div className="text-black mt-0.5" style={{ fontSize: 14 }}>
                     {t.solutions.communicationSystems}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-4 py-2">
-                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-gray-700">
+                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-black [&_path]:fill-black">
                   <TrainingIcon />
                 </div>
-                <div className="text-gray-800 leading-tight">
+                <div className="text-black leading-tight">
                   <div
-                    className="font-bold text-gray-900"
+                    className="font-bold text-black"
                     style={{ fontSize: 16 }}
                   >
                     {t.solutions.training}
                   </div>
-                  <div
-                    className="text-gray-600 mt-0.5"
-                    style={{ fontSize: 14 }}
-                  >
+                  <div className="text-black mt-0.5" style={{ fontSize: 14 }}>
                     {t.solutions.trainingAndServices}
                   </div>
                 </div>
@@ -637,20 +546,17 @@ export default function SolutionsPage() {
                 className="flex items-center gap-4 py-2 cursor-default rounded-md transition-all duration-200 hover:bg-gray-100/50 hover:scale-105 origin-left"
                 onMouseEnter={() => setDefenseHovered(true)}
               >
-                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-gray-700">
+                <div className="w-12 h-12 xl:w-14 xl:h-14 flex-shrink-0 flex items-center justify-center text-black [&_path]:fill-black">
                   <DefenseIcon />
                 </div>
-                <div className="text-gray-800 leading-tight">
+                <div className="text-black leading-tight">
                   <div
-                    className="font-bold text-gray-900"
+                    className="font-bold text-black"
                     style={{ fontSize: 16 }}
                   >
                     {t.solutions.defense}
                   </div>
-                  <div
-                    className="text-gray-600 mt-0.5"
-                    style={{ fontSize: 14 }}
-                  >
+                  <div className="text-black mt-0.5" style={{ fontSize: 14 }}>
                     {t.solutions.defenseSystems}
                   </div>
                 </div>
@@ -678,16 +584,16 @@ export default function SolutionsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-20px" }}
                 transition={{ duration: 0.35 }}
-                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg"
+                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg text-black [&_path]:fill-black"
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-black [&_path]:fill-black">
                   <CommunicationIcon />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-gray-900 truncate">
+                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-black truncate">
                     {t.solutions.communication}
                   </div>
-                  <div className="text-gray-600 text-[9px] sm:text-[10px] leading-tight truncate">
+                  <div className="text-black text-[9px] sm:text-[10px] leading-tight truncate">
                     {t.solutions.communicationSystems}
                   </div>
                 </div>
@@ -698,16 +604,16 @@ export default function SolutionsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-20px" }}
                 transition={{ duration: 0.35, delay: 0.05 }}
-                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg"
+                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg text-black [&_path]:fill-black"
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-black [&_path]:fill-black">
                   <TrainingIcon />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-gray-900 truncate">
+                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-black truncate">
                     {t.solutions.training}
                   </div>
-                  <div className="text-gray-600 text-[9px] sm:text-[10px] leading-tight truncate">
+                  <div className="text-black text-[9px] sm:text-[10px] leading-tight truncate">
                     {t.solutions.trainingAndServices}
                   </div>
                 </div>
@@ -718,16 +624,16 @@ export default function SolutionsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-20px" }}
                 transition={{ duration: 0.35, delay: 0.1 }}
-                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg"
+                className="flex flex-col items-center text-center gap-1 p-2 sm:p-2.5 rounded-lg text-black [&_path]:fill-black"
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-gray-700">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-100 text-black [&_path]:fill-black">
                   <DefenseIcon />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-gray-900 truncate">
+                  <div className="font-bold text-[10px] sm:text-xs leading-tight text-black truncate">
                     {t.solutions.defense}
                   </div>
-                  <div className="text-gray-600 text-[9px] sm:text-[10px] leading-tight truncate">
+                  <div className="text-black text-[9px] sm:text-[10px] leading-tight truncate">
                     {t.solutions.defenseSystems}
                   </div>
                 </div>

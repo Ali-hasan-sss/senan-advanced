@@ -23,7 +23,6 @@ import submarineImage from "@/assets/61540e66d260f2cde22cc640d995339875efba5b.pn
 import targetIconImage from "@/assets/10ece0636bfeb213b95a9827ed51f9647c03da9c.png";
 import aselsanBg from "@/assets/910d9064a27b83a840b1d9cdf3c5030c1f2a0077.png";
 import aselsanLogoImage from "@/assets/dc8f1005d190b58e6f8f96897819fea19bca9829.png";
-import footerBg from "@/assets/81747934bf98e8003972a07405afdd63cbeb3630.png";
 import logoImage from "@/assets/dba262c104d43832d133ef6ded872493e7354dff.png";
 import cursorLogo from "@/assets/e868c967defa2ff1adabdce43f94676450e69b02.png";
 import droneImage from "@/assets/cd1779045309571142b8f0a31bf6fab645307577.png";
@@ -83,7 +82,6 @@ function CustomCursor() {
         style={{
           opacity: 0.95,
           filter: isOnLightBackground ? "brightness(0)" : "none",
-          boxShadow: isOnLightBackground ? "0 0 0 1px rgba(0,0,0,0.1)" : "none",
           imageRendering: "crisp-edges",
         }}
       />
@@ -113,7 +111,7 @@ function MobileMenu({
           className="text-white/80 hover:text-white text-sm font-medium px-2 py-1 rounded transition-colors"
           aria-label="Toggle language"
         >
-          {locale === "ar" ? "EN" : "ar"}
+          {locale === "ar" ? "EN" : "عربي"}
         </button>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -172,7 +170,14 @@ function Header({
   scrollDown?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const opaque = isHovered || !scrollDown;
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  const opaque = isMobile || isHovered || !scrollDown;
   const textClass = opaque
     ? "text-white hover:text-gray-400"
     : "text-white/50 hover:text-white/70";
@@ -216,7 +221,7 @@ function Header({
             className={`text-sm font-medium px-3 py-1.5 rounded border transition-colors ${btnClass}`}
             aria-label="Toggle language"
           >
-            {locale === "ar" ? "EN" : "ar"}
+            {locale === "ar" ? "EN" : "عربي"}
           </button>
         </div>
 
@@ -452,10 +457,13 @@ export default function App() {
               aria-hidden
             >
               <div className="absolute inset-0 w-full h-full bg-gray-950" />
-              {/* خلفية مقلوبة رأسياً: المجسمات من الأسفل دون التأثير على اللوغو */}
+              {/* خلفية مقلوبة رأسياً: المجسمات من الأسفل دون التأثير على اللوغو — أولوية تحميل عالية */}
               <img
                 src={`${import.meta.env.BASE_URL || "/"}hero-bg.png`}
                 alt=""
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover object-center"
                 style={{
                   objectFit: "cover",
@@ -598,7 +606,7 @@ export default function App() {
                     : { duration: 0.3 },
                 }}
               >
-                {/* عند مرور الماوس: نبض القلب يتكرر — عند النقر ينتقل إلى صفحة About */}
+                {/* اللوغو ثابت بدون نبض عند الهوفر — عند النقر ينتقل إلى صفحة About */}
                 <a
                   href="#about"
                   onClick={(e) => {
@@ -611,27 +619,14 @@ export default function App() {
                   className="flex flex-col items-center justify-center cursor-none"
                   aria-label="Go to About Us"
                 >
-                  <motion.div
-                    className="flex flex-col items-center justify-center"
-                    whileHover={{
-                      scale: [1, 1.07, 1, 1.04, 1],
-                    }}
-                    transition={{
-                      scale: {
-                        duration: 0.75,
-                        repeat: Infinity,
-                        repeatDelay: 0.2,
-                        ease: "easeOut",
-                      },
-                    }}
-                  >
+                  <div className="flex flex-col items-center justify-center">
                     <img
                       src={logoImage}
                       alt="SINAN Logo"
                       className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none"
                       draggable={false}
                     />
-                  </motion.div>
+                  </div>
                 </a>
               </motion.div>
             </div>
@@ -1384,115 +1379,13 @@ export default function App() {
             </section>
           )}
 
-          {/* Contact Section - Before Footer */}
+          {/* Contact Section — يحتوي على محتوى اتصل بنا + الفوتر المدمج (روابط + حقوق النشر) */}
           <section
             id="contact"
             className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative"
           >
             <ContactPage />
           </section>
-
-          {/* Footer */}
-          <footer className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative bg-gray-900 flex flex-col justify-end">
-            {/* Background Image */}
-            <div className="absolute inset-0">
-              <img
-                src={footerBg}
-                alt=""
-                className="w-full h-full object-cover opacity-30"
-              />
-            </div>
-
-            {/* Footer Content — روابط أساسية، إيميلات، أيقونات اجتماعية */}
-            <div className="relative z-10 flex flex-col justify-end px-4 md:px-8 lg:px-20 pb-2">
-              <div className="max-w-7xl mx-auto w-full">
-                {/* روابط أساسية */}
-                <nav className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 mb-4 md:mb-6">
-                  <a
-                    href="#home"
-                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
-                    style={{ fontWeight: 300 }}
-                  >
-                    {t.nav.home}
-                  </a>
-                  <a
-                    href="#about"
-                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
-                    style={{ fontWeight: 300 }}
-                  >
-                    {t.nav.about}
-                  </a>
-                  <a
-                    href="#vision-mission"
-                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
-                    style={{ fontWeight: 300 }}
-                  >
-                    {t.nav.visionMission}
-                  </a>
-                  <a
-                    href="#values"
-                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
-                    style={{ fontWeight: 300 }}
-                  >
-                    {t.nav.values}
-                  </a>
-                  <a
-                    href="#contact"
-                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
-                    style={{ fontWeight: 300 }}
-                  >
-                    {t.nav.contact}
-                  </a>
-                </nav>
-                {/* إيميلات */}
-                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 mb-4 md:mb-6">
-                  <a
-                    href="mailto:info@sinan.om"
-                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
-                    style={{ fontWeight: 300 }}
-                  >
-                    info@sinan.om
-                  </a>
-                  <a
-                    href="mailto:sales@sinan.om"
-                    className="text-white/70 text-xs sm:text-sm hover:text-white transition-colors"
-                    style={{ fontWeight: 300 }}
-                  >
-                    sales@sinan.om
-                  </a>
-                </div>
-              </div>
-              {/* Social Icons — LinkedIn first, then YouTube */}
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <a
-                  href="https://linkedin.com/company/sinan-advanced-industries"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/70 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin size={24} strokeWidth={1.5} />
-                </a>
-                <a
-                  href="https://www.youtube.com/@SinanAdvancedIndustries"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/70 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10"
-                  aria-label="YouTube"
-                >
-                  <Youtube size={24} strokeWidth={1.5} />
-                </a>
-              </div>
-              <div className="pt-6 md:pt-8 border-t border-white/10 pb-3 md:pb-4">
-                <p
-                  className="text-white/60 text-xs text-center"
-                  style={{ fontWeight: 300 }}
-                >
-                  {t.footer.copyright}
-                </p>
-              </div>
-            </div>
-          </footer>
         </div>
       </div>
     </>

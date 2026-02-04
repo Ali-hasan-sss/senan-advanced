@@ -3,7 +3,9 @@ import { useLanguage } from "@/app/i18n/LanguageContext";
 
 type VisionMissionPageProps = { isInView?: boolean };
 
-export default function VisionMissionPage({ isInView = false }: VisionMissionPageProps) {
+export default function VisionMissionPage({
+  isInView = false,
+}: VisionMissionPageProps) {
   const { t } = useLanguage();
   const lines =
     (t.about as { empoweringLines?: string }).empoweringLines?.split("\n") ??
@@ -16,34 +18,60 @@ export default function VisionMissionPage({ isInView = false }: VisionMissionPag
       dir="ltr"
       className="w-full h-full min-h-0 max-h-full bg-[#f8f8f8] flex flex-col 2xl:flex-row items-stretch overflow-hidden"
     >
-      {/* موبايل وتابلت: الرمح كخلفية + النص فوقها — يظهر حتى تحت 2xl لضمان التجاوب على التابلت */}
-      <div className="relative flex-1 min-h-0 2xl:hidden overflow-hidden">
-        {/* خلفية الرمح — موبايل وتابلت فقط */}
+      {/* موبايل وتابلت: الرمح كخلفية + النص فوقها — مركزان في منتصف الصفحة */}
+      <div className="relative flex-1 min-h-0 2xl:hidden overflow-hidden flex flex-col items-center justify-center">
+        {/* خلفية الرمح — موبايل وتابلت فقط، متمركزة */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none flex items-end justify-center"
           aria-hidden
         >
           <img
             src="/rmh.png"
             alt=""
-            className="absolute bottom-0 left-0 w-auto h-[70%] max-h-[420px] sm:h-[75%] sm:max-h-[480px] md:h-[80%] md:max-h-[520px] object-contain object-left-bottom opacity-[0.12] sm:opacity-[0.14] md:opacity-[0.16]"
+            className="w-auto h-[70%] max-h-[420px] sm:h-[75%] sm:max-h-[480px] md:h-[80%] md:max-h-[520px] object-contain object-center opacity-[0.12] sm:opacity-[0.14] md:opacity-[0.16]"
             style={{ transform: "rotate(-18deg) translateY(10%)" }}
           />
         </div>
         <motion.div
-          className="relative z-10 flex flex-col justify-center min-h-full overflow-y-auto px-4 pb-6 pt-8 sm:px-6 sm:pb-8 sm:pt-10 md:px-8 md:pb-10 md:pt-12"
+          className="relative z-10 flex flex-col items-center justify-center min-h-full overflow-y-auto px-4 pb-6 pt-8 sm:px-6 sm:pb-8 sm:pt-10 md:px-8 md:pb-10 md:pt-12 w-full"
           initial={false}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ ...tBase, delay: 0.15 }}
         >
-          <div className="max-w-xl mx-auto w-full space-y-6 sm:space-y-7 md:space-y-8 md:max-w-2xl">
+          <div className="max-w-xl mx-auto w-full space-y-6 sm:space-y-7 md:space-y-8 md:max-w-2xl text-center">
             <div className="space-y-2 sm:space-y-2.5">
-              <h3 className="text-gray-900 font-bold text-lg sm:text-xl md:text-2xl tracking-tight" style={{ fontFamily: "DIN Arabic, sans-serif" }}>{t.about.vision}</h3>
-              <p className="text-gray-700 text-[15px] sm:text-base md:text-lg leading-[1.65] max-w-lg md:max-w-xl" style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}>{t.about.visionText}</p>
+              <h3
+                className="text-gray-900 font-bold text-lg sm:text-xl md:text-2xl tracking-tight"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {t.about.vision}
+              </h3>
+              <p
+                className="text-gray-700 text-[15px] sm:text-base md:text-lg leading-[1.65] max-w-lg md:max-w-xl mx-auto"
+                style={{
+                  fontFamily: "DIN Arabic, sans-serif",
+                  fontWeight: 500,
+                }}
+              >
+                {t.about.visionText}
+              </p>
             </div>
             <div className="space-y-2 sm:space-y-2.5">
-              <h3 className="text-gray-900 font-bold text-lg sm:text-xl md:text-2xl tracking-tight" style={{ fontFamily: "DIN Arabic, sans-serif" }}>{t.about.mission}</h3>
-              <p className="text-gray-700 text-[15px] sm:text-base md:text-lg leading-[1.65] max-w-lg md:max-w-xl" style={{ fontFamily: "DIN Arabic, sans-serif", fontWeight: 500 }}>{t.about.missionText}</p>
+              <h3
+                className="text-gray-900 font-bold text-lg sm:text-xl md:text-2xl tracking-tight"
+                style={{ fontFamily: "DIN Arabic, sans-serif" }}
+              >
+                {t.about.mission}
+              </h3>
+              <p
+                className="text-gray-700 text-[15px] sm:text-base md:text-lg leading-[1.65] max-w-lg md:max-w-xl mx-auto"
+                style={{
+                  fontFamily: "DIN Arabic, sans-serif",
+                  fontWeight: 500,
+                }}
+              >
+                {t.about.missionText}
+              </p>
             </div>
           </div>
         </motion.div>

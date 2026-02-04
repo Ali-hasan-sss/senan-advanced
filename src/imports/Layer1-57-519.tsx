@@ -82,29 +82,46 @@ type Group2Props = {
   onTriangleHoverChange?: (id: number | null, e?: React.MouseEvent) => void;
 };
 
-function Group2({ hideGrayRect, hoveredId = null, setHoveredId, onTriangleClick, onTriangleHoverChange }: Group2Props) {
+function Group2({
+  hideGrayRect,
+  hoveredId = null,
+  setHoveredId,
+  onTriangleClick,
+  onTriangleHoverChange,
+}: Group2Props) {
   const isHoverable = typeof setHoveredId === "function";
   const isClickable = typeof onTriangleClick === "function";
   const interactiveClass =
-    isHoverable || isClickable ? "cursor-none transition-[filter,opacity] duration-300" : "";
+    isHoverable || isClickable
+      ? "cursor-none transition-[filter,opacity] duration-300"
+      : "";
 
-  // مضلعات Assxet.svg الأصلية — إحداثياتها كما في الملف (viewBox 0 0 7872 2368)
-  // cls-4=أزرق(id:1) | cls-2=بنفسجي(id:2) | cls-3=برتقالي(id:3) | cls-1=أسود(id:4)
+  // مضلعات Assxet.svg — مثلث واحد من كل لون (viewBox 0 0 7872 2368)
+  // id:1 أزرق | id:2 بنفسجي | id:3 برتقالي | id:4 أسود
   const assxetPolygons: { id: number; color: string; points: string }[] = [
-    { id: 1, color: "#009fe3", points: "2911.96 420.65 2727.7 227.05 1997.76 491.11 2001.28 499.48 2911.96 420.65" },
-    { id: 1, color: "#009fe3", points: "2224.99 1438.78 2070.42 1672.62 1967.37 1601.28 2224.99 1438.78" },
-    { id: 1, color: "#009fe3", points: "3378.31 1347.63 3136.54 1003.48 3219.77 1347.63 3378.31 1347.63" },
-    { id: 1, color: "#009fe3", points: "5510.56 2064.98 5469.66 1811.33 5692.87 1981.75 5510.56 2064.98" },
-    { id: 2, color: "#312783", points: "5813.15 1543.15 5300.56 1263.08 5126.18 1220.8 5511.94 1448.03 5813.15 1543.15" },
-    { id: 2, color: "#312783", points: "4153.85 523.26 3419.32 676.51 3328.76 378.6 4168.98 518.31 4153.85 523.26" },
-    { id: 2, color: "#312783", points: "4260.8 1514.08 4200.03 1631.66 4069.24 1564.29 4260.8 1514.08" },
-    { id: 2, color: "#312783", points: "509.54 1143.52 280.99 866.75 364.88 1157.39 509.54 1143.52" },
-    { id: 2, color: "#312783", points: "4728.47 882.6 4501.24 1300.07 4284.58 1101.9 4728.47 882.6" },
-    { id: 3, color: "#f39422", points: "5760.31 914.31 6580.65 614.42 6609.71 609.13 6609.71 1138.89 5760.31 914.31" },
-    { id: 3, color: "#f39422", points: "1506.37 1146.82 1453.53 1469.17 306.81 428.14 1506.37 1146.82" },
-    { id: 3, color: "#f39422", points: "5435.26 0 5272.76 483.63 5633.42 297.35 5435.26 0" },
-    { id: 3, color: "#f39422", points: "2355.78 1220.8 1967.37 911.66 2395.41 1381.97 2355.78 1220.8" },
-    { id: 4, color: "#000002", points: "2001.28 499.48 3328.76 378.6 2944.99 898.45 2001.28 499.48" },
+    {
+      id: 1,
+      color: "#009fe3",
+      points:
+        "2911.96 420.65 2727.7 227.05 1997.76 491.11 2001.28 499.48 2911.96 420.65",
+    },
+    {
+      id: 2,
+      color: "#312783",
+      points:
+        "5813.15 1543.15 5300.56 1263.08 5126.18 1220.8 5511.94 1448.03 5813.15 1543.15",
+    },
+    {
+      id: 3,
+      color: "#f39422",
+      points:
+        "5760.31 914.31 6580.65 614.42 6609.71 609.13 6609.71 1138.89 5760.31 914.31",
+    },
+    {
+      id: 4,
+      color: "#000002",
+      points: "2001.28 499.48 3328.76 378.6 2944.99 898.45 2001.28 499.48",
+    },
   ];
 
   return (
@@ -124,12 +141,11 @@ function Group2({ hideGrayRect, hoveredId = null, setHoveredId, onTriangleClick,
         {assxetPolygons.map((poly, i) => {
           const isHovered = hoveredId === poly.id;
           const opacity = isHovered ? 1 : poly.id === 4 ? 0.7 : 0.5;
-          const filter =
-            isHovered
-              ? poly.id === 4
-                ? "drop-shadow(0 0 12px rgba(255,255,255,0.35)) drop-shadow(0 0 24px rgba(255,255,255,0.2))"
-                : `drop-shadow(0 0 12px ${poly.color}) drop-shadow(0 0 24px ${poly.color})`
-              : undefined;
+          const filter = isHovered
+            ? poly.id === 4
+              ? "drop-shadow(0 0 12px rgba(255,255,255,0.35)) drop-shadow(0 0 24px rgba(255,255,255,0.2))"
+              : `drop-shadow(0 0 12px ${poly.color}) drop-shadow(0 0 24px ${poly.color})`
+            : undefined;
           return (
             <polygon
               key={i}
@@ -137,9 +153,25 @@ function Group2({ hideGrayRect, hoveredId = null, setHoveredId, onTriangleClick,
               fill={poly.color}
               opacity={opacity}
               style={{ filter }}
-              onMouseEnter={isHoverable ? (e) => { setHoveredId!(poly.id); onTriangleHoverChange?.(poly.id, e); } : undefined}
-              onMouseLeave={isHoverable ? (e) => { setHoveredId!(null); onTriangleHoverChange?.(null); } : undefined}
-              onClick={isClickable ? () => onTriangleClick!(poly.id) : undefined}
+              onMouseEnter={
+                isHoverable
+                  ? (e) => {
+                      setHoveredId!(poly.id);
+                      onTriangleHoverChange?.(poly.id, e);
+                    }
+                  : undefined
+              }
+              onMouseLeave={
+                isHoverable
+                  ? (e) => {
+                      setHoveredId!(null);
+                      onTriangleHoverChange?.(null);
+                    }
+                  : undefined
+              }
+              onClick={
+                isClickable ? () => onTriangleClick!(poly.id) : undefined
+              }
             >
               {!isHovered && (
                 <animate
@@ -172,11 +204,19 @@ export const TRIANGLE_TO_SECTION: Record<number, string> = {
   4: "aselsan", // المثلث الأسود → قسم أسيلسان (Sinan Aselsan)
 };
 
-export default function Layer({ hideGrayRect, trianglesOnly, onTriangleClick, onTriangleHoverChange }: LayerProps = {}) {
+export default function Layer({
+  hideGrayRect,
+  trianglesOnly,
+  onTriangleClick,
+  onTriangleHoverChange,
+}: LayerProps = {}) {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   return (
-    <div className="relative size-full min-w-full min-h-full" data-name="Layer_1">
+    <div
+      className="relative size-full min-w-full min-h-full"
+      data-name="Layer_1"
+    >
       {!trianglesOnly && (
         <div className="absolute inset-0" data-name="Vector">
           <svg
