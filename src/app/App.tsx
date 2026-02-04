@@ -170,10 +170,11 @@ function Header({
   scrollDown?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false
+  );
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 1024);
-    check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
@@ -186,7 +187,7 @@ function Header({
     : "text-white/40 hover:text-white/60 border-white/20 hover:border-white/40";
   return (
     <header
-      className="h-[50px] flex-shrink-0 px-4 md:px-6 lg:px-8 flex items-center transition-all duration-300"
+      className="h-[50px] min-h-[50px] flex-shrink-0 px-4 md:px-6 lg:px-8 flex items-center transition-all duration-300 relative z-[100]"
       style={{
         backgroundColor: opaque ? "rgb(0,0,0)" : "rgba(0,0,0,0.5)",
       }}
@@ -379,14 +380,29 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
-  // عند التحميل/الريفريش: العودة للقسم المخزن في الـ hash
+  // عند التحميل/الريفريش: إبقاء النافذة في الأعلى (لئلا يختفي الهيدر عند الرابط #...) ثم التمرير داخل الحاوية فقط
   useEffect(() => {
-    const hash = window.location.hash?.slice(1);
-    if (!hash || !NAV_IDS.includes(hash as (typeof NAV_IDS)[number])) return;
-    const el = document.getElementById(hash);
-    if (el) {
-      (el as HTMLElement).scrollIntoView({ behavior: "auto", block: "start" });
-    }
+    const run = () => {
+      window.scrollTo(0, 0);
+      const hash = window.location.hash?.slice(1);
+      const scrollEl = scrollContainerRef.current;
+      if (hash && NAV_IDS.includes(hash as (typeof NAV_IDS)[number])) {
+        const el = document.getElementById(hash) as HTMLElement | null;
+        if (el && scrollEl) {
+          const top = el.offsetTop - scrollEl.offsetTop;
+          scrollEl.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+        }
+      }
+    };
+    run();
+    const t1 = requestAnimationFrame(run);
+    const t2 = setTimeout(run, 0);
+    const t3 = setTimeout(run, 100);
+    return () => {
+      cancelAnimationFrame(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, []);
 
   // عند التمرير: تحديث الـ hash بالقسم المرئي
