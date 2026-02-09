@@ -23,7 +23,6 @@ import submarineImage from "@/assets/61540e66d260f2cde22cc640d995339875efba5b.pn
 import targetIconImage from "@/assets/10ece0636bfeb213b95a9827ed51f9647c03da9c.png";
 import aselsanBg from "@/assets/910d9064a27b83a840b1d9cdf3c5030c1f2a0077.png";
 import aselsanLogoImage from "@/assets/dc8f1005d190b58e6f8f96897819fea19bca9829.png";
-import logoImage from "@/assets/dba262c104d43832d133ef6ded872493e7354dff.png";
 import cursorLogo from "@/assets/e868c967defa2ff1adabdce43f94676450e69b02.png";
 import droneImage from "@/assets/cd1779045309571142b8f0a31bf6fab645307577.png";
 
@@ -226,7 +225,7 @@ function Header({
           </button>
         </div>
 
-        {/* Mobile: logo (left) */}
+        {/* Mobile: logo (left) — لوجو دارك حسب اللغة */}
         <a
           href="#home"
           className={`lg:hidden flex-shrink-0 h-8 w-auto transition-opacity duration-300 ${
@@ -235,7 +234,7 @@ function Header({
           aria-label="Sinan Advanced Industries – Home"
         >
           <img
-            src={logoImage}
+            src={`${import.meta.env.BASE_URL || "/"}logo/logo_${locale === "ar" ? "arabice" : "english"}_ondark.png`}
             alt="Sinan Advanced Industries"
             className="h-full w-auto object-contain"
           />
@@ -581,54 +580,32 @@ export default function App() {
                 }}
               >
                 {heroHoveredTriangleId === 1 && (
-                  <>
-                    <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                      {typeof LayerDynamics === "function" ? (
-                        <LayerDynamics />
-                      ) : null}
-                    </div>
-                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                      SINAN DYNAMICS
-                    </span>
-                  </>
+                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                    {typeof LayerDynamics === "function" ? (
+                      <LayerDynamics />
+                    ) : null}
+                  </div>
                 )}
                 {heroHoveredTriangleId === 2 && (
-                  <>
-                    <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                      {typeof LayerMarine === "function" ? (
-                        <LayerMarine />
-                      ) : null}
-                    </div>
-                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                      SINAN MARINE
-                    </span>
-                  </>
+                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                    {typeof LayerMarine === "function" ? (
+                      <LayerMarine />
+                    ) : null}
+                  </div>
                 )}
                 {heroHoveredTriangleId === 3 && (
-                  <>
-                    <img
-                      src={`${import.meta.env.BASE_URL || "/"}simnfor.png`}
-                      alt="SINAN FRONTIERS"
-                      className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
-                    />
-                    <span className="text-white text-xs font-semibold tracking-wider mt-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                      SINAN FRONTIERS
-                    </span>
-                  </>
+                  <img
+                    src={`${import.meta.env.BASE_URL || "/"}simnfor.png`}
+                    alt="SINAN FRONTIERS"
+                    className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                  />
                 )}
                 {heroHoveredTriangleId === 4 && (
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={`${
-                        import.meta.env.BASE_URL || "/"
-                      }logo-assislian.png`}
-                      alt="GV Partner"
-                      className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
-                    />
-                    <span className="text-white text-xs font-semibold tracking-wider drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                      GV Partner
-                    </span>
-                  </div>
+                  <img
+                    src={`${import.meta.env.BASE_URL || "/"}logo-assislian.png`}
+                    alt="GV Partner"
+                    className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                  />
                 )}
               </div>
             )}
@@ -661,7 +638,7 @@ export default function App() {
                     : { duration: 0.3 },
                 }}
               >
-                {/* اللوغو ثابت بدون نبض عند الهوفر — عند النقر ينتقل إلى صفحة About */}
+                {/* اللوغو ثابت — إنجليزي/عربي حسب اللغة، نسخة دارك للهيرو */}
                 <a
                   href="#about"
                   onClick={(e) => {
@@ -676,9 +653,9 @@ export default function App() {
                 >
                   <div className="flex flex-col items-center justify-center">
                     <img
-                      src={logoImage}
+                      src={`${import.meta.env.BASE_URL || "/"}logo/logo_${locale === "ar" ? "arabice" : "english"}_ondark.png`}
                       alt="SINAN Logo"
-                      className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none"
+                      className={`h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none object-contain ${locale === "ar" ? "max-w-[70%] sm:max-w-[65%] md:max-w-[60%] lg:max-w-[55%]" : ""}`}
                       draggable={false}
                     />
                   </div>

@@ -12,7 +12,7 @@ import spaceLogo from "@/assets/9dd7749060815e64b5bacb0298a6f6e916d93f98.png";
 import CommunicationIcon from "@/imports/IsolationMode-203-171";
 import TrainingIcon from "@/imports/IsolationMode-203-189";
 import DefenseIcon from "@/imports/IsolationMode-203-207";
-import centerLogo from "@/assets/64074ce9782b043bd0cc2630c3456e4497e318bc.png";
+const CENTER_LOGO_URL = `${import.meta.env.BASE_URL || "/"}logo/logo_english_onlight.png`;
 
 const CANVAS_W = 1300;
 const CANVAS_H = 900;
@@ -136,9 +136,9 @@ export default function SolutionsPage() {
             }}
           >
             <img
-              src={centerLogo}
+              src={CENTER_LOGO_URL}
               alt="Center Logo"
-              style={{ width: "220px", height: "220px", objectFit: "contain" }}
+              style={{ width: "180px", height: "180px", objectFit: "contain" }}
             />
           </div>
 
@@ -678,9 +678,9 @@ export default function SolutionsPage() {
               {/* Static Logo in Center */}
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] flex items-center justify-center pointer-events-none z-[6]">
                 <img
-                  src={centerLogo}
+                  src={CENTER_LOGO_URL}
                   alt="Center Logo"
-                  className="w-[44px] h-[44px] sm:w-[52px] sm:h-[52px] object-contain"
+                  className="w-[38px] h-[38px] sm:w-[44px] sm:h-[44px] object-contain"
                 />
               </div>
               {/* 5 Orbiting Solutions — بعيدة عن المركز، فوق الدائرة الكبيرة، ألوان ظاهرة */}
@@ -711,7 +711,7 @@ export default function SolutionsPage() {
                     <img
                       src={spaceLogo}
                       alt=""
-                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                      className="max-w-5 max-h-5 sm:max-w-6 sm:max-h-6 w-auto h-auto object-contain"
                     />
                   </div>
                 </div>
@@ -746,7 +746,7 @@ export default function SolutionsPage() {
                     <img
                       src={airLogo}
                       alt=""
-                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                      className="max-w-5 max-h-5 sm:max-w-6 sm:max-h-6 w-auto h-auto object-contain"
                     />
                   </div>
                 </div>
@@ -781,7 +781,7 @@ export default function SolutionsPage() {
                     <img
                       src={landLogo}
                       alt=""
-                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                      className="max-w-5 max-h-5 sm:max-w-6 sm:max-h-6 w-auto h-auto object-contain"
                     />
                   </div>
                 </div>
@@ -816,7 +816,7 @@ export default function SolutionsPage() {
                     <img
                       src={maritimeLogo}
                       alt=""
-                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                      className="max-w-5 max-h-5 sm:max-w-6 sm:max-h-6 w-auto h-auto object-contain"
                     />
                   </div>
                 </div>
@@ -851,7 +851,7 @@ export default function SolutionsPage() {
                     <img
                       src={cyberLogo}
                       alt=""
-                      className="w-5 h-5 sm:w-6 sm:h-6 object-contain"
+                      className="max-w-5 max-h-5 sm:max-w-6 sm:max-h-6 w-auto h-auto object-contain"
                     />
                   </div>
                 </div>

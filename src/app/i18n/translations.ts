@@ -60,7 +60,7 @@ export const translations = {
       intro:
         "Sinan Frontiers is a wholly owned subsidiary of Sinan Advanced Industries, established as the Group's international gateway for global trade, strategic partnerships and market expansion.",
       paragraph2:
-        "The Sinan Frontiers serves as a platform to connect Sinan Advanced Industries with international partners, investors, and technology leaders, enabling cross-border collaboration and long-term value creation.",
+        "Sinan Frontiers serves as a platform to connect Sinan Advanced Industries with international partners, investors, and technology leaders, enabling cross-border collaboration and long-term value creation.",
       keyObjectives: "Key Objectives",
       obj1: "Advance cross-border cooperation and build long-term economic relationships with global industry leaders.",
       obj2: "Identify, structure, and enable value-driven investments that align with national priorities and support sustainable growth.",

@@ -16,17 +16,17 @@ export default function ContactPage() {
         />
         <div className="absolute inset-0 bg-black/50" />
       </div>
-      {/* المحتوى الرئيسي: مضموم + تباعد أقل — الفوتر يبقى أسفل الصفحة */}
-      <div className="relative z-10 flex-1 min-h-0 flex flex-col md:flex-row md:items-center px-2 sm:px-4 md:px-6 lg:px-16 py-2 sm:py-4 md:py-6 lg:py-8 overflow-hidden gap-2 sm:gap-4 md:gap-6">
+      {/* المحتوى الرئيسي: عنوان + العنوان + أيقونات + إيميلات — مناسب للشاشة بدون QR */}
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 py-4 sm:py-6 md:py-8 overflow-hidden">
         <motion.div
-          className="w-full md:w-1/2 min-h-0 flex flex-col items-center text-center md:items-start md:text-start justify-center pt-1 sm:pt-0 md:pt-0 flex-shrink"
+          className="w-full max-w-lg mx-auto flex flex-col items-center text-center justify-center"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
           <motion.h1
-            className="text-white mb-1 sm:mb-3 md:mb-4 text-base sm:text-xl md:text-2xl lg:text-3xl"
+            className="text-white mb-3 sm:mb-4 md:mb-6 text-lg sm:text-xl md:text-2xl lg:text-3xl"
             style={{
               fontFamily: "DIN Arabic, sans-serif",
               fontWeight: 500,
@@ -37,7 +37,7 @@ export default function ContactPage() {
           >
             {t.contact.title}
           </motion.h1>
-          <div className="space-y-1 sm:space-y-2 md:space-y-3">
+          <div className="space-y-2 sm:space-y-3 md:space-y-4">
             <motion.div
               className="flex-shrink-0"
               initial={{ opacity: 0, x: -20 }}
@@ -55,7 +55,7 @@ export default function ContactPage() {
               </p>
             </motion.div>
             <motion.div
-              className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 py-1 sm:py-0"
+              className="flex items-center justify-center gap-3 sm:gap-4 py-2 sm:py-0"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
@@ -98,32 +98,6 @@ export default function ContactPage() {
               </p>
             </motion.div>
           </div>
-        </motion.div>
-        <motion.div
-          className="w-full md:w-1/2 min-h-0 flex items-center justify-center md:justify-end pt-4 sm:pt-4 md:pt-0 pr-0 md:pr-2 lg:pr-6 flex-shrink-0"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <motion.div
-            className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl bg-white/95 shadow-xl"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <img
-              src="/qr.png"
-              alt="QR Code"
-              className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 object-contain"
-            />
-            <p
-              className="mt-2 text-gray-700 text-xs sm:text-sm font-medium"
-              style={{ fontFamily: "DIN Arabic, sans-serif" }}
-            >
-              Scan here
-            </p>
-          </motion.div>
         </motion.div>
       </div>
       {/* الفوتر ثابت أسفل الصفحة دائماً */}

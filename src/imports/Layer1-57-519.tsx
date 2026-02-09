@@ -96,6 +96,18 @@ function Group2({
       ? "cursor-none transition-[filter,opacity] duration-300"
       : "";
 
+  // تحويل points المضلع إلى path d (لحد الثعبان المتحرك)
+  const pointsToPathD = (points: string) => {
+    const pairs = points.trim().split(/\s+/);
+    if (pairs.length < 6) return "";
+    let d = `M ${pairs[0]} ${pairs[1]}`;
+    for (let i = 2; i < pairs.length; i += 2) {
+      if (pairs[i] !== undefined && pairs[i + 1] !== undefined)
+        d += ` L ${pairs[i]} ${pairs[i + 1]}`;
+    }
+    return d + " Z";
+  };
+
   // مضلعات Assxet.svg — مثلث واحد من كل لون (viewBox 0 0 7872 2368)
   // id:1 أزرق | id:2 بنفسجي | id:3 برتقالي | id:4 أسود
   const assxetPolygons: { id: number; color: string; points: string }[] = [
@@ -146,13 +158,18 @@ function Group2({
               ? "drop-shadow(0 0 12px rgba(255,255,255,0.35)) drop-shadow(0 0 24px rgba(255,255,255,0.2))"
               : `drop-shadow(0 0 12px ${poly.color}) drop-shadow(0 0 24px ${poly.color})`
             : undefined;
+          // لون حد الثعبان = لون الشادو مع شفافية خفيفة
+          const snakeStrokeColor =
+            poly.id === 4
+              ? "rgba(255,255,255,0.55)"
+              : poly.id === 1
+                ? "rgba(0,159,227,0.6)"
+                : poly.id === 2
+                  ? "rgba(49,39,131,0.6)"
+                  : "rgba(243,148,34,0.6)";
           return (
-            <polygon
+            <g
               key={i}
-              points={poly.points}
-              fill={poly.color}
-              opacity={opacity}
-              style={{ filter }}
               onMouseEnter={
                 isHoverable
                   ? (e) => {
@@ -173,15 +190,47 @@ function Group2({
                 isClickable ? () => onTriangleClick!(poly.id) : undefined
               }
             >
-              {!isHovered && (
+              <polygon
+                points={poly.points}
+                fill={poly.color}
+                opacity={opacity}
+                style={{ filter }}
+              >
+                {!isHovered && (
+                  <animate
+                    attributeName="opacity"
+                    values={poly.id === 4 ? "0.7;0.95;0.7" : "0.5;0.85;0.5"}
+                    dur="2.5s"
+                    repeatCount="indefinite"
+                  />
+                )}
+              </polygon>
+              {/* حد ثعبان متحرك — أقل سمكاً، شفافية خفيفة، ظل خفيف */}
+              <path
+                d={pointsToPathD(poly.points)}
+                fill="none"
+                stroke={snakeStrokeColor}
+                strokeWidth="22"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                pathLength="100"
+                strokeDasharray="18 82"
+                pointerEvents="none"
+                style={{
+                  filter: poly.id === 4
+                    ? "drop-shadow(0 0 3px rgba(255,255,255,0.35))"
+                    : `drop-shadow(0 0 3px ${poly.color}40)`,
+                }}
+              >
                 <animate
-                  attributeName="opacity"
-                  values={poly.id === 4 ? "0.7;0.95;0.7" : "0.5;0.85;0.5"}
-                  dur="2.5s"
+                  attributeName="stroke-dashoffset"
+                  from="0"
+                  to="100"
+                  dur="2.2s"
                   repeatCount="indefinite"
                 />
-              )}
-            </polygon>
+              </path>
+            </g>
           );
         })}
       </svg>
