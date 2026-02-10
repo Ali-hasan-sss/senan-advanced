@@ -120,8 +120,8 @@ function Group2({
     {
       id: 2,
       color: "#312783",
-      points:
-        "5813.15 1543.15 5300.56 1263.08 5126.18 1220.8 5511.94 1448.03 5813.15 1543.15",
+      // مثلث بنفسجي آخر من Assxet.svg (منطقة وسط-يمين) — منطبق على الصورة الأصلية
+      points: "4728.47 882.6 4501.24 1300.07 4284.58 1101.9 4728.47 882.6",
     },
     {
       id: 3,
@@ -217,9 +217,10 @@ function Group2({
                 strokeDasharray="18 82"
                 pointerEvents="none"
                 style={{
-                  filter: poly.id === 4
-                    ? "drop-shadow(0 0 3px rgba(255,255,255,0.35))"
-                    : `drop-shadow(0 0 3px ${poly.color}40)`,
+                  filter:
+                    poly.id === 4
+                      ? "drop-shadow(0 0 3px rgba(255,255,255,0.35))"
+                      : `drop-shadow(0 0 3px ${poly.color}40)`,
                 }}
               >
                 <animate

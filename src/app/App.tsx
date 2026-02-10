@@ -504,28 +504,19 @@ export default function App() {
             id="home"
             className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate bg-gray-950"
           >
-            {/* خلفية الهيرو: SVG المثلثات الملونة (Assxet.svg) — تغطي القسم بالكامل */}
+            {/* خلفية الهيرو: لون احتياطي + صورة الخلفية (cover, مقلوبة) */}
             <div
-              className="absolute inset-0 w-full h-full"
-              style={{ zIndex: 0 }}
+              className="absolute inset-0 z-0 pointer-events-none"
               aria-hidden
-            >
-              <div className="absolute inset-0 w-full h-full bg-gray-950" />
-              {/* خلفية مقلوبة رأسياً: المجسمات من الأسفل دون التأثير على اللوغو — أولوية تحميل عالية */}
-              <img
-                src={`${import.meta.env.BASE_URL || "/"}hero-bg.png`}
-                alt=""
-                fetchPriority="high"
-                loading="eager"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover object-center"
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center",
-                  transform: "scaleY(-1)",
-                }}
-              />
-            </div>
+              style={{
+                backgroundColor: "#08080A",
+                backgroundImage: `url(${import.meta.env.BASE_URL || "/"}hero-bg.png)`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                transform: "scaleY(-1)",
+              }}
+            />
             {/* طبقة المثلثات الملونة: هوفر + نقر للانتقال إلى قسم محدد */}
             <div
               className="absolute inset-y-0 left-1/2 w-[110vw] max-w-none -translate-x-1/2 pointer-events-none"
@@ -602,9 +593,9 @@ export default function App() {
                 )}
                 {heroHoveredTriangleId === 4 && (
                   <img
-                    src={`${import.meta.env.BASE_URL || "/"}logo-assislian.png`}
-                    alt="GV Partner"
-                    className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                    src={`${import.meta.env.BASE_URL || "/"}logo/logo_english_ondark.png`}
+                    alt="Sinan"
+                    className="h-16 sm:h-20 md:h-24 w-auto max-w-[min(28vw,260px)] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
                   />
                 )}
               </div>
