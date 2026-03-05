@@ -218,7 +218,7 @@ function Header({
           <button
             type="button"
             onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
-            className={`text-sm font-medium px-3 py-1.5 rounded border transition-colors ${btnClass}`}
+            className={`text-sm font-medium px-3 py-1.5 rounded border-0 transition-colors ${btnClass}`}
             aria-label="Toggle language"
           >
             {locale === "ar" ? "EN" : "عربي"}
@@ -559,7 +559,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* لوغو عائم فوق مؤشر الماوس عند الهوفر — بلا خلفية */}
+            {/* لوغو عائم فوق مؤشر الماوس عند الهوفر — مقاس أكبر (scale up) */}
             {heroHoveredTriangleId !== null && heroMousePosition && (
               <div
                 className="fixed flex flex-col items-center justify-center pointer-events-none z-[20]"
@@ -567,18 +567,18 @@ export default function App() {
                   left: heroMousePosition.x,
                   top: heroMousePosition.y - 90,
                   transform: "translate(-50%, 0)",
-                  width: "min(22vw, 220px)",
+                  width: "min(28vw, 280px)",
                 }}
               >
                 {heroHoveredTriangleId === 1 && (
-                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                  <div className="w-20 h-20 md:w-24 md:h-24 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
                     {typeof LayerDynamics === "function" ? (
                       <LayerDynamics />
                     ) : null}
                   </div>
                 )}
                 {heroHoveredTriangleId === 2 && (
-                  <div className="w-14 h-14 md:w-16 md:h-16 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+                  <div className="w-20 h-20 md:w-24 md:h-24 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
                     {typeof LayerMarine === "function" ? (
                       <LayerMarine />
                     ) : null}
@@ -588,14 +588,14 @@ export default function App() {
                   <img
                     src={`${import.meta.env.BASE_URL || "/"}simnfor.png`}
                     alt="SINAN FRONTIERS"
-                    className="h-12 md:h-14 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                    className="h-16 md:h-20 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
                   />
                 )}
                 {heroHoveredTriangleId === 4 && (
                   <img
-                    src={`${import.meta.env.BASE_URL || "/"}logo/logo_english_ondark.png`}
+                    src={`${import.meta.env.BASE_URL || "/"}logo/logo_${locale === "ar" ? "arabice" : "english"}_ondark.png`}
                     alt="Sinan"
-                    className="h-16 sm:h-20 md:h-24 w-auto max-w-[min(28vw,260px)] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+                    className="h-20 sm:h-24 md:h-28 w-auto max-w-[min(32vw,320px)] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
                   />
                 )}
               </div>
@@ -629,28 +629,20 @@ export default function App() {
                     : { duration: 0.3 },
                 }}
               >
-                {/* اللوغو ثابت — إنجليزي/عربي حسب اللغة، نسخة دارك للهيرو */}
-                <a
-                  href="#about"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const el =
-                      sectionRefs.current["about"] ??
-                      document.getElementById("about");
-                    el?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }}
-                  className="flex flex-col items-center justify-center cursor-none"
-                  aria-label="Go to About Us"
+                {/* اللوغو ثابت — Sinan Advanced Industries (بدون زر/رابط) */}
+                <div
+                  className="flex flex-col items-center justify-center"
+                  aria-hidden
                 >
                   <div className="flex flex-col items-center justify-center">
                     <img
                       src={`${import.meta.env.BASE_URL || "/"}logo/logo_${locale === "ar" ? "arabice" : "english"}_ondark.png`}
-                      alt="SINAN Logo"
-                      className={`h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none object-contain ${locale === "ar" ? "max-w-[70%] sm:max-w-[65%] md:max-w-[60%] lg:max-w-[55%]" : ""}`}
+                      alt="Sinan Advanced Industries"
+                      className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none object-contain"
                       draggable={false}
                     />
                   </div>
-                </a>
+                </div>
               </motion.div>
             </div>
           </section>

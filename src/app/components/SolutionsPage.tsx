@@ -38,8 +38,9 @@ export default function SolutionsPage() {
     <div
       className="w-full h-full min-h-0 relative overflow-hidden flex flex-col"
       style={{
+        // Cursor logo in solutions section: always dark with subtle white outline
         cursor:
-          'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%278%27 fill=%27black%27/%3E%3C/svg%3E") 16 16, auto',
+          'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%278%27 fill=%27black%27 stroke=%27white%27 stroke-width=%272%27/%3E%3C/svg%3E") 16 16, auto',
       }}
     >
       {/* Background Image */}
@@ -85,7 +86,7 @@ export default function SolutionsPage() {
             }}
             animate={{ rotate: 360 }}
             transition={{
-              duration: 20,
+              duration: 32,
               repeat: Infinity,
               ease: "linear",
             }}
@@ -109,7 +110,7 @@ export default function SolutionsPage() {
             }}
             animate={{ rotate: -360 }}
             transition={{
-              duration: 20,
+              duration: 32,
               repeat: Infinity,
               ease: "linear",
             }}
@@ -648,7 +649,7 @@ export default function SolutionsPage() {
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] z-[5]"
                 animate={{ rotate: 360 }}
                 transition={{
-                  duration: 20,
+                  duration: 32,
                   repeat: Infinity,
                   ease: "linear",
                 }}
@@ -664,7 +665,7 @@ export default function SolutionsPage() {
                 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] z-[5]"
                 animate={{ rotate: -360 }}
                 transition={{
-                  duration: 20,
+                  duration: 32,
                   repeat: Infinity,
                   ease: "linear",
                 }}
