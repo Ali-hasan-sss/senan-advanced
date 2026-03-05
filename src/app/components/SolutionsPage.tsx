@@ -66,7 +66,7 @@ export default function SolutionsPage() {
             transformOrigin: "center center",
           }}
         >
-          {/* خلفية اللوحة */}
+          {/* خلفية اللوحة — مفعّلة مسبقاً داخل الكانفس، تم تعطيلها الآن حتى لا تتكرر خلفية المضلعات
           <div className="absolute inset-0">
             <img
               src={solutionsBg}
@@ -74,6 +74,7 @@ export default function SolutionsPage() {
               className="w-full h-full object-cover"
             />
           </div>
+          */}
           {/* Rotating Circle 1 - Clockwise — موضع ثابت بالبكسل */}
           <motion.div
             className="absolute"

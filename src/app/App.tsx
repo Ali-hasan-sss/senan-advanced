@@ -688,7 +688,7 @@ export default function App() {
         <ExperiencePage />
       </section> */}
 
-          {/* Sectors Section - SINAN DYNAMICS: animated bg, content from image, drone top-right, teal overlay */}
+          {/* Sectors Section - SINAN DYNAMICS: video bg, drone top-right, teal overlay */}
           <section
             ref={(el) => {
               if (el) sectionRefs.current["sectors"] = el;
@@ -696,49 +696,22 @@ export default function App() {
             id="sectors"
             className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
           >
-            {/* Animated strip background (same as Aselsan / Frontiers / Marine) */}
+            {/* Background video (replaces animated strip) */}
             <div
               className="absolute inset-0 w-full h-full overflow-hidden"
-              style={{ zIndex: 0, direction: "ltr" }}
+              style={{ zIndex: 0 }}
             >
-              <div
-                className="flex h-full animate-strip-scroll-60"
-                style={{ width: "300vw", direction: "ltr" }}
-              >
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-              </div>
+              <video
+                className="w-full h-full object-cover"
+                src={`${import.meta.env.BASE_URL || "/"}background.mp4`}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
             </div>
 
-            {/* Geometric overlay */}
+            {/* Geometric overlay — disabled while using video background
             <div
               className="absolute inset-0 w-full h-full pointer-events-none"
               style={{ zIndex: 1 }}
@@ -749,6 +722,7 @@ export default function App() {
                 </div>
               ) : null}
             </div>
+            */}
 
             {/* نص الخلفية — نفس ستايل Marine تماماً */}
             <div
@@ -879,7 +853,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* Sinan Marine Section — animated bg, content from image, submarine top-right, purple overlay under text/logo */}
+          {/* Sinan Marine Section — video bg, content from image, submarine top-right, purple overlay under text/logo */}
           <section
             ref={(el) => {
               if (el) sectionRefs.current["marine"] = el;
@@ -887,49 +861,22 @@ export default function App() {
             id="marine"
             className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
           >
-            {/* Animated strip background (same as Aselsan / Frontiers) */}
+            {/* Background video (replaces animated strip) */}
             <div
               className="absolute inset-0 w-full h-full overflow-hidden"
-              style={{ zIndex: 0, direction: "ltr" }}
+              style={{ zIndex: 0 }}
             >
-              <div
-                className="flex h-full animate-strip-scroll-60"
-                style={{ width: "300vw", direction: "ltr" }}
-              >
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-              </div>
+              <video
+                className="w-full h-full object-cover"
+                src={`${import.meta.env.BASE_URL || "/"}background.mp4`}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
             </div>
 
-            {/* Geometric overlay */}
+            {/* Geometric overlay — disabled while using video background
             <div
               className="absolute inset-0 w-full h-full pointer-events-none"
               style={{ zIndex: 1 }}
@@ -940,6 +887,7 @@ export default function App() {
                 </div>
               ) : null}
             </div>
+            */}
 
             {/* نص الخلفية — نفس التموضع والستايل كـ Frontiers تماماً */}
             <div
@@ -1070,7 +1018,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* Sinan Frontiers Section — same animated bg as Aselsan, content from reference image */}
+          {/* Sinan Frontiers Section — video bg, content from reference image */}
           <section
             ref={(el) => {
               if (el) sectionRefs.current["frontiers"] = el;
@@ -1078,49 +1026,22 @@ export default function App() {
             id="frontiers"
             className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
           >
-            {/* Animated strip background (same as Aselsan) */}
+            {/* Background video (replaces animated strip same as Aselsan) */}
             <div
               className="absolute inset-0 w-full h-full overflow-hidden"
-              style={{ zIndex: 0, direction: "ltr" }}
+              style={{ zIndex: 0 }}
             >
-              <div
-                className="flex h-full animate-strip-scroll-60"
-                style={{ width: "300vw", direction: "ltr" }}
-              >
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-              </div>
+              <video
+                className="w-full h-full object-cover"
+                src={`${import.meta.env.BASE_URL || "/"}background.mp4`}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
             </div>
 
-            {/* Geometric overlay (plexus) */}
+            {/* Geometric overlay (plexus) — disabled while using video background
             <div
               className="absolute inset-0 w-full h-full pointer-events-none"
               style={{ zIndex: 1 }}
@@ -1131,6 +1052,7 @@ export default function App() {
                 </div>
               ) : null}
             </div>
+            */}
 
             {/* Faint background text: "Empowering National Capabilities..." (left side) */}
             <div
@@ -1244,7 +1166,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* SINAN ASELSAN Section — joint venture announcement (layout from reference image) */}
+          {/* SINAN ASELSAN Section — joint venture announcement with video background */}
           <section
             ref={(el) => {
               if (el) sectionRefs.current["aselsan"] = el;
@@ -1252,49 +1174,22 @@ export default function App() {
             id="aselsan"
             className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
           >
-            {/* Animated strip background (3×100vw seamless loop) */}
+            {/* Background video (replaces animated strip 3×100vw loop) */}
             <div
               className="absolute inset-0 w-full h-full overflow-hidden"
-              style={{ zIndex: 0, direction: "ltr" }}
+              style={{ zIndex: 0 }}
             >
-              <div
-                className="flex h-full animate-strip-scroll-60"
-                style={{ width: "300vw", direction: "ltr" }}
-              >
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-                <img
-                  src={aselsanBg}
-                  alt=""
-                  className="h-full flex-shrink-0 object-cover object-left"
-                  style={{
-                    width: "100vw",
-                    minWidth: "100vw",
-                    display: "block",
-                  }}
-                />
-              </div>
+              <video
+                className="w-full h-full object-cover"
+                src={`${import.meta.env.BASE_URL || "/"}background.mp4`}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
             </div>
 
-            {/* Plexus-style overlay: geometric polygons + dots */}
+            {/* Plexus-style overlay: geometric polygons + dots — disabled while using video background
             <div
               className="absolute inset-0 w-full h-full pointer-events-none"
               style={{ zIndex: 1 }}
@@ -1305,6 +1200,7 @@ export default function App() {
                 </div>
               ) : null}
             </div>
+            */}
 
             {/* Content: strictly centered in the middle of the screen */}
             <div
