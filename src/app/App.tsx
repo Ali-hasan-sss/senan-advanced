@@ -659,8 +659,8 @@ export default function App() {
               className="absolute inset-x-0 flex items-center justify-center gap-3 md:hidden"
               style={{
                 zIndex: 12,
-                // تحريك الشريط للأعلى قليلاً مع احترام الـ safe-area أسفل الشاشة (مثل شريط التنقل أو شق الآيفون)
-                bottom: "calc(env(safe-area-inset-bottom, 0px) + 1.5rem)",
+                // رفع الشريط أكثر للأعلى + احترام safe-area حتى لا يدخل تحت شريط التنقل السفلي
+                bottom: "calc(env(safe-area-inset-bottom, 0px) + 4rem)",
               }}
             >
               {/* Dynamics (blue) */}
