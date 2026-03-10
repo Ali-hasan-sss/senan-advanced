@@ -484,6 +484,18 @@ export default function App() {
     };
   }, []);
 
+  // منع تمرير نافذة المتصفح نفسها (خصوصاً على الموبايل مع الروابط التي تحتوي على hash)
+  // حتى لا يتحرك الهيدر خارج الشاشة ويبقى التمرير فقط داخل app-scroll-container
+  useEffect(() => {
+    const handleWindowScroll = () => {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+    window.addEventListener("scroll", handleWindowScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleWindowScroll);
+  }, []);
+
   return (
     <>
       <div className="hidden md:block">
