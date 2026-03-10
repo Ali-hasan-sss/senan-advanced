@@ -654,10 +654,14 @@ export default function App() {
               </motion.div>
             </div>
 
-            {/* Diamonds navigation for main sectors on mobile — أسفل الشاشة فقط في الموبايل */}
+            {/* Diamonds navigation for main sectors on mobile — أسفل الشاشة فقط في الموبايل مع مراعاة شريط التنقل السفلي (safe area) */}
             <div
-              className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-3 md:hidden"
-              style={{ zIndex: 12 }}
+              className="absolute inset-x-0 flex items-center justify-center gap-3 md:hidden"
+              style={{
+                zIndex: 12,
+                // تحريك الشريط للأعلى قليلاً مع احترام الـ safe-area أسفل الشاشة (مثل شريط التنقل أو شق الآيفون)
+                bottom: "calc(env(safe-area-inset-bottom, 0px) + 1.5rem)",
+              }}
             >
               {/* Dynamics (blue) */}
               <button
