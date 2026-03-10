@@ -77,6 +77,8 @@ function CustomCursor() {
       <img
         src={cursorLogo}
         alt=""
+        loading="lazy"
+        decoding="async"
         className="w-7 h-8"
         style={{
           opacity: 0.95,
@@ -236,11 +238,17 @@ function Header({
           <img
             src={`${import.meta.env.BASE_URL || "/"}logo/logo_${locale === "ar" ? "arabice" : "english"}_ondark.png`}
             alt="Sinan Advanced Industries"
+            loading="lazy"
+            decoding="async"
             className="h-full w-auto object-contain"
           />
         </a>
 
-        <div className="lg:hidden ml-auto flex items-center gap-4">
+        <div
+          className={`lg:hidden flex items-center gap-4 ${
+            locale === "ar" ? "ml-3" : "ml-auto"
+          }`}
+        >
           <MobileMenu
             menuItems={[
               ...menuItems,
@@ -593,8 +601,8 @@ export default function App() {
                 )}
                 {heroHoveredTriangleId === 4 && (
                   <img
-                    src={`${import.meta.env.BASE_URL || "/"}logo/logo_${locale === "ar" ? "arabice" : "english"}_ondark.png`}
-                    alt="Sinan"
+                    src={`${import.meta.env.BASE_URL || "/"}title-assislian.png`}
+                    alt="Sinan Aselsan"
                     className="h-20 sm:h-24 md:h-28 w-auto max-w-[min(32vw,320px)] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
                   />
                 )}
@@ -638,12 +646,110 @@ export default function App() {
                     <img
                       src={`${import.meta.env.BASE_URL || "/"}logo/logo_${locale === "ar" ? "arabice" : "english"}_ondark.png`}
                       alt="Sinan Advanced Industries"
-                      className="h-48 sm:h-64 md:h-80 lg:h-96 w-auto select-none object-contain"
+                      className="h-40 sm:h-52 md:h-80 lg:h-96 w-auto select-none object-contain"
                       draggable={false}
                     />
                   </div>
                 </div>
               </motion.div>
+            </div>
+
+            {/* Diamonds navigation for main sectors on mobile — أسفل الشاشة فقط في الموبايل */}
+            <div
+              className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-3 md:hidden"
+              style={{ zIndex: 12 }}
+            >
+              {/* Dynamics (blue) */}
+              <button
+                type="button"
+                onClick={() => {
+                  const el =
+                    sectionRefs.current["sectors"] ??
+                    document.getElementById("sectors");
+                  el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="relative w-14 h-14 flex items-center justify-center"
+                aria-label="Go to Sinan Dynamics"
+              >
+                <div
+                  className="absolute inset-0 rotate-45 bg-[#009fe3] shadow-[0_0_18px_rgba(0,159,227,0.7)] animate-pulse"
+                  style={{ animationDuration: "2.6s" }}
+                />
+                <div className="relative z-10 w-8 h-8 flex items-center justify-center [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
+                  {typeof LayerDynamics === "function" ? <LayerDynamics /> : null}
+                </div>
+              </button>
+
+              {/* Marine (purple) */}
+              <button
+                type="button"
+                onClick={() => {
+                  const el =
+                    sectionRefs.current["marine"] ??
+                    document.getElementById("marine");
+                  el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="relative w-14 h-14 flex items-center justify-center"
+                aria-label="Go to Sinan Marine"
+              >
+                <div
+                  className="absolute inset-0 rotate-45 bg-[#312783] shadow-[0_0_18px_rgba(49,39,131,0.7)] animate-pulse"
+                  style={{ animationDuration: "2.9s" }}
+                />
+                <div className="relative z-10 w-8 h-8 flex items-center justify-center [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
+                  {typeof LayerMarine === "function" ? <LayerMarine /> : null}
+                </div>
+              </button>
+
+              {/* Frontiers (orange) */}
+              <button
+                type="button"
+                onClick={() => {
+                  const el =
+                    sectionRefs.current["frontiers"] ??
+                    document.getElementById("frontiers");
+                  el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="relative w-14 h-14 flex items-center justify-center"
+                aria-label="Go to Sinan Frontiers"
+              >
+                <div
+                  className="absolute inset-0 rotate-45 bg-[#f39422] shadow-[0_0_18px_rgba(243,148,34,0.8)] animate-pulse"
+                  style={{ animationDuration: "3.2s" }}
+                />
+                <div className="relative z-10 flex items-center justify-center">
+                  <img
+                    src={`${import.meta.env.BASE_URL || "/"}simnfor.png`}
+                    alt="Sinan Frontiers"
+                    className="h-6 w-auto object-contain"
+                  />
+                </div>
+              </button>
+
+              {/* Aselsan (black) */}
+              <button
+                type="button"
+                onClick={() => {
+                  const el =
+                    sectionRefs.current["aselsan"] ??
+                    document.getElementById("aselsan");
+                  el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="relative w-14 h-14 flex items-center justify-center"
+                aria-label="Go to Sinan Aselsan"
+              >
+                <div
+                  className="absolute inset-0 rotate-45 bg-[#000002] shadow-[0_0_18px_rgba(0,0,0,0.9)] animate-pulse"
+                  style={{ animationDuration: "3.5s" }}
+                />
+                <div className="relative z-10 flex items-center justify-center">
+                  <img
+                    src="/title-assislian.png"
+                    alt="Sinan Aselsan"
+                    className="h-6 w-auto object-contain"
+                  />
+                </div>
+              </button>
             </div>
           </section>
 
@@ -708,6 +814,7 @@ export default function App() {
                 loop
                 muted
                 playsInline
+                preload="none"
               />
             </div>
 
@@ -873,6 +980,7 @@ export default function App() {
                 loop
                 muted
                 playsInline
+                preload="none"
               />
             </div>
 
@@ -1038,6 +1146,7 @@ export default function App() {
                 loop
                 muted
                 playsInline
+                preload="none"
               />
             </div>
 
@@ -1186,6 +1295,7 @@ export default function App() {
                 loop
                 muted
                 playsInline
+                preload="none"
               />
             </div>
 
