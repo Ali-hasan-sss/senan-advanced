@@ -19,6 +19,9 @@ const CANVAS_H = 900;
 
 export default function SolutionsPage() {
   const { t } = useLanguage();
+  const lines =
+    (t.about as { empoweringLines?: string }).empoweringLines?.split("\n") ??
+    [];
   const [defenseHovered, setDefenseHovered] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [fitScale, setFitScale] = useState(1);
@@ -76,6 +79,24 @@ export default function SolutionsPage() {
             />
           </div>
           */}
+          {/* نص خلفية كبير في الجهة اليسرى — نفس أسلوب قسم الرؤية والمهمة */}
+          <div
+            className="absolute inset-y-0 left-0 flex items-center pointer-events-none px-6 lg:px-10"
+            style={{ zIndex: 2 }}
+          >
+            <div className="space-y-0.5 lg:space-y-1">
+              {lines.map((line, i) => (
+                <div
+                  key={i}
+                  className="text-white/10 text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight tracking-tight"
+                  style={{ fontFamily: "DIN Arabic, sans-serif" }}
+                >
+                  {line}
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Rotating Circle 1 - Clockwise — موضع ثابت بالبكسل */}
           <motion.div
             className="absolute"

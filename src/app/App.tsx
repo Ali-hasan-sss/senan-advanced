@@ -172,7 +172,7 @@ function Header({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 1024 : false
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 1024);
@@ -330,7 +330,7 @@ export default function App() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Partial<Record<string, HTMLElement>>>({});
   const [sectionInView, setSectionInView] = useState<Record<string, boolean>>(
-    {}
+    {},
   );
   const [heroHoveredTriangleId, setHeroHoveredTriangleId] = useState<
     number | null
@@ -381,7 +381,7 @@ export default function App() {
           return next;
         });
       },
-      { root: scrollEl, rootMargin: "0px", threshold: 0.15 }
+      { root: scrollEl, rootMargin: "0px", threshold: 0.15 },
     );
     elements.forEach(({ el }) => observer.observe(el));
     return () => observer.disconnect();
@@ -599,9 +599,7 @@ export default function App() {
                 )}
                 {heroHoveredTriangleId === 2 && (
                   <div className="w-20 h-20 md:w-24 md:h-24 relative [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-                    {typeof LayerMarine === "function" ? (
-                      <LayerMarine />
-                    ) : null}
+                    {typeof LayerMarine === "function" ? <LayerMarine /> : null}
                   </div>
                 )}
                 {heroHoveredTriangleId === 3 && (
@@ -612,11 +610,18 @@ export default function App() {
                   />
                 )}
                 {heroHoveredTriangleId === 4 && (
-                  <img
-                    src={`${import.meta.env.BASE_URL || "/"}title-assislian.png`}
-                    alt="Sinan Aselsan"
-                    className="h-20 sm:h-24 md:h-28 w-auto max-w-[min(32vw,320px)] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
-                  />
+                  <div className="flex flex-col items-center ">
+                    <img
+                      src={`${import.meta.env.BASE_URL || "/"}logo-assislian.png`}
+                      alt="Sinan Aselsan"
+                      className="h-14 sm:h-16 md:h-20 w-auto max-w-[min(28vw,260px)] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+                    />
+                    <img
+                      src={`${import.meta.env.BASE_URL || "/"}title-assislian.png`}
+                      alt="Sinan Aselsan Title"
+                      className="h-4 sm:h-5 md:h-6 w-auto max-w-[min(26vw,260px)] object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
+                    />
+                  </div>
                 )}
               </div>
             )}
@@ -692,7 +697,9 @@ export default function App() {
                   style={{ animationDuration: "2.6s" }}
                 />
                 <div className="relative z-10 w-8 h-8 flex items-center justify-center [&_svg]:w-full [&_svg]:h-full [&_svg]:text-white">
-                  {typeof LayerDynamics === "function" ? <LayerDynamics /> : null}
+                  {typeof LayerDynamics === "function" ? (
+                    <LayerDynamics />
+                  ) : null}
                 </div>
               </button>
 
@@ -1152,14 +1159,14 @@ export default function App() {
             id="frontiers"
             className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate"
           >
-            {/* Background video (replaces animated strip same as Aselsan) */}
+            {/* Background video (earth video for Sinan Frontiers) */}
             <div
               className="absolute inset-0 w-full h-full overflow-hidden"
               style={{ zIndex: 0 }}
             >
               <video
                 className="w-full h-full object-cover"
-                src={`${import.meta.env.BASE_URL || "/"}background.mp4`}
+                src={`${import.meta.env.BASE_URL || "/"}earth-video.mp4`}
                 autoPlay
                 loop
                 muted
