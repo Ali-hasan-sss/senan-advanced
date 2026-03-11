@@ -68,7 +68,7 @@ function CustomCursor() {
     <div
       className="fixed pointer-events-none"
       style={{
-        left: mousePosition.x - 14,
+        left: mousePosition.x - 12,
         top: mousePosition.y - 16,
         transform: "translate(0, 0)",
         zIndex: 2147483647,
@@ -79,7 +79,7 @@ function CustomCursor() {
         alt=""
         loading="lazy"
         decoding="async"
-        className="w-7 h-8"
+        className="w-5 h-8"
         style={{
           opacity: 0.95,
           filter: isOnLightBackground ? "brightness(0)" : "none",
@@ -847,8 +847,9 @@ export default function App() {
             </div>
             */}
 
-            {/* نص الخلفية — نفس ستايل Marine تماماً */}
+            {/* نص الخلفية — دائماً على جهة اليسار بغض النظر عن اتجاه اللغة */}
             <div
+              dir="ltr"
               className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
               style={{ zIndex: 2 }}
             >
@@ -1013,8 +1014,9 @@ export default function App() {
             </div>
             */}
 
-            {/* نص الخلفية — نفس التموضع والستايل كـ Frontiers تماماً */}
+            {/* نص الخلفية — نفس التموضع والستايل كـ Frontiers تماماً، دائماً على جهة اليسار */}
             <div
+              dir="ltr"
               className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
               style={{ zIndex: 2 }}
             >
@@ -1179,8 +1181,9 @@ export default function App() {
             </div>
             */}
 
-            {/* Faint background text: "Empowering National Capabilities..." (left side) */}
+            {/* Faint background text: "Empowering National Capabilities..." (left side in all languages) */}
             <div
+              dir="ltr"
               className="hidden md:flex absolute inset-0 items-center justify-start pointer-events-none px-6 lg:px-12"
               style={{ zIndex: 2 }}
             >

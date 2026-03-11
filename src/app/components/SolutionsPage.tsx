@@ -36,6 +36,7 @@ export default function SolutionsPage() {
   }, []);
   return (
     <div
+      dir="ltr"
       className="w-full h-full min-h-0 relative overflow-hidden flex flex-col"
       style={{
         // Cursor logo in solutions section: always dark with subtle white outline

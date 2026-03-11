@@ -53,7 +53,7 @@ export function CustomCursor() {
         <img
           src={cursorLogo}
           alt=""
-          className="w-7 h-8"
+          className="w-3 h-8"
           style={{
             opacity: 0.9,
             filter: isOnWhiteBackground ? "brightness(0)" : "none",

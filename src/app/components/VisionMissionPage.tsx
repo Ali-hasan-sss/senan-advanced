@@ -16,10 +16,10 @@ export default function VisionMissionPage({
   return (
     <div
       dir="ltr"
-      className="w-full h-full min-h-0 max-h-full bg-[#f8f8f8] flex flex-col 2xl:flex-row items-stretch overflow-hidden"
+      className="w-full h-full min-h-0 max-h-full bg-[#f8f8f8] flex flex-col xl:flex-row items-stretch overflow-hidden"
     >
-      {/* موبايل وتابلت: الرمح كخلفية + النص فوقها — مركزان في منتصف الصفحة */}
-      <div className="relative flex-1 min-h-0 2xl:hidden overflow-hidden flex flex-col items-center justify-center">
+      {/* موبايل وتابلت وحتى شاشات أقل من xl: الرمح كخلفية + النص فوقها — مركزان في منتصف الصفحة */}
+      <div className="relative flex-1 min-h-0 xl:hidden overflow-hidden flex flex-col items-center justify-center">
         {/* خلفية الرمح — موبايل وتابلت فقط، متمركزة */}
         <div
           className="absolute inset-0 pointer-events-none flex items-end justify-center"
@@ -77,9 +77,9 @@ export default function VisionMissionPage({
         </motion.div>
       </div>
 
-      {/* ديسكتوب 2xl فما فوق فقط: ثلاثة أعمدة — يسار: النص الكبير | وسط: الرمح | يمين: الرؤية والمهمة */}
+      {/* ديسكتوب (xl فما فوق): ثلاثة أعمدة — يسار: النص الكبير | وسط: الرمح | يمين: الرؤية والمهمة */}
       <motion.div
-        className="hidden 2xl:flex flex-1 min-h-0 items-center justify-start pl-12 py-12 overflow-hidden"
+        className="hidden xl:flex flex-1 min-h-0 items-center justify-start pl-12 py-12 overflow-hidden"
         initial={false}
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
         transition={tBase}
@@ -88,7 +88,7 @@ export default function VisionMissionPage({
           {lines.map((line, i) => (
             <div
               key={i}
-              className="text-gray-400/40 text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-tight shrink-0"
+              className="text-gray-400/40 text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight shrink-0"
               style={{ fontFamily: "DIN Arabic, sans-serif" }}
             >
               {line}
@@ -97,8 +97,8 @@ export default function VisionMissionPage({
         </div>
       </motion.div>
 
-      {/* ديسكتوب 2xl: الرمح يبدأ من أسفل الصفحة */}
-      <div className="hidden 2xl:flex flex-shrink-0 items-end justify-center px-4 min-h-0 self-stretch">
+      {/* ديسكتوب (xl فما فوق): الرمح يبدأ من أسفل الصفحة */}
+      <div className="hidden xl:flex flex-shrink-0 items-end justify-center px-4 min-h-0 self-stretch">
         <motion.img
           src="/rmh.png"
           alt=""
@@ -110,7 +110,7 @@ export default function VisionMissionPage({
       </div>
 
       <motion.div
-        className="hidden 2xl:flex flex-1 min-h-0 flex-col justify-center items-start pr-12 py-12 overflow-hidden"
+        className="hidden xl:flex flex-1 min-h-0 flex-col justify-center items-start pr-12 py-12 overflow-hidden"
         initial={false}
         animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
         transition={{ ...tBase, delay: 0.2 }}
