@@ -329,16 +329,20 @@ export default function App() {
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef<Partial<Record<string, HTMLElement>>>({});
+  const heroSvgRef = useRef<HTMLDivElement>(null);
   const [sectionInView, setSectionInView] = useState<Record<string, boolean>>(
     {},
   );
   const [heroHoveredTriangleId, setHeroHoveredTriangleId] = useState<
     number | null
   >(null);
-  const [heroMousePosition, setHeroMousePosition] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  // مراكز المثلثات في viewBox (7872 × 2368) - محسوبة من نقاط المثلثات
+  const triangleCenters: Record<number, { x: number; y: number }> = {
+    1: { x: 2410, y: 409 },   // أزرق - Dynamics
+    2: { x: 4504, y: 1094 },  // بنفسجي - Marine
+    3: { x: 3245, y: 1233 },   // برتقالي - Frontiers (قريب من المجموعة أسفل الأزرق)
+    4: { x: 2758, y: 592 },   // أسود - Aselsan
+  };
   const [scrollDown, setScrollDown] = useState(false);
   const lastScrollTop = useRef(0);
 
@@ -539,30 +543,22 @@ export default function App() {
             />
             {/* طبقة المثلثات الملونة: هوفر + نقر للانتقال إلى قسم محدد */}
             <div
-              className="absolute inset-y-0 left-1/2 w-[110vw] max-w-none -translate-x-1/2 pointer-events-none"
+              ref={heroSvgRef}
+              className="absolute inset-y-0 left-1/2 w-[180vw] sm:w-[140vw] md:w-[110vw] max-w-none -translate-x-1/2 pointer-events-none"
               style={{ zIndex: 1 }}
             >
               <div
                 className="absolute inset-0 w-full h-full min-w-full min-h-full pointer-events-auto"
-                onMouseMove={(e) => {
-                  if (heroHoveredTriangleId !== null) {
-                    setHeroMousePosition({ x: e.clientX, y: e.clientY });
-                  }
-                }}
                 onMouseLeave={() => {
                   setHeroHoveredTriangleId(null);
-                  setHeroMousePosition(null);
                 }}
               >
                 {typeof LayerHome === "function" ? (
                   <LayerHome
                     hideGrayRect
                     trianglesOnly
-                    onTriangleHoverChange={(id, e) => {
+                    onTriangleHoverChange={(id) => {
                       setHeroHoveredTriangleId(id);
-                      if (e)
-                        setHeroMousePosition({ x: e.clientX, y: e.clientY });
-                      if (id === null) setHeroMousePosition(null);
                     }}
                     onTriangleClick={(triangleId) => {
                       const sectionId = TRIANGLE_TO_SECTION[triangleId];
@@ -579,14 +575,30 @@ export default function App() {
               </div>
             </div>
 
-            {/* لوغو عائم فوق مؤشر الماوس عند الهوفر — مقاس أكبر (scale up) */}
-            {heroHoveredTriangleId !== null && heroMousePosition && (
+            {/* لوغو القسم في مركز المثلث — ثابت لا يتحرك مع الماوس */}
+            {heroHoveredTriangleId !== null && (() => {
+              const svgEl = heroSvgRef.current;
+              if (!svgEl) return null;
+              const rect = svgEl.getBoundingClientRect();
+              const viewBoxWidth = 7872;
+              const viewBoxHeight = 2368;
+              // حساب نسبة التحويل مع مراعاة slice
+              const scaleX = rect.width / viewBoxWidth;
+              const scaleY = rect.height / viewBoxHeight;
+              const scale = Math.max(scaleX, scaleY);
+              const center = triangleCenters[heroHoveredTriangleId];
+              const offsetX = (rect.width - viewBoxWidth * scale) / 2;
+              const offsetY = (rect.height - viewBoxHeight * scale) / 2;
+              const screenX = rect.left + offsetX + center.x * scale;
+              // بسبب scaleY(-1) على الـ SVG، نعكس Y: القمة في viewBox تصبح قاع في العرض
+              const screenY = rect.top + rect.height - offsetY - center.y * scale;
+              return (
               <div
                 className="fixed flex flex-col items-center justify-center pointer-events-none z-[20]"
                 style={{
-                  left: heroMousePosition.x,
-                  top: heroMousePosition.y - 90,
-                  transform: "translate(-50%, 0)",
+                  left: screenX,
+                  top: screenY,
+                  transform: "translate(-50%, -50%)",
                   width: "min(28vw, 280px)",
                 }}
               >
@@ -624,7 +636,8 @@ export default function App() {
                   </div>
                 )}
               </div>
-            )}
+            );
+            })()}
 
             {/* Logo centered in hero — pointer-events-none حتى لا تغطي المثلثات؛ اللوغو فقط يلتقط الأحداث */}
             <div
