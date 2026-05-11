@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/app/i18n/LanguageContext";
 import solutionsBg from "@/assets/3004dc5a5d12ee327e0bb3709f487de52a320930.png";
-import circleGraphic from "@/assets/0f0bd3a35904deda296fc4032458194e027533ef.png";
 import connectingLines from "@/assets/f4a4b0ebdb8ac529a76b1ee55f33b820ca3ff3ba.png";
 import cyberLogo from "@/assets/6dcb2184ab0b8f46c9fb262f728e15f319f393da.png";
 import maritimeLogo from "@/assets/c1ac93a6c938a74dea95a6ec8d8ef43174627311.png";
@@ -13,6 +12,7 @@ import CommunicationIcon from "@/imports/IsolationMode-203-171";
 import TrainingIcon from "@/imports/IsolationMode-203-189";
 import DefenseIcon from "@/imports/IsolationMode-203-207";
 const CENTER_LOGO_URL = `${import.meta.env.BASE_URL || "/"}logo/logo_english_onlight.png`;
+const ROTATING_CIRCLE_URL = `${import.meta.env.BASE_URL || "/"}cercle.png`;
 
 const CANVAS_W = 1300;
 const CANVAS_H = 900;
@@ -115,7 +115,7 @@ export default function SolutionsPage() {
             }}
           >
             <img
-              src={circleGraphic}
+              src={ROTATING_CIRCLE_URL}
               alt=""
               className="w-full h-full object-contain"
             />
@@ -139,7 +139,7 @@ export default function SolutionsPage() {
             }}
           >
             <img
-              src={circleGraphic}
+              src={ROTATING_CIRCLE_URL}
               alt=""
               className="w-full h-full object-contain"
             />
@@ -678,7 +678,7 @@ export default function SolutionsPage() {
                 }}
               >
                 <img
-                  src={circleGraphic}
+                  src={ROTATING_CIRCLE_URL}
                   alt=""
                   className="w-full h-full object-contain"
                 />
@@ -694,7 +694,7 @@ export default function SolutionsPage() {
                 }}
               >
                 <img
-                  src={circleGraphic}
+                  src={ROTATING_CIRCLE_URL}
                   alt=""
                   className="w-full h-full object-contain"
                 />
