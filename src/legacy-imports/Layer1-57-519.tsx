@@ -1,0 +1,221 @@
+import { staticImageSrc } from "@/lib/static-image-src";
+import React, { useState } from "react";
+import imgRectangle1 from "@/assets/6361bdb9bfba5f30f5c0c8a84044844a6e47b954.png";
+
+function Group1() {
+  return (
+    <div
+      className="absolute contents inset-[53.65%_0.05%_0_1.65%]"
+      data-name="Group"
+    >
+      <div className="absolute flex inset-[53.65%_0.05%_0_1.65%] items-center justify-center">
+        <div className="flex-none h-[568.32px] min-h-[40vh] w-full max-w-[1889.28px] rotate-[180deg] shrink-0">
+          <div
+            className="relative size-full overflow-hidden"
+            data-name="Rectangle"
+          >
+            <div className="absolute inset-0 pointer-events-none">
+              <img
+                alt=""
+                className="absolute left-0 top-0 h-full w-auto min-w-full object-cover object-left"
+                src={staticImageSrc(imgRectangle1)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ClipPathGroup() {
+  return (
+    <div
+      className="absolute contents inset-[47.07%_0_11.93%_0.01%]"
+      data-name="Clip path group"
+    >
+      <Group1 />
+    </div>
+  );
+}
+
+type Group2Props = {
+  hideGrayRect?: boolean;
+  hoveredId?: number | null;
+  setHoveredId?: (id: number | null) => void;
+  onTriangleClick?: (id: number) => void;
+  onTriangleHoverChange?: (id: number | null, e?: React.MouseEvent) => void;
+};
+
+function Group2({
+  hideGrayRect,
+  hoveredId = null,
+  setHoveredId,
+  onTriangleClick,
+  onTriangleHoverChange,
+}: Group2Props) {
+  const isHoverable = typeof setHoveredId === "function";
+  const isClickable = typeof onTriangleClick === "function";
+  const interactiveClass =
+    isHoverable || isClickable
+      ? "cursor-none transition-[filter,opacity] duration-300"
+      : "";
+
+  // مضلعات Assxet.svg — مثلث واحد من كل لون (viewBox 0 0 7872 2368)
+  // id:1 أزرق | id:2 بنفسجي | id:3 برتقالي | id:4 أسود
+  const assxetPolygons: { id: number; color: string; points: string }[] = [
+    {
+      id: 1,
+      color: "#009fe3",
+      points:
+        "2911.96 420.65 2727.7 227.05 1997.76 491.11 2001.28 499.48 2911.96 420.65",
+    },
+    {
+      id: 2,
+      color: "#312783",
+      // مثلث بنفسجي آخر من Assxet.svg (منطقة وسط-يمين) — منطبق على الصورة الأصلية
+      points: "4728.47 882.6 4501.24 1300.07 4284.58 1101.9 4728.47 882.6",
+    },
+    {
+      id: 3,
+      color: "#f39422",
+      // مثلث برتقالي قريب من المجموعة (أسفل الأزرق والأسود)
+      points:
+        "3378.31 1347.63 3136.54 1003.48 3219.77 1347.63",
+    },
+    {
+      id: 4,
+      color: "#000002",
+      points: "2001.28 499.48 3328.76 378.6 2944.99 898.45 2001.28 499.48",
+    },
+  ];
+
+  return (
+    <div
+      className="absolute inset-0 w-full h-full"
+      data-name="Group"
+      style={{ transform: "scaleY(-1)" }}
+    >
+      {!hideGrayRect && <ClipPathGroup />}
+      {/* SVG واحد بنفس viewBox ومواضع Assxet.svg — المثلثات الملونة في أماكنها الأصلية */}
+      <svg
+        className={`block w-full h-full ${interactiveClass}`.trim()}
+        viewBox="0 0 7872 2368"
+        preserveAspectRatio="xMidYMid slice"
+        fill="none"
+      >
+        {assxetPolygons.map((poly, i) => {
+          const isHovered = hoveredId === poly.id;
+          const opacity = isHovered ? 1 : poly.id === 4 ? 0.7 : 0.5;
+          // نفس مرجع الهيرو: drop-shadow 6px بلون شبه شفاف؛ عند الهوفر إضاءة أقوى
+          const idleShadowById: Record<number, string> = {
+            1: "drop-shadow(0 0 6px rgba(0, 159, 227, 0.25))",
+            2: "drop-shadow(0 0 6px rgba(49, 39, 131, 0.25))",
+            3: "drop-shadow(0 0 6px rgba(243, 148, 34, 0.25))",
+            4: "drop-shadow(0 0 6px rgba(255, 255, 255, 0.2))",
+          };
+          const filter =
+            poly.id === 4
+              ? isHovered
+                ? "drop-shadow(0 0 12px rgba(255,255,255,0.35)) drop-shadow(0 0 24px rgba(255,255,255,0.2))"
+                : idleShadowById[4]
+              : isHovered
+                ? `drop-shadow(0 0 12px ${poly.color}) drop-shadow(0 0 24px ${poly.color})`
+                : idleShadowById[poly.id] ??
+                  `drop-shadow(0 0 6px ${poly.color}40)`;
+          return (
+            <g
+              key={i}
+              onMouseEnter={
+                isHoverable
+                  ? (e) => {
+                      setHoveredId!(poly.id);
+                      onTriangleHoverChange?.(poly.id, e);
+                    }
+                  : undefined
+              }
+              onMouseLeave={
+                isHoverable
+                  ? () => {
+                      setHoveredId!(null);
+                      onTriangleHoverChange?.(null);
+                    }
+                  : undefined
+              }
+              onClick={
+                isClickable ? () => onTriangleClick!(poly.id) : undefined
+              }
+            >
+              <polygon
+                points={poly.points}
+                fill={poly.color}
+                opacity={opacity}
+                style={{ filter }}
+              >
+                {!isHovered && (
+                  <animate
+                    attributeName="opacity"
+                    values={poly.id === 4 ? "0.7;0.95;0.7" : "0.5;0.85;0.5"}
+                    dur="2.5s"
+                    repeatCount="indefinite"
+                  />
+                )}
+              </polygon>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+type LayerProps = {
+  hideGrayRect?: boolean;
+  trianglesOnly?: boolean;
+  onTriangleClick?: (id: number) => void;
+  onTriangleHoverChange?: (id: number | null, e?: React.MouseEvent) => void;
+};
+
+/** ربط المثلثات الأربعة (1–4: أزرق→Dynamics، بنفسجي→Marine، برتقالي→Frontiers، أسود→Aselsan) بأقسام الصفحة للانتقال عند النقر */
+export const TRIANGLE_TO_SECTION: Record<number, string> = {
+  1: "sectors", // المثلث الأزرق → قسم داينمك (Sinan Dynamics)
+  2: "marine", // المثلث البنفسجي → قسم مارين (Sinan Marine)
+  3: "frontiers", // المثلث البرتقالي → قسم فرونتيرس (Sinan Frontiers)
+  4: "aselsan", // المثلث الأسود → قسم أسيلسان (Sinan Aselsan)
+};
+
+export default function Layer({
+  hideGrayRect,
+  trianglesOnly,
+  onTriangleClick,
+  onTriangleHoverChange,
+}: LayerProps = {}) {
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
+
+  return (
+    <div
+      className="relative size-full min-w-full min-h-full"
+      data-name="Layer_1"
+    >
+      {!trianglesOnly && (
+        <div className="absolute inset-0" data-name="Vector">
+          <svg
+            className="block size-full"
+            fill="none"
+            preserveAspectRatio="none"
+            viewBox="0 0 1919.75 644"
+          >
+            <path d="M1919.75 0H0V644H1919.75V0Z" fill="#08080A" id="Vector" />
+          </svg>
+        </div>
+      )}
+      <Group2
+        hideGrayRect={hideGrayRect}
+        hoveredId={hoveredId}
+        setHoveredId={trianglesOnly ? setHoveredId : undefined}
+        onTriangleClick={trianglesOnly ? onTriangleClick : undefined}
+        onTriangleHoverChange={onTriangleHoverChange}
+      />
+    </div>
+  );
+}
