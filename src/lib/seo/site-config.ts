@@ -44,4 +44,5 @@ export const SEO_KEYWORDS_AR = [
 ];
 
 export const OG_IMAGE_PATH = "/logo/logo_english_ondark.png";
-export const FAVICON_PATH = "/favicon.png";
+/** شعار الموقع (رمز الماسة) — يُولَّد أيضاً في src/app/icon.png */
+export const FAVICON_PATH = "/icon.png";
