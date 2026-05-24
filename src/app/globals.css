@@ -124,6 +124,33 @@
     display: block;
     overflow: visible;
   }
+
+  /**
+   * هيرو الموبايل: تدوير الخلفية والمضلعات 90° لتصبح بالطول (عمودية)
+   * وتملأ شاشة الهاتف بشكل أفضل.
+   */
+  @media (max-width: 767px) {
+    .hero-mobile-landscape-frame {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 0;
+      width: 100vh;
+      height: 100vw;
+      max-width: 100vh;
+      max-height: 100vw;
+      transform: translate(-50%, -50%) rotate(90deg);
+      transform-origin: center center;
+      pointer-events: none;
+    }
+
+    .hero-mobile-landscape-inner {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 @keyframes rotate360 {

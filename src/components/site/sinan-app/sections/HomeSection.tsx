@@ -1,17 +1,24 @@
 "use client";
 
-import { type RefObject } from "react";
+import { type RefObject, useEffect, useState } from "react";
 import { motion } from "motion/react";
-import LayerHome, { TRIANGLE_TO_SECTION } from "@/legacy-imports/Layer1-57-519";
+import LayerHome from "@/legacy-imports/Layer1-57-519";
 import {
   dynamicsMarineLogoTile,
-  heroDiamondLogoInner,
   sinanDynamicsLogoPng,
   sinanMarineLogoPng,
-  triangleCenters,
   SINAN_SITE_PX,
 } from "../constants";
+import {
+  getAssxetLogoKindForTriangle,
+  getAssxetSectionIdForTriangle,
+  HERO_ALL_ASSXET_IDS,
+  assxetTrianglesByIds,
+  heroTriangleScreenCenter,
+} from "../hero-triangles";
 import type { AssignSectionRef, SectionRefs } from "../types";
+
+const ALL_ASSXET_TRIANGLES = assxetTrianglesByIds(HERO_ALL_ASSXET_IDS);
 
 export function HomeSection({
   assignSectionRef,
@@ -30,6 +37,34 @@ export function HomeSection({
   sectionInViewHome: boolean;
   locale: "en" | "ar";
 }) {
+  const [isMobileHero, setIsMobileHero] = useState(false);
+
+  const hoveredTriangle =
+    heroHoveredTriangleId != null
+      ? ALL_ASSXET_TRIANGLES.find((t) => t.id === heroHoveredTriangleId)
+      : undefined;
+  const hoverLogoKind = hoveredTriangle
+    ? getAssxetLogoKindForTriangle(hoveredTriangle)
+    : undefined;
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const syncMobile = () => setIsMobileHero(media.matches);
+    syncMobile();
+    media.addEventListener("change", syncMobile);
+    return () => media.removeEventListener("change", syncMobile);
+  }, []);
+
+  const scrollToSection = (assxetId: number) => {
+    const tri = ALL_ASSXET_TRIANGLES.find((t) => t.id === assxetId);
+    const sectionId = tri ? getAssxetSectionIdForTriangle(tri) : undefined;
+    if (!sectionId) return;
+    const target =
+      sectionRefs.current[sectionId] ??
+      document.getElementById(sectionId);
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section
       ref={assignSectionRef("home")}
@@ -37,100 +72,90 @@ export function HomeSection({
       className="h-[calc(100vh-50px)] snap-start snap-always flex-shrink-0 overflow-hidden relative isolate bg-gray-950"
     >
       <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        aria-hidden
-        style={{
-          backgroundColor: "#08080A",
-          backgroundImage: `url(${"/"}hero-bg.png)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          transform: "scaleY(-1)",
-        }}
-      />
-      <div
         ref={heroSvgRef}
-        className="absolute inset-y-0 left-1/2 w-[180vw] sm:w-[140vw] md:w-[110vw] max-w-none -translate-x-1/2 pointer-events-none"
+        className={
+          isMobileHero
+            ? "hero-mobile-landscape-frame"
+            : "absolute inset-0 pointer-events-none md:inset-y-0 md:left-1/2 md:w-[110vw] md:max-w-none md:-translate-x-1/2"
+        }
         style={{ zIndex: 1 }}
       >
-        <div
-          className="absolute inset-0 w-full h-full min-w-full min-h-full pointer-events-auto"
-          onMouseLeave={() => {
-            setHeroHoveredTriangleId(null);
-          }}
-        >
-          {typeof LayerHome === "function" ? (
-            <LayerHome
-              hideGrayRect
-              trianglesOnly
-              onTriangleHoverChange={(id) => {
-                setHeroHoveredTriangleId(id);
-              }}
-              onTriangleClick={(triangleId) => {
-                const sectionId = TRIANGLE_TO_SECTION[triangleId];
-                const el =
-                  sectionRefs.current[sectionId] ??
-                  document.getElementById(sectionId);
-                el?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
-              }}
-            />
-          ) : null}
+        <div className="hero-mobile-landscape-inner absolute inset-0 w-full h-full">
+          <div
+            className="absolute inset-0 z-0 pointer-events-none"
+            aria-hidden
+            style={{
+              backgroundColor: "#08080A",
+              backgroundImage: `url(${"/"}hero-bg.png)`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              transform: "scaleY(-1)",
+            }}
+          />
+
+          <div
+            className="absolute inset-0 z-[1] w-full h-full pointer-events-auto"
+            onMouseLeave={() => setHeroHoveredTriangleId(null)}
+          >
+            {typeof LayerHome === "function" ? (
+              <LayerHome
+                hideGrayRect
+                trianglesOnly
+                customTriangles={ALL_ASSXET_TRIANGLES}
+                onTriangleHoverChange={setHeroHoveredTriangleId}
+                onTriangleClick={scrollToSection}
+              />
+            ) : null}
+          </div>
         </div>
       </div>
 
-      {heroHoveredTriangleId !== null && (() => {
+      {heroHoveredTriangleId !== null && hoverLogoKind && (() => {
         const svgEl = heroSvgRef.current;
         if (!svgEl) return null;
         const rect = svgEl.getBoundingClientRect();
-        const viewBoxWidth = 7872;
-        const viewBoxHeight = 2368;
-        const scaleX = rect.width / viewBoxWidth;
-        const scaleY = rect.height / viewBoxHeight;
-        const scale = Math.max(scaleX, scaleY);
-        const center = triangleCenters[heroHoveredTriangleId];
-        const offsetX = (rect.width - viewBoxWidth * scale) / 2;
-        const offsetY = (rect.height - viewBoxHeight * scale) / 2;
-        const screenX = rect.left + offsetX + center.x * scale;
-        const screenY =
-          rect.top + rect.height - offsetY - center.y * scale;
+        const pos = heroTriangleScreenCenter(
+          heroHoveredTriangleId,
+          rect,
+          ALL_ASSXET_TRIANGLES,
+        );
+        if (!pos) return null;
         return (
           <div
             className="fixed flex flex-col items-center justify-center pointer-events-none z-[20]"
             style={{
-              left: screenX,
-              top: screenY,
+              left: pos.x,
+              top: pos.y,
               transform: "translate(-50%, -50%)",
             }}
           >
-            {heroHoveredTriangleId === 1 && (
+            {hoverLogoKind === "dynamics" && (
               <div className={dynamicsMarineLogoTile}>
                 <img
                   src={sinanDynamicsLogoPng}
                   alt="Sinan Dynamics"
-                  className="drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
+                  className="drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
                 />
               </div>
             )}
-            {heroHoveredTriangleId === 2 && (
+            {hoverLogoKind === "marine" && (
               <div className={dynamicsMarineLogoTile}>
                 <img
                   src={sinanMarineLogoPng}
                   alt="Sinan Marine"
-                  className="drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
+                  className="drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
                 />
               </div>
             )}
-            {heroHoveredTriangleId === 3 && (
+            {hoverLogoKind === "frontiers" && (
               <img
                 src={`${"/"}simnfor.png`}
                 alt="SINAN FRONTIERS"
                 className="h-16 md:h-20 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
               />
             )}
-            {heroHoveredTriangleId === 4 && (
+            {hoverLogoKind === "aselsan" && (
               <div className="flex flex-col items-center ">
                 <img
                   src={`${"/"}logo-assislian.png`}
@@ -188,102 +213,6 @@ export function HomeSection({
             </div>
           </div>
         </motion.div>
-      </div>
-
-      <div
-        className="absolute inset-x-0 flex items-center justify-center gap-3 md:hidden"
-        style={{
-          zIndex: 12,
-          bottom: "calc(env(safe-area-inset-bottom, 0px) + 4rem)",
-        }}
-      >
-        <button
-          type="button"
-          onClick={() => {
-            const el =
-              sectionRefs.current["sectors"] ??
-              document.getElementById("sectors");
-            el?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
-          className="relative w-14 h-14 flex items-center justify-center"
-          aria-label="Go to Sinan Dynamics"
-        >
-          <div
-            className="absolute inset-0 rotate-45 bg-[#009fe3] shadow-[0_0_18px_rgba(0,159,227,0.7)] animate-pulse"
-            style={{ animationDuration: "2.6s" }}
-          />
-          <div className={heroDiamondLogoInner}>
-            <img src={sinanDynamicsLogoPng} alt="" />
-          </div>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            const el =
-              sectionRefs.current["marine"] ??
-              document.getElementById("marine");
-            el?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
-          className="relative w-14 h-14 flex items-center justify-center"
-          aria-label="Go to Sinan Marine"
-        >
-          <div
-            className="absolute inset-0 rotate-45 bg-[#312783] shadow-[0_0_18px_rgba(49,39,131,0.7)] animate-pulse"
-            style={{ animationDuration: "2.9s" }}
-          />
-          <div className={heroDiamondLogoInner}>
-            <img src={sinanMarineLogoPng} alt="" />
-          </div>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            const el =
-              sectionRefs.current["frontiers"] ??
-              document.getElementById("frontiers");
-            el?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
-          className="relative w-14 h-14 flex items-center justify-center"
-          aria-label="Go to Sinan Frontiers"
-        >
-          <div
-            className="absolute inset-0 rotate-45 bg-[#f39422] shadow-[0_0_18px_rgba(243,148,34,0.8)] animate-pulse"
-            style={{ animationDuration: "3.2s" }}
-          />
-          <div className="relative z-10 flex items-center justify-center">
-            <img
-              src={`${"/"}simnfor.png`}
-              alt="Sinan Frontiers"
-              className="h-6 w-auto object-contain"
-            />
-          </div>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            const el =
-              sectionRefs.current["aselsan"] ??
-              document.getElementById("aselsan");
-            el?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }}
-          className="relative w-14 h-14 flex items-center justify-center"
-          aria-label="Go to Sinan Aselsan"
-        >
-          <div
-            className="absolute inset-0 rotate-45 bg-[#000002] shadow-[0_0_18px_rgba(0,0,0,0.9)] animate-pulse"
-            style={{ animationDuration: "3.5s" }}
-          />
-          <div className="relative z-10 flex items-center justify-center">
-            <img
-              src="/title-assislian.png"
-              alt="Sinan Aselsan"
-              className="h-6 w-auto object-contain"
-            />
-          </div>
-        </button>
       </div>
     </section>
   );
