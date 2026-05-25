@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import imgRectangle1 from "@/assets/6361bdb9bfba5f30f5c0c8a84044844a6e47b954.png";
 import {
   HERO_TRIANGLES,
+  HERO_VIEWBOX_HEIGHT,
+  HERO_VIEWBOX_WIDTH,
   getAssxetSectionIdForTriangle,
   isInteractiveAssxetTriangle,
   type HeroTriangle,
@@ -55,6 +57,11 @@ type Group2Props = {
   visibleTriangleIds?: number[];
   /** مضلعات مخصّصة (مثلاً من أداة الاختيار A1–A14) */
   customTriangles?: HeroTriangle[];
+  /** طبقة أزرار شبه شفافة فوق خلفية تحتوي نفس المثلثات */
+  hitAreaOnly?: boolean;
+  viewBoxWidth?: number;
+  viewBoxHeight?: number;
+  flipY?: boolean;
 };
 
 function Group2({
@@ -65,6 +72,10 @@ function Group2({
   onTriangleHoverChange,
   visibleTriangleIds,
   customTriangles,
+  hitAreaOnly,
+  viewBoxWidth = HERO_VIEWBOX_WIDTH,
+  viewBoxHeight = HERO_VIEWBOX_HEIGHT,
+  flipY = true,
 }: Group2Props) {
   const isHoverable = typeof setHoveredId === "function";
   const isClickable = typeof onTriangleClick === "function";
@@ -84,13 +95,13 @@ function Group2({
     <div
       className="absolute inset-0 w-full h-full"
       data-name="Group"
-      style={{ transform: "scaleY(-1)" }}
+      style={{ transform: flipY ? "scaleY(-1)" : undefined }}
     >
       {!hideGrayRect && <ClipPathGroup />}
       {/* SVG واحد بنفس viewBox ومواضع Assxet.svg — المثلثات الملونة في أماكنها الأصلية */}
       <svg
         className={`block w-full h-full ${interactiveClass}`.trim()}
-        viewBox="0 0 7872 2368"
+        viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
         preserveAspectRatio="xMidYMid slice"
         fill="none"
       >
@@ -105,14 +116,32 @@ function Group2({
             hoveredPoly != null &&
             poly.color === hoveredPoly.color;
           const isBlack = poly.color === "#000002";
-          const opacity = isGroupHovered ? 1 : isBlack ? 0.7 : 0.5;
+          const idleOpacity = hitAreaOnly
+            ? isBlack
+              ? 0.32
+              : 0.2
+            : isBlack
+              ? 0.7
+              : 0.5;
+          const opacity = isGroupHovered ? 1 : idleOpacity;
+          const stroke = hitAreaOnly
+            ? isBlack
+              ? "rgba(255,255,255,0.5)"
+              : poly.color
+            : undefined;
+          const strokeOpacity = hitAreaOnly ? (isGroupHovered ? 0.95 : 0.55) : undefined;
+          const strokeWidth = hitAreaOnly ? (isGroupHovered ? 12 : 6) : undefined;
           const filter = isBlack
             ? isGroupHovered
               ? "drop-shadow(0 0 12px rgba(255,255,255,0.35)) drop-shadow(0 0 24px rgba(255,255,255,0.2))"
-              : "drop-shadow(0 0 6px rgba(255, 255, 255, 0.2))"
+              : hitAreaOnly
+                ? "drop-shadow(0 0 8px rgba(255,255,255,0.2))"
+                : "drop-shadow(0 0 6px rgba(255, 255, 255, 0.2))"
             : isGroupHovered
               ? `drop-shadow(0 0 12px ${poly.color}) drop-shadow(0 0 24px ${poly.color})`
-              : `drop-shadow(0 0 6px ${poly.color}40)`;
+              : hitAreaOnly
+                ? `drop-shadow(0 0 8px ${poly.color}55)`
+                : `drop-shadow(0 0 6px ${poly.color}40)`;
           const canHover = isHoverable && interactive;
           const canClick =
             isClickable && interactive && getAssxetSectionIdForTriangle(poly);
@@ -144,13 +173,33 @@ function Group2({
                 points={poly.points}
                 fill={poly.color}
                 opacity={opacity}
+                pointerEvents={interactive ? "all" : "none"}
+                stroke={stroke}
+                strokeOpacity={strokeOpacity}
+                strokeWidth={strokeWidth}
                 style={{ filter }}
               >
                 {!isGroupHovered && interactive && (
                   <animate
                     attributeName="opacity"
-                    values={isBlack ? "0.7;0.95;0.7" : "0.5;0.85;0.5"}
-                    dur="2.5s"
+                    values={
+                      hitAreaOnly
+                        ? isBlack
+                          ? "0.22;0.55;0.22"
+                          : "0.12;0.42;0.12"
+                        : isBlack
+                          ? "0.7;0.95;0.7"
+                          : "0.5;0.85;0.5"
+                    }
+                    dur={hitAreaOnly ? "2.1s" : "2.5s"}
+                    repeatCount="indefinite"
+                  />
+                )}
+                {hitAreaOnly && !isGroupHovered && interactive && (
+                  <animate
+                    attributeName="stroke-opacity"
+                    values={isBlack ? "0.35;0.9;0.35" : "0.35;0.85;0.35"}
+                    dur="2.1s"
                     repeatCount="indefinite"
                   />
                 )}
@@ -170,6 +219,10 @@ type LayerProps = {
   onTriangleHoverChange?: (id: number | null, e?: React.MouseEvent) => void;
   visibleTriangleIds?: number[];
   customTriangles?: HeroTriangle[];
+  hitAreaOnly?: boolean;
+  viewBoxWidth?: number;
+  viewBoxHeight?: number;
+  flipY?: boolean;
 };
 
 /** ربط المثلثات الأربعة بأقسام الصفحة للانتقال عند النقر */
@@ -182,6 +235,10 @@ export default function Layer({
   onTriangleHoverChange,
   visibleTriangleIds,
   customTriangles,
+  hitAreaOnly,
+  viewBoxWidth,
+  viewBoxHeight,
+  flipY,
 }: LayerProps = {}) {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
@@ -210,6 +267,10 @@ export default function Layer({
         onTriangleHoverChange={onTriangleHoverChange}
         visibleTriangleIds={visibleTriangleIds}
         customTriangles={customTriangles}
+        hitAreaOnly={hitAreaOnly}
+        viewBoxWidth={viewBoxWidth}
+        viewBoxHeight={viewBoxHeight}
+        flipY={flipY}
       />
     </div>
   );

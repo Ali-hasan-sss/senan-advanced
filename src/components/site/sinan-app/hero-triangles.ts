@@ -1,6 +1,8 @@
 /** viewBox موحّد: hero-bg.svg و Assxet.svg */
 export const HERO_VIEWBOX_WIDTH = 7872;
 export const HERO_VIEWBOX_HEIGHT = 2368;
+export const HERO_MOBILE_VIEWBOX_WIDTH = 1290;
+export const HERO_MOBILE_VIEWBOX_HEIGHT = 2796;
 
 export type HeroTriangle = {
   id: number;
@@ -57,6 +59,45 @@ export const HERO_BG_ACCENT_TRIANGLES: HeroTriangle[] = [
     labelEn: "Black — Sinan Aselsan",
     labelAr: "أسود — سنان أسيلسان",
     points: "2001.28 499.48 3328.76 378.6 2944.99 898.45 2001.28 499.48",
+  },
+];
+
+/**
+ * المثلثات الأربعة في `hero-mobile.svg`.
+ * ترتيب المعرّفات يتبع `rectangle_1..rectangle_4` داخل الملف.
+ */
+export const HERO_MOBILE_ACCENT_TRIANGLES: HeroTriangle[] = [
+  {
+    id: 1,
+    color: "#009fe3",
+    sectionId: "sectors",
+    labelEn: "Blue — Sinan Dynamics (mobile)",
+    labelAr: "أزرق — سنان داينمك (موبايل)",
+    points: "680.46 1150.68 348.53 1427.54 82.43 879.34 680.46 1150.68",
+  },
+  {
+    id: 2,
+    color: "#312783",
+    sectionId: "marine",
+    labelEn: "Purple — Sinan Marine (mobile)",
+    labelAr: "بنفسجي — سنان مارين (موبايل)",
+    points: "645.91 1827.85 26.78 1899.92 347.76 1429.9 645.91 1827.85",
+  },
+  {
+    id: 3,
+    color: "#f39422",
+    sectionId: "frontiers",
+    labelEn: "Orange — Sinan Frontiers (mobile)",
+    labelAr: "برتقالي — سنان فرونتيرز (موبايل)",
+    points: "744.23 899.77 464.21 772.96 607.62 510.4 744.23 899.77",
+  },
+  {
+    id: 4,
+    color: "#000002",
+    sectionId: "aselsan",
+    labelEn: "Black — Sinan Aselsan (mobile)",
+    labelAr: "أسود — سنان أسيلسان (موبايل)",
+    points: "1174.7 1479.43 811.11 964.11 1069.68 850.21 1174.7 1479.43",
   },
 ];
 
@@ -264,12 +305,26 @@ export function getHeroSliceTransform(
   containerWidth: number,
   containerHeight: number,
 ) {
-  const scale = Math.max(
-    containerWidth / HERO_VIEWBOX_WIDTH,
-    containerHeight / HERO_VIEWBOX_HEIGHT,
+  return getHeroSliceTransformForViewbox(
+    containerWidth,
+    containerHeight,
+    HERO_VIEWBOX_WIDTH,
+    HERO_VIEWBOX_HEIGHT,
   );
-  const offsetX = (containerWidth - HERO_VIEWBOX_WIDTH * scale) / 2;
-  const offsetY = (containerHeight - HERO_VIEWBOX_HEIGHT * scale) / 2;
+}
+
+export function getHeroSliceTransformForViewbox(
+  containerWidth: number,
+  containerHeight: number,
+  viewboxWidth: number,
+  viewboxHeight: number,
+) {
+  const scale = Math.max(
+    containerWidth / viewboxWidth,
+    containerHeight / viewboxHeight,
+  );
+  const offsetX = (containerWidth - viewboxWidth * scale) / 2;
+  const offsetY = (containerHeight - viewboxHeight * scale) / 2;
   return { scale, offsetX, offsetY };
 }
 
@@ -334,18 +389,40 @@ export function heroTriangleScreenCenter(
   containerRect: DOMRect,
   triangles: HeroTriangle[] = HERO_TRIANGLES,
 ): { x: number; y: number } | null {
+  return heroTriangleScreenCenterForViewbox(
+    triangleId,
+    containerRect,
+    triangles,
+    HERO_VIEWBOX_WIDTH,
+    HERO_VIEWBOX_HEIGHT,
+    true,
+  );
+}
+
+export function heroTriangleScreenCenterForViewbox(
+  triangleId: number,
+  containerRect: DOMRect,
+  triangles: HeroTriangle[],
+  viewboxWidth: number,
+  viewboxHeight: number,
+  flipY: boolean,
+): { x: number; y: number } | null {
   const tri = triangles.find((t) => t.id === triangleId);
   if (!tri) return null;
 
   const center = heroTriangleCentroid(tri.points);
-  const { scale, offsetX, offsetY } = getHeroSliceTransform(
+  const { scale, offsetX, offsetY } = getHeroSliceTransformForViewbox(
     containerRect.width,
     containerRect.height,
+    viewboxWidth,
+    viewboxHeight,
   );
 
   return {
     x: containerRect.left + offsetX + center.x * scale,
-    y: containerRect.top + containerRect.height - offsetY - center.y * scale,
+    y: flipY
+      ? containerRect.top + containerRect.height - offsetY - center.y * scale
+      : containerRect.top + offsetY + center.y * scale,
   };
 }
 

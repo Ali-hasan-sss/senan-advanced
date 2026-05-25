@@ -12,13 +12,19 @@ import {
 import {
   getAssxetLogoKindForTriangle,
   getAssxetSectionIdForTriangle,
+  HERO_MOBILE_ACCENT_TRIANGLES,
+  HERO_MOBILE_VIEWBOX_HEIGHT,
+  HERO_MOBILE_VIEWBOX_WIDTH,
+  HERO_VIEWBOX_HEIGHT,
+  HERO_VIEWBOX_WIDTH,
   HERO_ALL_ASSXET_IDS,
   assxetTrianglesByIds,
-  heroTriangleScreenCenter,
+  heroTriangleScreenCenterForViewbox,
 } from "../hero-triangles";
 import type { AssignSectionRef, SectionRefs } from "../types";
 
 const ALL_ASSXET_TRIANGLES = assxetTrianglesByIds(HERO_ALL_ASSXET_IDS);
+const MOBILE_HERO_TRIANGLES = HERO_MOBILE_ACCENT_TRIANGLES;
 
 export function HomeSection({
   assignSectionRef,
@@ -38,10 +44,19 @@ export function HomeSection({
   locale: "en" | "ar";
 }) {
   const [isMobileHero, setIsMobileHero] = useState(false);
+  const activeTriangles = isMobileHero
+    ? MOBILE_HERO_TRIANGLES
+    : ALL_ASSXET_TRIANGLES;
+  const activeViewBoxWidth = isMobileHero
+    ? HERO_MOBILE_VIEWBOX_WIDTH
+    : HERO_VIEWBOX_WIDTH;
+  const activeViewBoxHeight = isMobileHero
+    ? HERO_MOBILE_VIEWBOX_HEIGHT
+    : HERO_VIEWBOX_HEIGHT;
 
   const hoveredTriangle =
     heroHoveredTriangleId != null
-      ? ALL_ASSXET_TRIANGLES.find((t) => t.id === heroHoveredTriangleId)
+      ? activeTriangles.find((t) => t.id === heroHoveredTriangleId)
       : undefined;
   const hoverLogoKind = hoveredTriangle
     ? getAssxetLogoKindForTriangle(hoveredTriangle)
@@ -56,7 +71,7 @@ export function HomeSection({
   }, []);
 
   const scrollToSection = (assxetId: number) => {
-    const tri = ALL_ASSXET_TRIANGLES.find((t) => t.id === assxetId);
+    const tri = activeTriangles.find((t) => t.id === assxetId);
     const sectionId = tri ? getAssxetSectionIdForTriangle(tri) : undefined;
     if (!sectionId) return;
     const target =
@@ -75,24 +90,36 @@ export function HomeSection({
         ref={heroSvgRef}
         className={
           isMobileHero
-            ? "hero-mobile-landscape-frame"
+            ? "absolute inset-0 pointer-events-none"
             : "absolute inset-0 pointer-events-none md:inset-y-0 md:left-1/2 md:w-[110vw] md:max-w-none md:-translate-x-1/2"
         }
         style={{ zIndex: 1 }}
       >
-        <div className="hero-mobile-landscape-inner absolute inset-0 w-full h-full">
-          <div
-            className="absolute inset-0 z-0 pointer-events-none"
-            aria-hidden
-            style={{
-              backgroundColor: "#08080A",
-              backgroundImage: `url(${"/"}hero-bg.png)`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              transform: "scaleY(-1)",
-            }}
-          />
+        <div className="absolute inset-0 w-full h-full">
+          {isMobileHero ? (
+            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+              <img
+                src={`${"/"}hero-mobile.svg`}
+                alt=""
+                aria-hidden
+                draggable={false}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </div>
+          ) : (
+            <div
+              className="absolute inset-0 z-0 pointer-events-none"
+              aria-hidden
+              style={{
+                backgroundColor: "#08080A",
+                backgroundImage: `url(${"/"}hero-bg.png)`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                transform: "scaleY(-1)",
+              }}
+            />
+          )}
 
           <div
             className="absolute inset-0 z-[1] w-full h-full pointer-events-auto"
@@ -102,7 +129,11 @@ export function HomeSection({
               <LayerHome
                 hideGrayRect
                 trianglesOnly
-                customTriangles={ALL_ASSXET_TRIANGLES}
+                customTriangles={activeTriangles}
+                hitAreaOnly={isMobileHero}
+                viewBoxWidth={activeViewBoxWidth}
+                viewBoxHeight={activeViewBoxHeight}
+                flipY={!isMobileHero}
                 onTriangleHoverChange={setHeroHoveredTriangleId}
                 onTriangleClick={scrollToSection}
               />
@@ -115,10 +146,13 @@ export function HomeSection({
         const svgEl = heroSvgRef.current;
         if (!svgEl) return null;
         const rect = svgEl.getBoundingClientRect();
-        const pos = heroTriangleScreenCenter(
+        const pos = heroTriangleScreenCenterForViewbox(
           heroHoveredTriangleId,
           rect,
-          ALL_ASSXET_TRIANGLES,
+          activeTriangles,
+          activeViewBoxWidth,
+          activeViewBoxHeight,
+          !isMobileHero,
         );
         if (!pos) return null;
         return (
